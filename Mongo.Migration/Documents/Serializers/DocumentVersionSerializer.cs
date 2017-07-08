@@ -1,7 +1,7 @@
 ﻿using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 
-namespace Mongo.Migration.Models.Serializers
+namespace Mongo.Migration.Documents.Serializers
 {
     public class DocumentVersionSerializer : SerializerBase<DocumentVersion>
     {

@@ -1,5 +1,5 @@
-﻿using Mongo.Migration.Models;
-using Mongo.Migration.Models.Serializers;
+﻿using Mongo.Migration.Documents;
+using Mongo.Migration.Documents.Serializers;
 using Mongo.Migration.Services.Interceptors;
 using MongoDB.Bson.Serialization;
 

@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using Mongo.Migration.Models;
+using Mongo.Migration.Documents;
 using NUnit.Framework;
 
 namespace Mongo.Migration.Test.Models

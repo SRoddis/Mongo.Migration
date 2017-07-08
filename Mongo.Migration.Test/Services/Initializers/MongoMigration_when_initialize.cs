@@ -4,7 +4,7 @@ using Mongo.Migration.Exceptions;
 using Mongo.Migration.Services.Initializers;
 using NUnit.Framework;
 
-namespace Mongo.Migration.Test
+namespace Mongo.Migration.Test.Services.Initializers
 {
     [TestFixture]
     public class MongoMigration_when_initialize

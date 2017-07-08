@@ -1,7 +1,7 @@
 ﻿using System;
 using Mongo.Migration.Exceptions;
 
-namespace Mongo.Migration.Models
+namespace Mongo.Migration.Documents
 {
     public struct DocumentVersion : IComparable<DocumentVersion>
     {

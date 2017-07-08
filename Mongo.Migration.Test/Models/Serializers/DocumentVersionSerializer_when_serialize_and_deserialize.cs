@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
-using Mongo.Migration.Models;
-using Mongo.Migration.Models.Serializers;
+using Mongo.Migration.Documents;
+using Mongo.Migration.Documents.Serializers;
 using MongoDB.Bson;
 using MongoDB.Bson.IO;
 using MongoDB.Bson.Serialization;

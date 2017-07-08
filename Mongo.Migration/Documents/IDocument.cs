@@ -1,4 +1,4 @@
-﻿namespace Mongo.Migration.Models
+﻿namespace Mongo.Migration.Documents
 {
     public interface IDocument
     {
