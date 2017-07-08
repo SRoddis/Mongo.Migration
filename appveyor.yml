@@ -1,0 +1,36 @@
+version: 1.0.{build}
+
+environment:
+  COVERALLS_REPO_TOKEN:
+    secure: w1QgTKjQb/SRT5RvjLDGRniq5S6HV+otG5MywPqt6J3DwZYcddT+/H4SA/YZx/8y
+
+assembly_info:
+  patch: true
+  file: AssemblyInfo.*
+  assembly_version: "{version}"
+  assembly_file_version: "{version}"
+  assembly_informational_version: "{version}"
+
+configuration: Release
+
+build:
+  project: Mongo.Migration.sln
+
+before_build:
+  - nuget restore
+
+after_test:
+   #- ps: .\nuget\pack.ps1
+   - cmd: .\post_build.cmd
+
+#artifacts:
+#  - path: Nancy.RestModule\bin\Release\Nancy.RestModule.dll
+#    name: Nancy.RestModule.dll
+#  - path: '**\Nancy.RestModule.*.nupkg'
+
+#uncomment to publish to NuGet
+#deploy:
+#  provider: NuGet
+#  api_key:
+#    secure: U9STqjDjIz1j/0PFSPM0sCYt+0WTU3Cx5w1cw06RWIdPeXZUmCq2nScvhimnQ9NH
+#  artifact: /.*\.nupkg/
