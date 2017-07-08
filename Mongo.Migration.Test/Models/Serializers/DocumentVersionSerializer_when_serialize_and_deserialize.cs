@@ -1,0 +1,78 @@
+﻿using FluentAssertions;
+using Mongo.Migration.Models;
+using Mongo.Migration.Models.Serializers;
+using MongoDB.Bson;
+using MongoDB.Bson.IO;
+using MongoDB.Bson.Serialization;
+using NUnit.Framework;
+
+namespace Mongo.Migration.Test.Models.Serializers
+{
+    [TestFixture]
+    public class DocumentVersionSerializer_when_serialize_and_deserialize
+    {
+        #region SetUp
+
+        [SetUp]
+        public void SetUp()
+        {
+            _serializer = new DocumentVersionSerializer();
+        }
+
+        private DocumentVersionSerializer _serializer;
+
+        private static BsonDocumentReader CreateVersionReader(BsonDocument document)
+        {
+            var reader = new BsonDocumentReader(document);
+            reader.ReadStartDocument();
+            reader.ReadName();
+            return reader;
+        }
+
+        private static BsonDocumentWriter CreateVersionWriter()
+        {
+            var writer = new BsonDocumentWriter(new BsonDocument());
+            writer.WriteStartDocument();
+            writer.WriteName("version");
+            return writer;
+        }
+
+        #endregion
+
+        [Test]
+        public void Then_version_is_deserialized_correct()
+        {
+            // Arrange 
+            var document = new BsonDocument {{"version", "0.1.1"}};
+            BsonDocumentReader reader = CreateVersionReader(document);
+
+            BsonDeserializationContext context = BsonDeserializationContext.CreateRoot(reader);
+            var args = new BsonDeserializationArgs {NominalType = typeof (DocumentVersion)};
+
+            // Act 
+            DocumentVersion result = _serializer.Deserialize(context, args);
+
+            // Assert 
+            result.Should().BeOfType<DocumentVersion>();
+            result.Should().Be("0.1.1");
+        }
+
+        [Test]
+        public void Then_version_is_serialized_correct()
+        {
+            // Arrange 
+            BsonDocumentWriter writer = CreateVersionWriter();
+            BsonSerializationContext context = BsonSerializationContext.CreateRoot(writer);
+            var args = new BsonSerializationArgs {NominalType = typeof (DocumentVersion)};
+            var version = new DocumentVersion("0.0.1");
+
+
+            // Act 
+            _serializer.Serialize(context, args, version);
+
+            // Assert 
+            BsonDocument document = writer.Document;
+            document.ToString().Should().Be("{ \"version\" : \"0.0.1\" }");
+        }
+    }
+}
