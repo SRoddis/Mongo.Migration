@@ -1,7 +1,7 @@
 ﻿using LightInject;
+using Mongo.Migration.Documents.Serializers;
 using Mongo.Migration.Migrations;
 using Mongo.Migration.Migrations.Locators;
-using Mongo.Migration.Models.Serializers;
 using Mongo.Migration.Services.Interceptors;
 using Mongo.Migration.Services.MongoDB;
 

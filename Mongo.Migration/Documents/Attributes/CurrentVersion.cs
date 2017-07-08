@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace Mongo.Migration.Models.Attributes
+namespace Mongo.Migration.Documents.Attributes
 {
     [AttributeUsage(AttributeTargets.Class)]
-    public class CurrentDocumentVersion : Attribute
+    public class CurrentVersion : Attribute
     {
-        public CurrentDocumentVersion(string version)
+        public CurrentVersion(string version)
         {
             Version = version;
         }

@@ -70,7 +70,7 @@
     <Compile Include="Migrations\Locators\MigrationLocator.cs" />
     <Compile Include="Migrations\Migration.cs" />
     <Compile Include="Migrations\MigrationRunner.cs" />
-    <Compile Include="Models\Attributes\CurrentDocumentVersion.cs" />
+    <Compile Include="Documents\Attributes\CurrentVersion.cs" />
     <Compile Include="Services\DiContainer\ComponentRegistry.cs" />
     <Compile Include="Services\DiContainer\ICompoentRegistry.cs" />
     <Compile Include="Exceptions\AlreadyInitializedException.cs" />
@@ -84,17 +84,19 @@
     <Compile Include="IApplication.cs" />
     <Compile Include="Services\Interceptors\MigrationInterceptor.cs" />
     <Compile Include="Services\Interceptors\MigrationInterceptorProvider.cs" />
-    <Compile Include="Models\Document.cs" />
-    <Compile Include="Models\DocumentVersion.cs" />
-    <Compile Include="Models\IDocument.cs" />
-    <Compile Include="Models\Serializers\DocumentVersionSerializer.cs" />
+    <Compile Include="Documents\Document.cs" />
+    <Compile Include="Documents\DocumentVersion.cs" />
+    <Compile Include="Documents\IDocument.cs" />
+    <Compile Include="Documents\Serializers\DocumentVersionSerializer.cs" />
     <Compile Include="Services\MongoDB\IMongoRegistrater.cs" />
     <Compile Include="Services\MongoDB\MongoRegistrater.cs" />
     <Compile Include="Services\Initializers\MongoMigration.cs" />
     <Compile Include="Application.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Documents\Locators\" />
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Exceptions\ErrorTexts.resx">
       <Generator>ResXFileCodeGenerator</Generator>

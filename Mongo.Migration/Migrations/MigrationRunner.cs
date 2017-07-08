@@ -1,7 +1,7 @@
 ﻿using System;
+using Mongo.Migration.Documents;
 using Mongo.Migration.Exceptions;
 using Mongo.Migration.Migrations.Locators;
-using Mongo.Migration.Models;
 using MongoDB.Bson;
 
 namespace Mongo.Migration.Migrations

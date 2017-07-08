@@ -61,7 +61,7 @@
     <Compile Include="Models\Document_when_creating.cs" />
     <Compile Include="Models\Serializers\DocumentVersionSerializer_when_serialize_and_deserialize.cs" />
     <Compile Include="MongoDB\MongoRegistrater_when_registrating.cs" />
-    <Compile Include="MongoMigration_when_initialize.cs" />
+    <Compile Include="Services\Initializers\MongoMigration_when_initialize.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Interceptors\MigrationInterceptorProvider_when_get_serializer.cs" />
     <Compile Include="TestDoubles\TestClass.cs" />

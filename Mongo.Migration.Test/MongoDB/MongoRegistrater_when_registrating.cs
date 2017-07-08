@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using Mongo.Migration.Models;
+using Mongo.Migration.Documents;
 using Mongo.Migration.Services.MongoDB;
 using MongoDB.Bson.Serialization;
 using NUnit.Framework;

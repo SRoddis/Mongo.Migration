@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
+using Mongo.Migration.Documents;
 using Mongo.Migration.Migrations;
-using Mongo.Migration.Models;
 using MongoDB.Bson.Serialization;
 
 namespace Mongo.Migration.Services.Interceptors
