@@ -58,8 +58,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\DuplicateVersionException.cs" />
+    <Compile Include="Exceptions\NoMigrationsFoundException.cs" />
+    <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Migrations\Attributes\MigrationMaker.cs" />
     <Compile Include="Migrations\IMigration.cs" />
+    <Compile Include="Migrations\Locators\AttributeMigrationLocator.cs" />
+    <Compile Include="Migrations\Locators\IMigrationLocator.cs" />
+    <Compile Include="Migrations\Locators\MigrationLocator.cs" />
     <Compile Include="Migrations\Migration.cs" />
     <Compile Include="Models\Attributes\CurrentDocumentVersion.cs" />
     <Compile Include="Services\DiContainer\ComponentRegistry.cs" />
@@ -85,13 +91,12 @@
     <Compile Include="Application.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Migrations\Locators\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Exceptions\ErrorTexts.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ErrorTexts.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

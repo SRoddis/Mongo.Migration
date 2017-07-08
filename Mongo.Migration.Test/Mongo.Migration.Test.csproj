@@ -51,6 +51,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Migrations\Locators\AttributeMigrationLocator_when_locate.cs" />
     <Compile Include="Migrations\Migration_when_migrating.cs" />
     <Compile Include="Migrations\Migration_when_creating.cs" />
     <Compile Include="Models\DocumentVersion_When_casting.cs" />
