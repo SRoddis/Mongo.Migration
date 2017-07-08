@@ -17,7 +17,7 @@ namespace Mongo.Migration.Test.Migrations.Locators
             var locator = new AttributeMigrationLocator();
 
             // Act
-            var result = locator.GetMigrations(typeof(TestClass));
+            var result = locator.GetMigrations(typeof(TestDocument));
 
             // Assert
             result.Count().Should().Be(1);

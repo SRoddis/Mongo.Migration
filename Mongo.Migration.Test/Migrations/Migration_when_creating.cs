@@ -15,7 +15,7 @@ namespace Mongo.Migration.Test.Migrations
             var migration = new TestMigration();
 
             // Assert
-            migration.Type.Should().Be(typeof(TestClass));
+            migration.Type.Should().Be(typeof(TestDocument));
         }
 
         [Test]

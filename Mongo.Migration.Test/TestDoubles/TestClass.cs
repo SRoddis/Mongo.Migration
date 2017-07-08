@@ -1,10 +1,9 @@
 ﻿using System;
-using Mongo.Migration.Models;
 
 namespace Mongo.Migration.Test.TestDoubles
 {
-    internal class TestClass : Document
+    internal class TestClass
     {
-        public int Doors { get; set; }
+        public string Test { get; set; }
     }
 }

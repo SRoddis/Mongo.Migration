@@ -21,6 +21,7 @@ namespace Mongo.Migration.Migrations.Locators
             {
                 var migrations = types.Select(Activator.CreateInstance)
                     .OfType<IMigration>();
+
                 instances.AddRange(migrations);
             }
 

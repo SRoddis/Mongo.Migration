@@ -1,24 +1,24 @@
-﻿using Mongo.Migration.Models;
-using MongoDB.Bson;
+﻿using Mongo.Migration.Migrations;
+using Mongo.Migration.Models;
 using MongoDB.Bson.IO;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 
 namespace Mongo.Migration.Services.Interceptors
 {
-    public class MigrationInterceptor<TClass> : BsonClassMapSerializer<TClass> where TClass : class, IDocument
+    internal class MigrationInterceptor<TClass> : BsonClassMapSerializer<TClass> where TClass : class, IDocument
     {
-        //private readonly IMigrationRunner _migrationRunner;
+        private readonly IMigrationRunner _migrationRunner;
 
-        public MigrationInterceptor()
-            : base(BsonClassMap.LookupClassMap(typeof (TClass)))
+        public MigrationInterceptor(IMigrationRunner migrationRunner)
+            : base(BsonClassMap.LookupClassMap(typeof(TClass)))
         {
-            //_migrationRunner = FlyingMigratory.CreateMigrationRunner();
+            _migrationRunner = migrationRunner;
         }
 
         public override void Serialize(BsonSerializationContext context, BsonSerializationArgs args, TClass value)
         {
-            //_migrationRunner.CheckVersion(value);
+            _migrationRunner.CheckVersion(value);
 
             base.Serialize(context, args, value);
         }
@@ -26,11 +26,11 @@ namespace Mongo.Migration.Services.Interceptors
         public override TClass Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)
         {
             // TODO: Performance? LatestVersion, dont do anything
-            BsonDocument document = BsonDocumentSerializer.Instance.Deserialize(context);
+            var document = BsonDocumentSerializer.Instance.Deserialize(context);
 
-            //_migrationRunner.Run(typeof(TClass), document);
+            _migrationRunner.Run(typeof(TClass), document);
 
-            BsonDeserializationContext migratedContext =
+            var migratedContext =
                 BsonDeserializationContext.CreateRoot(new BsonDocumentReader(document));
 
             return base.Deserialize(migratedContext, args);
