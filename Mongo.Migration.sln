@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mongo.Migration", "Mongo.Mi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mongo.Migration.Test", "Mongo.Migration.Test\Mongo.Migration.Test.csproj", "{8EDF4429-251A-416D-BB68-93F227191BCF}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demo", "Demo", "{86D46833-CAC7-4BA6-A02A-DF834DC471C4}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mongo.Migration.Demo", "Mongo.Migration.Demo\Mongo.Migration.Demo.csproj", "{4EEB72CC-4663-460F-A93B-58400E6898C9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Git", "Git", "{CB26356F-6A6A-4B13-BD95-672A8AF24518}"
@@ -50,8 +48,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{4EEB72CC-4663-460F-A93B-58400E6898C9} = {86D46833-CAC7-4BA6-A02A-DF834DC471C4}
 	EndGlobalSection
 EndGlobal

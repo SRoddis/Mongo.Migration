@@ -58,6 +58,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Documents\Locators\IVersionLocator.cs" />
+    <Compile Include="Documents\Locators\VersionLocator.cs" />
     <Compile Include="Exceptions\DuplicateVersionException.cs" />
     <Compile Include="Exceptions\NoMigrationsFoundException.cs" />
     <Compile Include="Exceptions\VersionViolationException.cs" />
@@ -94,9 +96,7 @@
     <Compile Include="Application.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Documents\Locators\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Exceptions\ErrorTexts.resx">
       <Generator>ResXFileCodeGenerator</Generator>

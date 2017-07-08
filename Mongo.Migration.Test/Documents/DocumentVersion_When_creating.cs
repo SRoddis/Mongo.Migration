@@ -4,7 +4,7 @@ using Mongo.Migration.Documents;
 using Mongo.Migration.Exceptions;
 using NUnit.Framework;
 
-namespace Mongo.Migration.Test.Models
+namespace Mongo.Migration.Test.Documents
 {
     [TestFixture]
     public class DocumentVersion_When_creating

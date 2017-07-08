@@ -6,7 +6,7 @@ using MongoDB.Bson.IO;
 using MongoDB.Bson.Serialization;
 using NUnit.Framework;
 
-namespace Mongo.Migration.Test.Models.Serializers
+namespace Mongo.Migration.Test.Documents.Serializers
 {
     [TestFixture]
     public class DocumentVersionSerializer_when_serialize_and_deserialize

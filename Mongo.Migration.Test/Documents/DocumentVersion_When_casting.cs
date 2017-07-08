@@ -2,7 +2,7 @@
 using Mongo.Migration.Documents;
 using NUnit.Framework;
 
-namespace Mongo.Migration.Test.Models
+namespace Mongo.Migration.Test.Documents
 {
     [TestFixture]
     public class DocumentVersion_When_casting

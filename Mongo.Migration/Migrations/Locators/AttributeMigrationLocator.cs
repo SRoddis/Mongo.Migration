@@ -9,23 +9,16 @@ namespace Mongo.Migration.Migrations.Locators
     {
         protected override IEnumerable<IMigration> LoadMigrations()
         {
-            var typesList = AppDomain.CurrentDomain.GetAssemblies().Select(
-                assembly => from type in assembly.GetTypes()
-                    where Attribute.IsDefined(type, typeof(MigrationMaker))
-                    select type
-            );
+            var typesWithMarker =
+                from a in AppDomain.CurrentDomain.GetAssemblies()
+                from t in a.GetTypes()
+                let attributes = t.GetCustomAttributes(typeof(MigrationMaker), true)
+                where attributes != null && attributes.Length > 0
+                select new { Type = t, Attributes = attributes.Cast<MigrationMaker>() };
 
-            var instances = new List<IMigration>();
+            //TODO: Throw exception if type is not IMigration
 
-            foreach (var types in typesList)
-            {
-                var migrations = types.Select(Activator.CreateInstance)
-                    .OfType<IMigration>();
-
-                instances.AddRange(migrations);
-            }
-
-            return instances;
+            return typesWithMarker.Select(type => (IMigration) Activator.CreateInstance(type.Type));
         }
     }
 }

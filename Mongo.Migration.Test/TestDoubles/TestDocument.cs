@@ -9,4 +9,9 @@ namespace Mongo.Migration.Test.TestDoubles
     {
         public int Doors { get; set; }
     }
+
+    internal class TestDocumentWithoutAttribute : Document
+    {
+        public int Doors { get; set; }
+    }
 }

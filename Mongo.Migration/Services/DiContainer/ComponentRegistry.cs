@@ -1,4 +1,5 @@
 ﻿using LightInject;
+using Mongo.Migration.Documents.Locators;
 using Mongo.Migration.Documents.Serializers;
 using Mongo.Migration.Migrations;
 using Mongo.Migration.Migrations.Locators;
@@ -21,6 +22,7 @@ namespace Mongo.Migration.Services.DiContainer
             _container.Register<DocumentVersionSerializer, DocumentVersionSerializer>();
             _container.Register<MigrationInterceptorProvider, MigrationInterceptorProvider>();
             _container.Register<IMigrationLocator, AttributeMigrationLocator>();
+            _container.Register<IVersionLocator, VersionLocator>();
 
             _container.Register<IMigrationRunner, MigrationRunner>();
             _container.Register<IMongoRegistrater, MongoRegistrater>();
