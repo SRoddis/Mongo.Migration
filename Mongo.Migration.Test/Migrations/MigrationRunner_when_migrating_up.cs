@@ -1,19 +1,57 @@
-﻿using NUnit.Framework;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using FluentAssertions;
+using Mongo.Migration.Migrations;
+using Mongo.Migration.Test.TestDoubles;
+using MongoDB.Bson;
+using NUnit.Framework;
 
 namespace Mongo.Migration.Test.Migrations
 {
     [TestFixture]
     internal class MigrationRunner_when_migrating_up : IntegrationTest
     {
-        [Test]
-        public void TestMethod()
+        private IMigrationRunner _runner;
+
+        [OneTimeSetUp]
+        public void OneTimeSetUp()
         {
-            
+            _runner = _components.Get<IMigrationRunner>();
+        }
+
+        [Test]
+        public void When_migrate_up_the_lowest_version_Then_all_migrations_are_used()
+        {
+            // Arrange
+            BsonDocument document = new BsonDocument
+            {
+                {"Version", "0.0.0"},
+                {"Dors", 3}
+            };
+
+            // Act
+            _runner.Run(typeof(TestDocumentWithTwoMigrationHighestVersion), document);
+
+            // Assert
+            document.Names.ToList()[1].Should().Be("Door");
+            document.Values.ToList()[0].AsString.Should().Be("0.0.2");
+        }
+
+        [Test]
+        public void When_document_has_no_version_Then_all_migrations_are_used()
+        {
+            // Arrange
+            BsonDocument document = new BsonDocument
+            {
+                {"Dors", 3}
+            };
+
+            // Act
+            _runner.Run(typeof(TestDocumentWithTwoMigrationHighestVersion), document);
+
+            // Assert
+            document.Names.ToList()[1].Should().Be("Door");
+            document.Values.ToList()[0].AsString.Should().Be("0.0.2");
         }
     }
 }

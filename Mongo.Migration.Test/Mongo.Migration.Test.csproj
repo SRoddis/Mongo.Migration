@@ -68,6 +68,9 @@
     <Compile Include="Services\Interceptors\MigrationInterceptorProvider_when_get_serializer.cs" />
     <Compile Include="TestDoubles\TestClass.cs" />
     <Compile Include="TestDoubles\TestDocumentWithOneMigration.cs" />
+    <Compile Include="TestDoubles\TestDocumentWithTwoMigrationHighestVersion.cs" />
+    <Compile Include="TestDoubles\TestDocumentWithTwoMigrationHighestVersion_0_0_1.cs" />
+    <Compile Include="TestDoubles\TestDocumentWithTwoMigrationHighestVersion_0_0_2.cs" />
     <Compile Include="TestDoubles\TestDocumentWithTwoMigration_0_0_2.cs" />
     <Compile Include="TestDoubles\TestDocumentWithTwoMigration_0_0_1.cs" />
     <Compile Include="TestDoubles\TestDocumentWithOneMigration_0_0_1.cs" />
