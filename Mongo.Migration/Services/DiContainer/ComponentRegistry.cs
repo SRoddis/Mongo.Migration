@@ -1,4 +1,4 @@
-﻿using DryIoc;
+﻿using LightInject;
 using Mongo.Migration.Models.Serializers;
 using Mongo.Migration.Services.Interceptors;
 using Mongo.Migration.Services.MongoDB;
@@ -7,11 +7,11 @@ namespace Mongo.Migration.Services.DiContainer
 {
     internal class ComponentRegistry : ICompoentRegistry
     {
-        private readonly Container _container;
+        private readonly ServiceContainer _container;
 
         public ComponentRegistry()
         {
-            _container = new Container();
+            _container = new ServiceContainer();
         }
 
         public void RegisterComponents()
@@ -24,7 +24,7 @@ namespace Mongo.Migration.Services.DiContainer
 
         public TComponent Get<TComponent>() where TComponent : class
         {
-            return _container.Resolve<TComponent>();
+            return _container.GetInstance<TComponent>();
         }
     }
 }

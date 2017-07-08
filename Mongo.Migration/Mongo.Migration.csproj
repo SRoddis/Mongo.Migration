@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="LightInject, Version=5.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\LightInject.5.0.3\lib\net45\LightInject.dll</HintPath>
+    </Reference>
     <Reference Include="MongoDB.Bson, Version=2.4.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MongoDB.Bson.2.4.4\lib\net45\MongoDB.Bson.dll</HintPath>
       <Private>True</Private>
@@ -61,10 +64,6 @@
     <Compile Include="Models\Attributes\CurrentDocumentVersion.cs" />
     <Compile Include="Services\DiContainer\ComponentRegistry.cs" />
     <Compile Include="Services\DiContainer\ICompoentRegistry.cs" />
-    <Compile Include="DryIoc\AsyncExecutionFlowScopeContext.cs" />
-    <Compile Include="DryIoc\Container.cs" />
-    <Compile Include="DryIoc\FastExpressionCompiler.cs" />
-    <Compile Include="DryIoc\ImTools.cs" />
     <Compile Include="Exceptions\AlreadyInitializedException.cs" />
     <Compile Include="Exceptions\ErrorTexts.Designer.cs">
       <AutoGen>True</AutoGen>
