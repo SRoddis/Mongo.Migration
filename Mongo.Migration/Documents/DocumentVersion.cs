@@ -55,7 +55,7 @@ namespace Mongo.Migration.Documents
 
         public override string ToString()
         {
-            return string.Format("{0}.{1}.{2}", Major, Minor, Revision);
+            return $"{Major}.{Minor}.{Revision}";
         }
 
         #region compare

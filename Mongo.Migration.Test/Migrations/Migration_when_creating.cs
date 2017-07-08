@@ -12,17 +12,17 @@ namespace Mongo.Migration.Test.Migrations
         public void Then_migration_has_type_testClass()
         {
             // Arrange Act
-            var migration = new TestMigration();
+            var migration = new TestDocumentWithOneMigration_0_0_1();
 
             // Assert
-            migration.Type.Should().Be(typeof(TestDocument));
+            migration.Type.Should().Be(typeof(TestDocumentWithOneMigration));
         }
 
         [Test]
         public void Then_migration_have_version()
         {
             // Arrange Act
-            var migration = new TestMigration();
+            var migration = new TestDocumentWithOneMigration_0_0_1();
 
             // Assert
             migration.Version.Should().Be("0.0.1");
@@ -32,10 +32,10 @@ namespace Mongo.Migration.Test.Migrations
         public void Then_migration_should_be_created()
         {
             // Arrange Act
-            var migration = new TestMigration();
+            var migration = new TestDocumentWithOneMigration_0_0_1();
 
             // Assert
-            migration.Should().BeOfType<TestMigration>();
+            migration.Should().BeOfType<TestDocumentWithOneMigration_0_0_1>();
         }
     }
 }

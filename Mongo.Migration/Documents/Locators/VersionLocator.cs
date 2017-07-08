@@ -11,9 +11,8 @@ namespace Mongo.Migration.Documents.Locators
 
         private IDictionary<Type, DocumentVersion> Versions => _versions ?? (_versions = LoadVersions());
 
-        public DocumentVersion? GetCurrentVersion<TDocument>() where TDocument : class, IDocument
+        public DocumentVersion? GetCurrentVersion(Type type)
         {
-            var type = typeof(TDocument);
             if (!Versions.ContainsKey(type))
                 return null;
 

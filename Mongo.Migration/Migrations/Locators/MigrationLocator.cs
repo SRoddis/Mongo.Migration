@@ -9,14 +9,15 @@ namespace Mongo.Migration.Migrations.Locators
 {
     public abstract class MigrationLocator : IMigrationLocator
     {
-        private IList<IMigration> _migrations;
+        private IDictionary<Type, IEnumerable<IMigration>> _migrations;
 
-        protected IList<IMigration> Migrations
+        protected IDictionary<Type, IEnumerable<IMigration>> Migrations
         {
             get
             {
                 if (_migrations == null)
-                    _migrations = LoadMigrations().OrderBy(m => m.Type).CheckForDuplicates().ToList();
+                    _migrations =
+                        LoadMigrations();
 
                 if (_migrations.NullOrEmpty())
                     throw new NoMigrationsFoundException();
@@ -27,32 +28,39 @@ namespace Mongo.Migration.Migrations.Locators
 
         public IEnumerable<IMigration> GetMigrations(Type type)
         {
-            return Migrations.Where(m => m.Type == type).OrderBy(m => m.Version).ToList();
+            IEnumerable<IMigration> migrations;
+            Migrations.TryGetValue(type, out migrations);
+
+            return migrations;
         }
 
         public IEnumerable<IMigration> GetMigrationsGt(Type type, DocumentVersion version)
         {
+            var migrations = GetMigrations(type);
+
             return
-                Migrations.Where(m => m.Type == type)
-                    .OrderBy(m => m.Version)
+                migrations
                     .Where(m => m.Version > version)
                     .ToList();
         }
 
-        public IEnumerable<IMigration> GetMigrationsLte(Type type, DocumentVersion version)
+        public IEnumerable<IMigration> GetMigrationsGtAndEquel(Type type, DocumentVersion version)
         {
+            var migrations = GetMigrations(type);
+
             return
-                Migrations.Where(m => m.Type == type)
-                    .OrderByDescending(m => m.Version)
-                    .Where(m => m.Version <= version)
+                migrations
+                    .Where(m => m.Version >= version)
                     .ToList();
         }
 
         public DocumentVersion GetLatestVersion(Type type)
         {
-            return Migrations.Where(m => m.Type == type).Max(m => m.Version);
+            var migrations = GetMigrations(type);
+
+            return migrations.Max(m => m.Version);
         }
 
-        protected abstract IEnumerable<IMigration> LoadMigrations();
+        protected abstract IDictionary<Type, IEnumerable<IMigration>> LoadMigrations();
     }
 }

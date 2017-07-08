@@ -16,10 +16,10 @@ namespace Mongo.Migration.Test.Services.Interceptors
             var provider = _components.Get<MigrationInterceptorProvider>();
 
             // Act
-            var serializer = provider.GetSerializer(typeof(TestDocument));
+            var serializer = provider.GetSerializer(typeof(TestDocumentWithOneMigration));
 
             // Assert
-            serializer.ValueType.Should().Be(typeof(TestDocument));
+            serializer.ValueType.Should().Be(typeof(TestDocumentWithOneMigration));
         }
 
         [Test]

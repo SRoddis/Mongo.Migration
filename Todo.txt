@@ -1,1 +1,0 @@
-Add Dictonary in AttributeLocator to acces types faster

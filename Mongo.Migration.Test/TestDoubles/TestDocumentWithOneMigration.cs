@@ -5,7 +5,7 @@ using Mongo.Migration.Documents.Attributes;
 namespace Mongo.Migration.Test.TestDoubles
 {
     [CurrentVersion("0.0.1")]
-    internal class TestDocument : Document
+    internal class TestDocumentWithOneMigration : Document
     {
         public int Doors { get; set; }
     }
