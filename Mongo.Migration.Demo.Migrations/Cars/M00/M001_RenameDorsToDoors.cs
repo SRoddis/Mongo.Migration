@@ -4,7 +4,7 @@ using Mongo.Migration.Migrations;
 using Mongo.Migration.Migrations.Attributes;
 using MongoDB.Bson;
 
-namespace Mongo.Migration.Demo.Migrations.Cars.M00
+namespace Mongo.Migration.Demo.MongoMigrations.Cars.M00
 {
     [MigrationMaker]
     public class M001_RenameDorsToDoors : Migration<Car>
