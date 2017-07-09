@@ -14,7 +14,7 @@ namespace Mongo.Migration.Test.Performance
     [TestFixture]
     public class PerformanceTest
     {
-        //[TearDown]
+        [TearDown]
         public void TearDown()
         {
             MongoMigration.Reset();
@@ -22,10 +22,10 @@ namespace Mongo.Migration.Test.Performance
             _runner.Dispose();
         }
 
-        //[SetUp]
+        [SetUp]
         public void SetUp()
         {
-            _runner = MongoDbRunner.StartForDebugging();
+            _runner = MongoDbRunner.Start();
             _client = new MongoClient(_runner.ConnectionString);
             
         }
@@ -87,7 +87,7 @@ namespace Mongo.Migration.Test.Performance
 
         #endregion
 
-        //[Test]
+        [Test]
         public void When_migrating_number_of_documents()
         {
             // Arrange
@@ -103,6 +103,7 @@ namespace Mongo.Migration.Test.Performance
             InsertMany(DOCUMENT_COUNT, false);
             MigrateAll(false);
             sw.Stop();
+
             ClearCollection();
 
             // Measure time of MongoDb processing without Mongo.Migration
@@ -121,8 +122,8 @@ namespace Mongo.Migration.Test.Performance
             Console.WriteLine(
               $"MongoDB: {sw.ElapsedMilliseconds}, Mongo.Migration: {swWithMigration.ElapsedMilliseconds}, Diff: {result}, Documents: {DOCUMENT_COUNT}, Migrations per Document: 2");
 
+            // Assert
             result.Should().BeLessThan(100);
-
         }
     }
 }
