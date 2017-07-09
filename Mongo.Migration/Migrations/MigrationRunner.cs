@@ -48,6 +48,7 @@ namespace Mongo.Migration.Migrations
         public void Run(Type type, BsonDocument document)
         {
             var documentVersion = GetVersionOrDefault(document);
+            // Zeitkritisch
             var latestVersion = _migrationLocator.GetLatestVersion(type);
             var currentVersion = _versionLocator.GetCurrentVersion(type) ?? latestVersion;
 

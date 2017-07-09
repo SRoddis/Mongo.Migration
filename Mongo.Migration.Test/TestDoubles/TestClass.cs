@@ -1,9 +1,12 @@
 ﻿using System;
+using MongoDB.Bson;
 
 namespace Mongo.Migration.Test.TestDoubles
 {
-    internal class TestClass
+    public class TestClass
     {
-        public string Test { get; set; }
+        public ObjectId Id { get; set; }
+
+        public int Dors { get; set; }
     }
 }

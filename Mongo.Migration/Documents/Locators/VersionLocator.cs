@@ -9,7 +9,15 @@ namespace Mongo.Migration.Documents.Locators
     {
         private IDictionary<Type, DocumentVersion> _versions;
 
-        private IDictionary<Type, DocumentVersion> Versions => _versions ?? (_versions = LoadVersions());
+        private IDictionary<Type, DocumentVersion> Versions
+        {
+            get
+            {
+                if (_versions == null)
+                    LoadVersions();
+                return _versions;
+            }
+        }
 
         public DocumentVersion? GetCurrentVersion(Type type)
         {
@@ -21,7 +29,7 @@ namespace Mongo.Migration.Documents.Locators
             return value;
         }
 
-        private static IDictionary<Type, DocumentVersion> LoadVersions()
+        public void LoadVersions()
         {
             var types =
                 from a in AppDomain.CurrentDomain.GetAssemblies()
@@ -38,7 +46,7 @@ namespace Mongo.Migration.Documents.Locators
                 versions.Add(type.Type, version);
             }
 
-            return versions;
+            _versions = versions;
         }
     }
 }

@@ -13,5 +13,7 @@ namespace Mongo.Migration.Migrations.Locators
         IEnumerable<IMigration> GetMigrationsGtAndEquel(Type type, DocumentVersion version);
 
         DocumentVersion GetLatestVersion(Type type);
+
+        void LoadMigrations();
     }
 }

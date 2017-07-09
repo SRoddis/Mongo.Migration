@@ -24,5 +24,10 @@ namespace Mongo.Migration.Services.Initializers
 
             _isInitialized = true;
         }
+
+        public static void Reset()
+        {
+            _isInitialized = false;
+        }
     }
 }

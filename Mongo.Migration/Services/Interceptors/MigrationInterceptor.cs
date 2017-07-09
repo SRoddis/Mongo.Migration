@@ -1,4 +1,6 @@
-﻿using Mongo.Migration.Documents;
+﻿using System;
+using System.Diagnostics;
+using Mongo.Migration.Documents;
 using Mongo.Migration.Migrations;
 using MongoDB.Bson.IO;
 using MongoDB.Bson.Serialization;
@@ -27,9 +29,9 @@ namespace Mongo.Migration.Services.Interceptors
         {
             // TODO: Performance? LatestVersion, dont do anything
             var document = BsonDocumentSerializer.Instance.Deserialize(context);
-
+            
             _migrationRunner.Run(typeof(TClass), document);
-
+            
             var migratedContext =
                 BsonDeserializationContext.CreateRoot(new BsonDocumentReader(document));
 

@@ -9,6 +9,12 @@ namespace Mongo.Migration.Test.Services.Initializers
     [TestFixture]
     public class MongoMigration_when_initialize
     {
+        [TearDown]
+        public void TearDown()
+        {
+            MongoMigration.Reset();
+        }
+
         [Test]
         public void When_inizialize_twice_Then_throw_exception()
         {

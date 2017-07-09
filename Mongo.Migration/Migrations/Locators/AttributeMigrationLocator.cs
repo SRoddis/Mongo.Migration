@@ -10,7 +10,7 @@ namespace Mongo.Migration.Migrations.Locators
 {
     internal class AttributeMigrationLocator : MigrationLocator
     {
-        protected override IDictionary<Type, IEnumerable<IMigration>> LoadMigrations()
+        public override void LoadMigrations()
         {
             var assemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
 
@@ -23,7 +23,7 @@ namespace Mongo.Migration.Migrations.Locators
                 where attributes != null && attributes.Length > 0
                 select new {Type = t, Attributes = attributes.Cast<MigrationMaker>()};
 
-            var dictonary = new Dictionary<Type, IEnumerable<IMigration>>();
+            var dictonary = new Dictionary<Type, IReadOnlyCollection<IMigration>>();
 
             var allMigrations = migrationTypes.Select(t => (IMigration) Activator.CreateInstance(t.Type))
                 .OrderBy(m => m.Version);
@@ -32,10 +32,10 @@ namespace Mongo.Migration.Migrations.Locators
             foreach (var type in types)
             {
                 var migrations = allMigrations.Where(m => m.Type == type).CheckForDuplicates();
-                dictonary.Add(type, migrations);
+                dictonary.Add(type, migrations.ToList());
             }
 
-            return dictonary;
+            _migrations =  dictonary;
         }
 
         private static void AppendMigrationAssemblies(List<Assembly> assemblies)
