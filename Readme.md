@@ -80,6 +80,13 @@ The performance is measured on every push to the repository with a small perform
 Example Output of the automated test:
 ```bash
 MongoDB: 73ms, Mongo.Migration: 168ms, Diff: 95ms (Tolerance: 150ms), Documents: 5000, Migrations per Document: 2
+
+MongoDB: 88ms, Mongo.Migration: 109ms, Diff: 21ms (Tolerance: 70ms), Documents: 1500, Migrations per Document: 2
+
+MongoDB: 62ms, Mongo.Migration: 63ms, Diff: 1ms (Tolerance: 40ms), Documents: 100, Migrations per Document: 2
+
+MongoDB: 48ms, Mongo.Migration: 50ms, Diff: 2ms (Tolerance: 10ms), Documents: 10, Migrations per Document: 2
+
 ```
 
 After bigger changes the code is analyzed with profiling tools to check for performance or memory problems.
