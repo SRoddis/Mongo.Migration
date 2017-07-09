@@ -95,5 +95,14 @@ namespace Mongo.Migration.Exceptions {
                 return ResourceManager.GetString("VersionStringToLong", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CurrentVersion: &apos;{0}&apos;, DocumentVersion: &apos;{1}&apos;, LatestMigrationVersion: &apos;{2}&apos;.
+        /// </summary>
+        internal static string VersionViolated {
+            get {
+                return ResourceManager.GetString("VersionViolated", resourceCulture);
+            }
+        }
     }
 }

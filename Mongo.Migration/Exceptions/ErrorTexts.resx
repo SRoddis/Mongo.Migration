@@ -129,4 +129,7 @@
   <data name="VersionStringToLong" xml:space="preserve">
     <value>Versions must have format: major.minor.revision, this doesn't match: {0}</value>
   </data>
+  <data name="VersionViolated" xml:space="preserve">
+    <value>CurrentVersion: '{0}', DocumentVersion: '{1}', LatestMigrationVersion: '{2}'</value>
+  </data>
 </root>

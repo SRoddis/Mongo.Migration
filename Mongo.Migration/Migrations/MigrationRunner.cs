@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Mongo.Migration.Documents;
 using Mongo.Migration.Documents.Locators;
@@ -26,8 +27,8 @@ namespace Mongo.Migration.Migrations
         {
             var type = typeof(TClass);
             var documentVersion = instance.Version.ToString();
-            var currentVersion = _versionLocator.GetCurrentVersion(type);
             var latestVersion = _migrationLocator.GetLatestVersion(type);
+            var currentVersion = _versionLocator.GetCurrentVersion(type) ?? latestVersion;
 
             if (documentVersion == currentVersion)
                 return;
@@ -37,25 +38,42 @@ namespace Mongo.Migration.Migrations
 
             if (DocumentVersion.Default() == documentVersion)
             {
-                instance.Version = latestVersion;
+                DetermineCurrentVersion(instance, currentVersion, latestVersion);
                 return;
             }
 
-            throw new VersionViolationException();
+            throw new VersionViolationException(currentVersion.ToString(), documentVersion, latestVersion);
         }
 
         public void Run(Type type, BsonDocument document)
         {
             var documentVersion = GetVersionOrDefault(document);
-            var currentVersion = _versionLocator.GetCurrentVersion(type);
+            var latestVersion = _migrationLocator.GetLatestVersion(type);
+            var currentVersion = _versionLocator.GetCurrentVersion(type) ?? latestVersion;
 
             if (documentVersion == currentVersion)
                 return;
 
             if (documentVersion > currentVersion)
+            {
                 MigrateDown(type, currentVersion.ToString(), document);
+                return;
+            }
 
             MigrateUp(type, documentVersion, document);
+        }
+
+        private static void DetermineCurrentVersion<TClass>(
+            TClass instance,
+            DocumentVersion? currentVersion,
+            DocumentVersion latestVersion) where TClass : class, IDocument
+        {
+            if (currentVersion < latestVersion)
+            {
+                instance.Version = currentVersion.ToString();
+                return;
+            }
+            instance.Version = latestVersion;
         }
 
         private void MigrateUp(Type type, DocumentVersion version, BsonDocument document)
@@ -71,7 +89,10 @@ namespace Mongo.Migration.Migrations
 
         private void MigrateDown(Type type, DocumentVersion version, BsonDocument document)
         {
-            var migrations = _migrationLocator.GetMigrationsGtAndEquel(type, version).ToList();
+            var migrations = _migrationLocator
+                .GetMigrationsGtAndEquel(type, version)
+                .OrderByDescending(m => m.Version)
+                .ToList();
 
             for (var m = 0; m < migrations.Count; m++)
             {
@@ -79,8 +100,20 @@ namespace Mongo.Migration.Migrations
                     break;
 
                 migrations[m].Down(document);
-                SetVersion(document, migrations[m + 1].Version);
+
+                var docVersion = DetermineDocumentVersion(version, migrations, m);
+                SetVersion(document, docVersion);
             }
+        }
+
+        private static DocumentVersion DetermineDocumentVersion(
+            DocumentVersion version,
+            List<IMigration> migrations,
+            int m)
+        {
+            if (migrations.Last() != migrations[m])
+                return migrations[m + 1].Version;
+            return version;
         }
 
         private static string GetVersionOrDefault(BsonDocument document)

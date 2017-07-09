@@ -54,6 +54,8 @@
     <Compile Include="Documents\Locators\AttributeMigrationLocator_when_locate.cs" />
     <Compile Include="IntegrationTest.cs" />
     <Compile Include="Migrations\Locators\AttributeMigrationLocator_when_locate.cs" />
+    <Compile Include="Migrations\MigrationRunner_when_check_version.cs" />
+    <Compile Include="Migrations\MigrationRunner_when_migrating_down.cs" />
     <Compile Include="Migrations\Migration_when_migrating.cs" />
     <Compile Include="Migrations\Migration_when_creating.cs" />
     <Compile Include="Documents\DocumentVersion_When_casting.cs" />
@@ -68,6 +70,9 @@
     <Compile Include="Services\Interceptors\MigrationInterceptorProvider_when_get_serializer.cs" />
     <Compile Include="TestDoubles\TestClass.cs" />
     <Compile Include="TestDoubles\TestDocumentWithOneMigration.cs" />
+    <Compile Include="TestDoubles\TestDocumentWithTwoMigrationMiddleVersion_0_0_1.cs" />
+    <Compile Include="TestDoubles\TestDocumentWithTwoMigrationMiddleVersion_0_0_2.cs" />
+    <Compile Include="TestDoubles\TestDocumentWithTwoMigrationMiddleVersion.cs" />
     <Compile Include="TestDoubles\TestDocumentWithTwoMigrationHighestVersion.cs" />
     <Compile Include="TestDoubles\TestDocumentWithTwoMigrationHighestVersion_0_0_1.cs" />
     <Compile Include="TestDoubles\TestDocumentWithTwoMigrationHighestVersion_0_0_2.cs" />
