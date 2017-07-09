@@ -1,43 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using FluentAssertions;
+using Mongo.Migration.Demo.Model;
 using Mongo.Migration.Services.Initializers;
-using Mongo.Migration.Test.TestDoubles;
 using Mongo2Go;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using NUnit.Framework;
 
-namespace Mongo.Migration.Test.Performance
+namespace Mongo.Migration.Demo.Performance.Console
 {
-    [TestFixture]
-    public class PerformanceTest
+    internal class Program
     {
-        [TearDown]
-        public void TearDown()
-        {
-            MongoMigration.Reset();
-        }
+        private static readonly MongoClient _client;
 
-        [SetUp]
-        public void SetUp()
+        static Program()
         {
             var runner = MongoDbRunner.StartForDebugging();
             _client = new MongoClient(runner.ConnectionString);
         }
 
-        #region PRIVATE
-
-        private const int DOCUMENT_COUNT = 1000;
-
-        private const string DATABASE_NAME = "PeformanveTest";
-
-        private const string COLLECTION_NAME = "Test";
-
-        private MongoClient _client;
-
-        private void InsertMany(int number, bool withVersion)
+        private static void InsertMany(int number, bool withVersion)
         {
             var documents = new List<BsonDocument>();
             for (var n = 0; n < number; n++)
@@ -47,56 +29,55 @@ namespace Mongo.Migration.Test.Performance
                     {"Dors", 3}
                 };
                 if (withVersion)
+                {
                     document.Add("Version", "0.0.0");
+                    document.Add("Type", "Truck");
+                }
+                
                 documents.Add(document);
             }
 
-            _client.GetDatabase(DATABASE_NAME).GetCollection<BsonDocument>(COLLECTION_NAME).InsertManyAsync(documents)
+            _client.GetDatabase("PerformanceTestCar").GetCollection<BsonDocument>("Tests").InsertManyAsync(documents)
                 .Wait();
         }
 
-        private void MigrateAll(bool withVersion)
+        private static void MigrateAll(bool withVersion)
         {
             if (withVersion)
             {
-                var versionedCollectin = _client.GetDatabase(DATABASE_NAME)
-                    .GetCollection<TestDocumentWithTwoMigrationHighestVersion>(COLLECTION_NAME);
+                var versionedCollectin = _client.GetDatabase("PerformanceTestCar")
+                    .GetCollection<Car>("Tests");
                 var versionedResult = versionedCollectin.FindAsync(_ => true).Result.ToListAsync().Result;
                 return;
             }
 
-            var collection = _client.GetDatabase(DATABASE_NAME)
-                .GetCollection<TestClass>(COLLECTION_NAME);
+            var collection = _client.GetDatabase("PerformanceTestCar")
+                .GetCollection<CarWithoutVersion>("Tests");
             var result = collection.FindAsync(_ => true).Result.ToListAsync().Result;
         }
 
-        private void AddDocumentsToCache()
+        private static void AddDocumentsToCache()
         {
-            InsertMany(DOCUMENT_COUNT, false);
+            InsertMany(10000, false);
             MigrateAll(false);
         }
 
-        private void ClearCollection()
+        private static void ClearCollection()
         {
-            _client.GetDatabase(DATABASE_NAME).DropCollection(COLLECTION_NAME);
+            _client.GetDatabase("PerformanceTestCar").DropCollection("Tests");
         }
 
-        #endregion
-
-        [Test]
-        public void When_migrating_number_of_documents()
+        private static void Main(string[] args)
         {
-            // Arrange
             // Worm up MongoCache
             ClearCollection();
             AddDocumentsToCache();
             ClearCollection();
 
-            // Act
             // Measure time of MongoDb processing without Mongo.Migration
             var sw = new Stopwatch();
             sw.Start();
-            InsertMany(DOCUMENT_COUNT, false);
+            InsertMany(10000, false);
             MigrateAll(false);
             sw.Stop();
             ClearCollection();
@@ -106,7 +87,7 @@ namespace Mongo.Migration.Test.Performance
 
             var swWithMigration = new Stopwatch();
             swWithMigration.Start();
-            InsertMany(DOCUMENT_COUNT, true);
+            InsertMany(10000, true);
             MigrateAll(true);
             swWithMigration.Stop();
 
@@ -114,10 +95,8 @@ namespace Mongo.Migration.Test.Performance
 
             var result = swWithMigration.ElapsedMilliseconds - sw.ElapsedMilliseconds;
 
-            Console.WriteLine(
+            System.Console.WriteLine(
                 $"MongoDB: {sw.ElapsedMilliseconds}, Mongo.Migration: {swWithMigration.ElapsedMilliseconds}, Diff: {result}");
-
-            result.Should().BeLessThan(110);
         }
     }
 }
