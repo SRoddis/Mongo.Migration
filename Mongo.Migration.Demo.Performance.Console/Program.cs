@@ -111,7 +111,7 @@ namespace Mongo.Migration.Demo.Performance.Console
             var result = swWithMigration.ElapsedMilliseconds - sw.ElapsedMilliseconds;
 
             System.Console.WriteLine(
-                $"MongoDB: {sw.ElapsedMilliseconds}, Mongo.Migration: {swWithMigration.ElapsedMilliseconds}, Diff: {result} (Tolerance: {TOLERANCE_MS}), Documents: {DOCUMENT_COUNT}, Migrations per Document: 2");
+                $"MongoDB: {sw.ElapsedMilliseconds}ms, Mongo.Migration: {swWithMigration.ElapsedMilliseconds}ms, Diff: {result}ms (Tolerance: {TOLERANCE_MS}ms), Documents: {DOCUMENT_COUNT}, Migrations per Document: 2");
 
             System.Console.ReadLine();
         }

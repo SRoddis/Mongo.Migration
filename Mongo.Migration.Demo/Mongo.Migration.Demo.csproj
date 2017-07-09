@@ -58,11 +58,6 @@
       <HintPath>..\packages\System.Runtime.InteropServices.RuntimeInformation.4.0.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -76,7 +71,6 @@
     <ProjectReference Include="..\Mongo.Migration.Demo.Migrations\Mongo.Migration.Demo.MongoMigrations.csproj">
       <Project>{71448fb3-5f4f-4be1-a019-b68e35cb3da6}</Project>
       <Name>Mongo.Migration.Demo.MongoMigrations</Name>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
     </ProjectReference>
     <ProjectReference Include="..\Mongo.Migration.Demo.Model\Mongo.Migration.Demo.Model.csproj">
       <Project>{8E153CCE-D7FB-4F39-B840-86AA9F4E165E}</Project>

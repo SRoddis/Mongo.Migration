@@ -19,9 +19,9 @@ namespace Mongo.Migration.Migrations.Locators
             var migrationTypes =
                 from a in assemblies
                 from t in a.GetTypes()
-                let attributes = t.GetCustomAttributes(typeof(MigrationMaker), true)
+                let attributes = t.GetCustomAttributes(typeof(MigrationMarker), true)
                 where attributes != null && attributes.Length > 0
-                select new {Type = t, Attributes = attributes.Cast<MigrationMaker>()};
+                select new {Type = t, Attributes = attributes.Cast<MigrationMarker>()};
 
             var dictonary = new Dictionary<Type, IReadOnlyCollection<IMigration>>();
 

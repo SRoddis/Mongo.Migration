@@ -32,13 +32,13 @@ namespace Mongo.Migration.Test.Performance
 
         #region PRIVATE
 
-        private const int DOCUMENT_COUNT = 10000;
+        private const int DOCUMENT_COUNT = 5000;
 
         private const string DATABASE_NAME = "PeformanveTest";
 
         private const string COLLECTION_NAME = "Test";
 
-        private const int TOLERANCE_MS = 200;
+        private const int TOLERANCE_MS = 150;
 
         private MongoClient _client;
         private MongoDbRunner _runner;
@@ -122,7 +122,7 @@ namespace Mongo.Migration.Test.Performance
             var result = swWithMigration.ElapsedMilliseconds - sw.ElapsedMilliseconds;
 
             Console.WriteLine(
-              $"MongoDB: {sw.ElapsedMilliseconds}, Mongo.Migration: {swWithMigration.ElapsedMilliseconds}, Diff: {result} (Tolerance: {TOLERANCE_MS}), Documents: {DOCUMENT_COUNT}, Migrations per Document: 2");
+              $"MongoDB: {sw.ElapsedMilliseconds}ms, Mongo.Migration: {swWithMigration.ElapsedMilliseconds}ms, Diff: {result}ms (Tolerance: {TOLERANCE_MS}ms), Documents: {DOCUMENT_COUNT}, Migrations per Document: 2");
 
             // Assert
             result.Should().BeLessThan(TOLERANCE_MS);

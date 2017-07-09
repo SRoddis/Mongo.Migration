@@ -6,7 +6,7 @@ using MongoDB.Bson;
 
 namespace Mongo.Migration.Demo.MongoMigrations.Cars.M00
 {
-    [MigrationMaker]
+    [MigrationMarker]
     public class M001_RenameDorsToDoors : Migration<Car>
     {
         public M001_RenameDorsToDoors()

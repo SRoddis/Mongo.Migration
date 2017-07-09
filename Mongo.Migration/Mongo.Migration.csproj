@@ -51,11 +51,6 @@
       <HintPath>..\packages\System.Runtime.InteropServices.RuntimeInformation.4.0.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Documents\Locators\IVersionLocator.cs" />
@@ -64,7 +59,7 @@
     <Compile Include="Exceptions\NoMigrationsFoundException.cs" />
     <Compile Include="Exceptions\VersionViolationException.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
-    <Compile Include="Migrations\Attributes\MigrationMaker.cs" />
+    <Compile Include="Migrations\Attributes\MigrationMarker.cs" />
     <Compile Include="Migrations\IMigration.cs" />
     <Compile Include="Migrations\IMigrationRunner.cs" />
     <Compile Include="Migrations\Locators\AttributeMigrationLocator.cs" />
