@@ -33,7 +33,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mongo.Migration.Demo.Model"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mongo.Migration.Demo.MongoMigrations", "Mongo.Migration.Demo.Migrations\Mongo.Migration.Demo.MongoMigrations.csproj", "{71448FB3-5F4F-4BE1-A019-B68E35CB3DA6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mongo.Migration.Demo.Performance.Console", "Mongo.Migration.Performance.Console\Mongo.Migration.Demo.Performance.Console.csproj", "{E571258E-54B6-4AEE-816E-B53E48485759}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mongo.Migration.Demo.Performance.Console", "Mongo.Migration.Demo.Performance.Console\Mongo.Migration.Demo.Performance.Console.csproj", "{E571258E-54B6-4AEE-816E-B53E48485759}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
