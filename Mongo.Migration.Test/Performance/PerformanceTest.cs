@@ -114,8 +114,8 @@ namespace Mongo.Migration.Test.Performance
 
             var result = swWithMigration.ElapsedMilliseconds - sw.ElapsedMilliseconds;
 
-            Console.WriteLine(
-                $"MongoDB: {sw.ElapsedMilliseconds}, Mongo.Migration: {swWithMigration.ElapsedMilliseconds}, Diff: {result}, Documents: {DOCUMENT_COUNT}, Migrations per Document: 2");
+           // Console.WriteLine(
+           //    $"MongoDB: {sw.ElapsedMilliseconds}, Mongo.Migration: {swWithMigration.ElapsedMilliseconds}, Diff: {result}, Documents: {DOCUMENT_COUNT}, Migrations per Document: 2");
 
             result.Should().BeLessThan(110);
         }
