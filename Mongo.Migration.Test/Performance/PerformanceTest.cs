@@ -18,24 +18,28 @@ namespace Mongo.Migration.Test.Performance
         public void TearDown()
         {
             MongoMigration.Reset();
+            _client = null;
+            _runner.Dispose();
         }
 
         [SetUp]
         public void SetUp()
         {
-            var runner = MongoDbRunner.StartForDebugging();
-            _client = new MongoClient(runner.ConnectionString);
+            _runner = MongoDbRunner.StartForDebugging();
+            _client = new MongoClient(_runner.ConnectionString);
+            
         }
 
         #region PRIVATE
 
-        private const int DOCUMENT_COUNT = 1000;
+        private const int DOCUMENT_COUNT = 100;
 
         private const string DATABASE_NAME = "PeformanveTest";
 
         private const string COLLECTION_NAME = "Test";
 
         private MongoClient _client;
+        private MongoDbRunner _runner;
 
         private void InsertMany(int number, bool withVersion)
         {
@@ -114,10 +118,11 @@ namespace Mongo.Migration.Test.Performance
 
             var result = swWithMigration.ElapsedMilliseconds - sw.ElapsedMilliseconds;
 
-           // Console.WriteLine(
-           //    $"MongoDB: {sw.ElapsedMilliseconds}, Mongo.Migration: {swWithMigration.ElapsedMilliseconds}, Diff: {result}, Documents: {DOCUMENT_COUNT}, Migrations per Document: 2");
+            Console.WriteLine(
+              $"MongoDB: {sw.ElapsedMilliseconds}, Mongo.Migration: {swWithMigration.ElapsedMilliseconds}, Diff: {result}, Documents: {DOCUMENT_COUNT}, Migrations per Document: 2");
 
-            result.Should().BeLessThan(110);
+            result.Should().BeLessThan(100);
+
         }
     }
 }
