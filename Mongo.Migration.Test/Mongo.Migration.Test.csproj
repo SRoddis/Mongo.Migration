@@ -82,9 +82,6 @@
     <Compile Include="TestDoubles\TestDocumentWithTwoMigration.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Mongo.Migration\Mongo.Migration.csproj">
       <Project>{6D7736C2-BF1B-4552-A56C-C225F9F33588}</Project>
       <Name>Mongo.Migration</Name>

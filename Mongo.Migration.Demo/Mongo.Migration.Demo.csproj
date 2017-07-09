@@ -73,6 +73,15 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Mongo.Migration.Demo.Migrations\Mongo.Migration.Demo.Migrations.csproj">
+      <Project>{71448fb3-5f4f-4be1-a019-b68e35cb3da6}</Project>
+      <Name>Mongo.Migration.Demo.Migrations</Name>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </ProjectReference>
+    <ProjectReference Include="..\Mongo.Migration.Demo.Model\Mongo.Migration.Demo.Model.csproj">
+      <Project>{8E153CCE-D7FB-4F39-B840-86AA9F4E165E}</Project>
+      <Name>Mongo.Migration.Demo.Model</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mongo.Migration\Mongo.Migration.csproj">
       <Project>{6D7736C2-BF1B-4552-A56C-C225F9F33588}</Project>
       <Name>Mongo.Migration</Name>

@@ -1,6 +1,8 @@
-﻿using Mongo.Migration.Documents;
+﻿using System;
+using Mongo.Migration.Documents;
 using Mongo.Migration.Documents.Serializers;
 using Mongo.Migration.Services.Interceptors;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 
 namespace Mongo.Migration.Services.MongoDB
@@ -17,19 +19,18 @@ namespace Mongo.Migration.Services.MongoDB
             _provider = provider;
         }
 
-
         public void Registrate()
         {
             BsonSerializer.RegisterSerializationProvider(_provider);
 
-            var serializer = BsonSerializer.LookupSerializer<DocumentVersionSerializer>();
-            if (serializer != null)
+            try
             {
-                return;
+                BsonSerializer.RegisterSerializer(typeof(DocumentVersion), _serializer);
             }
-
-            BsonSerializer.RegisterSerializer(typeof (DocumentVersion), _serializer);
-
+            catch (BsonSerializationException Exception)
+            {
+                // Catch if Serializer was registered already, not great. But for testing it must be catched.
+            }
         }
     }
 }

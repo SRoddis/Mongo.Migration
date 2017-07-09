@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using Mongo.Migration.Extensions;
 using Mongo.Migration.Migrations.Attributes;
 
@@ -10,8 +12,12 @@ namespace Mongo.Migration.Migrations.Locators
     {
         protected override IDictionary<Type, IEnumerable<IMigration>> LoadMigrations()
         {
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
+
+            AppendMigrationAssemblies(assemblies);
+
             var migrationTypes =
-                from a in AppDomain.CurrentDomain.GetAssemblies()
+                from a in assemblies
                 from t in a.GetTypes()
                 let attributes = t.GetCustomAttributes(typeof(MigrationMaker), true)
                 where attributes != null && attributes.Length > 0
@@ -32,6 +38,15 @@ namespace Mongo.Migration.Migrations.Locators
             }
 
             return dictonary;
+        }
+
+        private static void AppendMigrationAssemblies(List<Assembly> assemblies)
+        {
+            var location = Assembly.GetExecutingAssembly().Location;
+            var path = Path.GetDirectoryName(location);
+
+            foreach (var dll in Directory.GetFiles(path, "*.Migrations.dll"))
+                assemblies.Add(Assembly.LoadFile(dll));
         }
     }
 }

@@ -27,6 +27,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Information", "Information"
 		Todo.txt = Todo.txt
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demo", "Demo", "{DB219944-127E-489A-9C06-1121DB9C17AD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mongo.Migration.Demo.Model", "Mongo.Migration.Demo.Model\Mongo.Migration.Demo.Model.csproj", "{8E153CCE-D7FB-4F39-B840-86AA9F4E165E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mongo.Migration.Demo.Migrations", "Mongo.Migration.Demo.Migrations\Mongo.Migration.Demo.Migrations.csproj", "{71448FB3-5F4F-4BE1-A019-B68E35CB3DA6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,8 +51,21 @@ Global
 		{4EEB72CC-4663-460F-A93B-58400E6898C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4EEB72CC-4663-460F-A93B-58400E6898C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4EEB72CC-4663-460F-A93B-58400E6898C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E153CCE-D7FB-4F39-B840-86AA9F4E165E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E153CCE-D7FB-4F39-B840-86AA9F4E165E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E153CCE-D7FB-4F39-B840-86AA9F4E165E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E153CCE-D7FB-4F39-B840-86AA9F4E165E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71448FB3-5F4F-4BE1-A019-B68E35CB3DA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71448FB3-5F4F-4BE1-A019-B68E35CB3DA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71448FB3-5F4F-4BE1-A019-B68E35CB3DA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71448FB3-5F4F-4BE1-A019-B68E35CB3DA6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4EEB72CC-4663-460F-A93B-58400E6898C9} = {DB219944-127E-489A-9C06-1121DB9C17AD}
+		{8E153CCE-D7FB-4F39-B840-86AA9F4E165E} = {DB219944-127E-489A-9C06-1121DB9C17AD}
+		{71448FB3-5F4F-4BE1-A019-B68E35CB3DA6} = {DB219944-127E-489A-9C06-1121DB9C17AD}
 	EndGlobalSection
 EndGlobal

@@ -1,0 +1,1 @@
+Automaticallyupdate on migrated resources if attribute is provided
