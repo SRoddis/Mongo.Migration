@@ -31,7 +31,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demo", "Demo", "{DB219944-1
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mongo.Migration.Demo.Model", "Mongo.Migration.Demo.Model\Mongo.Migration.Demo.Model.csproj", "{8E153CCE-D7FB-4F39-B840-86AA9F4E165E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mongo.Migration.Demo.Migrations", "Mongo.Migration.Demo.Migrations\Mongo.Migration.Demo.Migrations.csproj", "{71448FB3-5F4F-4BE1-A019-B68E35CB3DA6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mongo.Migration.Demo.MongoMigrations", "Mongo.Migration.Demo.Migrations\Mongo.Migration.Demo.MongoMigrations.csproj", "{71448FB3-5F4F-4BE1-A019-B68E35CB3DA6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

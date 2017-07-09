@@ -73,9 +73,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mongo.Migration.Demo.Migrations\Mongo.Migration.Demo.Migrations.csproj">
+    <ProjectReference Include="..\Mongo.Migration.Demo.Migrations\Mongo.Migration.Demo.MongoMigrations.csproj">
       <Project>{71448fb3-5f4f-4be1-a019-b68e35cb3da6}</Project>
-      <Name>Mongo.Migration.Demo.Migrations</Name>
+      <Name>Mongo.Migration.Demo.MongoMigrations</Name>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </ProjectReference>
     <ProjectReference Include="..\Mongo.Migration.Demo.Model\Mongo.Migration.Demo.Model.csproj">

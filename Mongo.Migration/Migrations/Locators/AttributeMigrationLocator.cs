@@ -23,8 +23,6 @@ namespace Mongo.Migration.Migrations.Locators
                 where attributes != null && attributes.Length > 0
                 select new {Type = t, Attributes = attributes.Cast<MigrationMaker>()};
 
-            //TODO: Throw exception if type is not IMigration
-
             var dictonary = new Dictionary<Type, IEnumerable<IMigration>>();
 
             var allMigrations = migrationTypes.Select(t => (IMigration) Activator.CreateInstance(t.Type))
@@ -45,7 +43,7 @@ namespace Mongo.Migration.Migrations.Locators
             var location = Assembly.GetExecutingAssembly().Location;
             var path = Path.GetDirectoryName(location);
 
-            foreach (var dll in Directory.GetFiles(path, "*.Migrations.dll"))
+            foreach (var dll in Directory.GetFiles(path, "*.MongoMigrations.dll"))
                 assemblies.Add(Assembly.LoadFile(dll));
         }
     }
