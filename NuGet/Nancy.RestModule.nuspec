@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Mongo.Migration</id>
+    <version>$version$</version>
+    <authors>Sean Roddis (@sroddis)</authors>
+    <licenseUrl>https://github.com/SRoddis/Mongo.Migration/blob/master/LICENSE.txt</licenseUrl>
+    <projectUrl>https://github.com/SRoddis/Mongo.Migration</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/SRoddis/Mongo.Migration/master/NuGet/nuget.jpg</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Mongo.Migration is designed for MongoDB C# Driver to migrate your documents easily on-the-fly.</description>
+    <copyright>Copyright 2017 Sean Roddis</copyright>
+    <tags>mongodb mongo migration schema web dotnet schema-migration csharp</tags>
+    <dependencies>
+      <dependency id="LightInject" version="5.0.3" />
+      <dependency id="MongoDB.Bson" version="2.4.4" />
+      <dependency id="MongoDB.Driver" version="2.4.4" />
+      <dependency id="MongoDB.Driver.Core" version="2.4.4" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\Mongo.Migration\bin\Release\Mongo.Migration.dll" target="lib\portable-windows8+net45" />
+    <file src="..\Mongo.Migration\bin\Release\Mongo.Migration.dll" target="lib\portable-net45+win+wp8+wpa81" />
+    <file src="..\Mongo.Migration\bin\Release\Mongo.Migration.dll" target="lib\portable-net45+sl50+MonoAndroid10+MonoTouch10" />
+  </files>
+</package>

@@ -35,6 +35,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mongo.Migration.Demo.MongoM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mongo.Migration.Demo.Performance.Console", "Mongo.Migration.Demo.Performance.Console\Mongo.Migration.Demo.Performance.Console.csproj", "{E571258E-54B6-4AEE-816E-B53E48485759}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{47979B8A-45B3-41C4-803A-98FE92A9A405}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\Nancy.RestModule.nuspec = NuGet\Nancy.RestModule.nuspec
+		NuGet\NuGet.exe = NuGet\NuGet.exe
+		NuGet\nuget.jpg = NuGet\nuget.jpg
+		NuGet\pack.ps1 = NuGet\pack.ps1
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
