@@ -50,8 +50,7 @@ namespace Mongo.Migration.Test.Migrations
             // Arrange
             var document = new TestDocumentWithTwoMigrationHighestVersion { Version = "0.0.1"};
 
-            // Act
-            // Act
+            // Act// Act
             Action checkAction = () => { _runner.CheckVersion(document); };
 
             // Assert
