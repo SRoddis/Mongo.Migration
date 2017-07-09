@@ -14,7 +14,7 @@ namespace Mongo.Migration.Test.Performance
     [TestFixture]
     public class PerformanceTest
     {
-        [TearDown]
+        //[TearDown]
         public void TearDown()
         {
             MongoMigration.Reset();
@@ -22,7 +22,7 @@ namespace Mongo.Migration.Test.Performance
             _runner.Dispose();
         }
 
-        [SetUp]
+        //[SetUp]
         public void SetUp()
         {
             _runner = MongoDbRunner.StartForDebugging();
@@ -87,7 +87,7 @@ namespace Mongo.Migration.Test.Performance
 
         #endregion
 
-        [Test]
+        //[Test]
         public void When_migrating_number_of_documents()
         {
             // Arrange
