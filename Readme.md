@@ -3,11 +3,11 @@
 # Mongo.Migration
 
 Mongo.Migration is designed for [MongoDB C# Driver]( https://github.com/mongodb/mongo-csharp-driver) to migrate your documents easily on-the-fly.
-No downtime four simple schema-migrations anymore. Just write small and simple `IMigration`, implement `IDocument` to your entities to allow versioning and deploy it next to your application. Mongo.Migration will handle the rest for you. 
+No downtime for simple schema-migrations anymore. Just write small and simple `IMigration`, implement `IDocument` to your entities to allow versioning and deploy it next to your application. Mongo.Migration will handle the rest for you. 
 
 The `MigrationInterceptor<TDocument>` checks on every read/find if the document needs to be migrated and informs the `MigrationRunner` to do so, if it is necessary.
 
-`Please NOTE` that updates are not intercepted, because updates don’t use serialization. You have to handle them by yourself.
+`Please NOTE` that updates are not intercepted, because updates donâ€™t use serialization. You have to handle them by yourself.
 
 # Installation
 
@@ -128,7 +128,7 @@ In the repository you can find [Mongo.Migration.Demo]( https://github.com/SRoddi
 
 ## Copyright
 
-Copyright © 2017 Sean Roddis
+Copyright Â© 2017 Sean Roddis
 
 ## License
 
