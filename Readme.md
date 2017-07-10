@@ -21,7 +21,7 @@ PM> Install-Package Mongo.Migration
 
 # How to use
 
-1. Initialize `MongoMigration` past the `MongoClient`.
+1. Initialize `MongoMigration` past the `MongoClient`. ([Mongo2Go](https://github.com/Mongo2Go/Mongo2Go))
     ```csharp
 	// Init MongoDB
 	var runner = MongoDbRunner.Start(); // Mongo2Go
