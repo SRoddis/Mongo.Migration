@@ -133,6 +133,7 @@ After bigger changes the code is analyzed with profiling tools to check for perf
 ## Next Feature/Todo
 
 	1. Automatically insert after migrating. So migration is done only once. (MongoDB has its performance on read. I will test if it has big performance issues with the automatically insert.)
+	2. Tool to upgrade all documents in the database, to the current version. Maybe this is needet for long life applications.
 
 ## Copyright
 
