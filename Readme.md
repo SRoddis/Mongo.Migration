@@ -80,29 +80,9 @@ In the repository you can find [Mongo.Migration.Demo]( https://github.com/SRoddi
 
 1. Compile and run the demo application.
 2. Now you should see the following output in the console.
-    ```bash
-    Migrate from:
-	{ "_id" : ObjectId("59624d5beb5bb330386cd859"), "Dors" : 3, "Type" : "Cabrio", "UnnecessaryField" : "" }
 
-	{ "_id" : ObjectId("59624d5beb5bb330386cd85a"), "Dors" : 5, "Type" : "Combi", "UnnecessaryField" : "" }
+![](https://media.giphy.com/media/hrfxbUHy5QlqM/giphy.gif)
 
-	{ "_id" : ObjectId("59624d5beb5bb330386cd85b"), "Doors" : 3, "Type" : "Truck", "UnnecessaryField" : "", "Version" : "0.0.1" }
-
-	{ "_id" : ObjectId("59624d5beb5bb330386cd85c"), "Doors" : 5, "Type" : "Van", "Version" : "0.1.1" }
-
-	To:
-	{ "_id" : ObjectId("59624d5beb5bb330386cd859"), "Type" : "Cabrio", "Doors" : 3, "Version" : "0.1.1" }
-
-	{ "_id" : ObjectId("59624d5beb5bb330386cd85a"), "Type" : "Combi", "Doors" : 5, "Version" : "0.1.1" }
-
-	{ "_id" : ObjectId("59624d5beb5bb330386cd85b"), "Type" : "Truck", "Doors" : 3, "Version" : "0.1.1" }
-
-	{ "_id" : ObjectId("59624d5beb5bb330386cd85c"), "Type" : "Van", "Doors" : 5, "Version" : "0.1.1" }
-
-	New Car was created with version: 0.1.1
-
-	Press any Key to exit...
-    ```
 3. `(Optional)` Run [Mongo.Migration.Demo.Performance.Console]( https://github.com/SRoddis/Mongo.Migration/tree/master/Mongo.Migration.Demo.Performance.Console)
 
 
