@@ -9,7 +9,7 @@
 Mongo.Migration is designed for the [MongoDB C# Driver]( https://github.com/mongodb/mongo-csharp-driver) to migrate your documents easily and on-the-fly.
 No more downtime for schema-migrations. Just write small and simple `migrations`.
 
-`PLEASE NOTE` that updates, aggregate pipeline and projections are not handled in the current version, because they don’t use serialization. You have to handle them yourself.
+`**PLEASE NOTE**` that updates, aggregate pipeline and projections are not handled in the current version, because they don’t use serialization. You have to handle them yourself.
 
 # Installation
 
