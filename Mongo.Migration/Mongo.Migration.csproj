@@ -85,8 +85,8 @@
     <Compile Include="Documents\DocumentVersion.cs" />
     <Compile Include="Documents\IDocument.cs" />
     <Compile Include="Documents\Serializers\DocumentVersionSerializer.cs" />
-    <Compile Include="Services\MongoDB\IMongoRegistrater.cs" />
-    <Compile Include="Services\MongoDB\MongoRegistrater.cs" />
+    <Compile Include="Services\MongoDB\IMongoRegistrator.cs" />
+    <Compile Include="Services\MongoDB\MongoRegistrator.cs" />
     <Compile Include="Services\Initializers\MongoMigration.cs" />
     <Compile Include="Application.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -7,16 +7,16 @@ using NUnit.Framework;
 namespace Mongo.Migration.Test.MongoDB
 {
     [TestFixture]
-    internal class MongoRegistrater_when_registrating : IntegrationTest
+    internal class MongoRegistrator_when_registrating : IntegrationTest
     {
         [Test]
         public void Then_serializer_is_registered()
         {
             // Arrange 
-            var registrater = _components.Get<IMongoRegistrater>();
+            var registrator = _components.Get<IMongoRegistrator>();
 
             // Act
-            registrater.Registrate();
+            registrator.Register();
 
             // Arrange
             BsonSerializer.LookupSerializer<DocumentVersion>().ValueType.Should().Be(typeof(DocumentVersion));
