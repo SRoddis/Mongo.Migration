@@ -29,9 +29,11 @@ namespace Mongo.Migration.Demo
                 new BsonDocument {{"Doors", 3}, {"Type", "Truck"}, {"UnnecessaryField", ""}, {"Version", "0.0.1"}},
                 new BsonDocument {{"Doors", 5}, {"Type", "Van"}, {"Version", "0.1.1"}}
             };
+
             var bsonCollection =
                 client.GetDatabase("TestCars").GetCollection<BsonDocument>("Car");
-            bsonCollection.InsertManyAsync(cars).Wait();
+
+           bsonCollection.InsertManyAsync(cars).Wait();
 
             Console.WriteLine("Migrate from:");
             cars.ForEach(c => Console.WriteLine(c.ToBsonDocument() + "\n"));
@@ -50,6 +52,12 @@ namespace Mongo.Migration.Demo
 
             typedCollection.InsertOne(car);
             var test = typedCollection.FindAsync(Builders<Car>.Filter.Eq(c => c.Type, type)).Result.Single();
+
+
+
+            var aggregate = typedCollection.Aggregate()
+                .Match(new BsonDocument {{"Dors", 3}});
+            var results = aggregate.ToListAsync().Result;
 
             Console.WriteLine("New Car was created with version: " + test.Version);
             Console.WriteLine("\n");

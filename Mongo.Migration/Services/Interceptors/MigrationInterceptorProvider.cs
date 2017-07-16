@@ -2,6 +2,7 @@
 using System.Linq;
 using Mongo.Migration.Documents;
 using Mongo.Migration.Migrations;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 
 namespace Mongo.Migration.Services.Interceptors
@@ -25,7 +26,7 @@ namespace Mongo.Migration.Services.Interceptors
 
         private static bool IsNoMigrateDocument(Type type)
         {
-            return !type.GetInterfaces().Contains(typeof(IDocument));
+            return !type.GetInterfaces().Contains(typeof(IDocument)) || type == typeof(BsonDocument);
         }
 
         private IBsonSerializer CreateMigrationInterceptorInstance(Type type)

@@ -32,10 +32,16 @@ namespace Mongo.Migration.Services.MongoDB
 
         private void RegisterSerializer()
         {
-            var foundSerializer = BsonSerializer.LookupSerializer(_serializer.ValueType);
-            
-            if (foundSerializer == null)
+            try
+            {
                 BsonSerializer.RegisterSerializer(_serializer.ValueType, _serializer);
+            }
+            catch (BsonSerializationException exception)
+            {
+                // Catch if Serializer was registered alread... not great, I know.
+                // We have to do this, because there is always a default DocumentVersionSerialzer.
+                // BsonSerializer.LookupSerializer(), does not work.
+            }
         }
     }
 }
