@@ -6,20 +6,20 @@ namespace Mongo.Migration
 {
     internal class Application : IApplication
     {
-        private readonly IMongoRegistrater _registrater;
+        private readonly IMongoRegistrator _mongoRegistrator;
         private readonly IMigrationLocator _migrationLocator;
         private readonly IVersionLocator _versionLocator;
 
-        public Application(IMongoRegistrater registrater, IMigrationLocator migrationLocator, IVersionLocator versionLocator)
+        public Application(IMongoRegistrator mongoRegistrator, IMigrationLocator migrationLocator, IVersionLocator versionLocator)
         {
-            _registrater = registrater;
+            _mongoRegistrator = mongoRegistrator;
             _migrationLocator = migrationLocator;
             _versionLocator = versionLocator;
         }
 
         public void Run()
         {
-            _registrater.Registrate();
+            _mongoRegistrator.Register();
             _migrationLocator.LoadMigrations();
             _versionLocator.LoadVersions();
         }
