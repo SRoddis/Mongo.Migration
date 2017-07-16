@@ -21,16 +21,21 @@ namespace Mongo.Migration.Services.MongoDB
 
         public void Register()
         {
-            BsonSerializer.RegisterSerializationProvider(_provider);
+            RegisterSerializationProvider();
+            RegisterSerializer();
+        }
 
-            try
-            {
-                BsonSerializer.RegisterSerializer(typeof(DocumentVersion), _serializer);
-            }
-            catch (BsonSerializationException Exception)
-            {
-                // Catch if Serializer was registered already, not great. But for testing it must be catched.
-            }
+        private void RegisterSerializationProvider()
+        {
+            BsonSerializer.RegisterSerializationProvider(_provider);
+        }
+
+        private void RegisterSerializer()
+        {
+            var foundSerializer = BsonSerializer.LookupSerializer(_serializer.ValueType);
+            
+            if (foundSerializer == null)
+                BsonSerializer.RegisterSerializer(_serializer.ValueType, _serializer);
         }
     }
 }
