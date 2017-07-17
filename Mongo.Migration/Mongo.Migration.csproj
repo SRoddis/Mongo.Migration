@@ -79,7 +79,9 @@
     <Compile Include="Exceptions\InvalidVersionValueException.cs" />
     <Compile Include="Exceptions\VersionStringToLongException.cs" />
     <Compile Include="IApplication.cs" />
+    <Compile Include="Services\Interceptors\IMigrationInterceptorFactory.cs" />
     <Compile Include="Services\Interceptors\MigrationInterceptor.cs" />
+    <Compile Include="Services\Interceptors\MigrationInterceptorFactory.cs" />
     <Compile Include="Services\Interceptors\MigrationInterceptorProvider.cs" />
     <Compile Include="Documents\Document.cs" />
     <Compile Include="Documents\DocumentVersion.cs" />
