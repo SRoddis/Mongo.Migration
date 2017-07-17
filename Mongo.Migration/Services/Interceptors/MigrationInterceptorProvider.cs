@@ -18,15 +18,15 @@ namespace Mongo.Migration.Services.Interceptors
 
         public IBsonSerializer GetSerializer(Type type)
         {
-            if (IsNoMigrateDocument(type))
-                return null;
+            if (ShouldBeMigrated(type))
+                return _migrationInterceptorFactory.Create(type);
 
-            return _migrationInterceptorFactory.Create(type);
+            return null;
         }
 
-        private static bool IsNoMigrateDocument(Type type)
+        private static bool ShouldBeMigrated(Type type)
         {
-            return !type.GetInterfaces().Contains(typeof(IDocument)) || type == typeof(BsonDocument);
+            return type.GetInterfaces().Contains(typeof(IDocument)) && type != typeof(BsonDocument);
         }
     }
 }
