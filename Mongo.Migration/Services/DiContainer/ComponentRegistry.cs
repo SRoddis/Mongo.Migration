@@ -25,6 +25,7 @@ namespace Mongo.Migration.Services.DiContainer
             _container.Register<IVersionLocator, VersionLocator>(new PerContainerLifetime());
 
             _container.Register<IMigrationRunner, MigrationRunner>();
+            _container.Register<IMigrationInterceptorFactory, MigrationInterceptorFactory>();
             _container.Register<IMongoRegistrator, MongoRegistrator>();
             _container.Register<IApplication, Application>();
         }
