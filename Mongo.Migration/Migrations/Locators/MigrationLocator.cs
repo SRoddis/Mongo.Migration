@@ -24,16 +24,14 @@ namespace Mongo.Migration.Migrations.Locators
             get
             {
                 if (_migrations == null)
-                {
-                    var migrationList = LoadMigrations();
-                    _migrations = migrationList.ToMigrationDictionary();
-                }   
+                    LoadMigrations();
                 
                 if (_migrations.NullOrEmpty())
                     throw new NoMigrationsFoundException();
 
                 return _migrations;
             }
+            set { _migrations = value; }
         }
 
         public IEnumerable<IMigration> GetMigrations(Type type)
@@ -71,7 +69,7 @@ namespace Mongo.Migration.Migrations.Locators
             return migrations.Max(m => m.Version);
         }
 
-        public abstract IList<IMigration> LoadMigrations();
+        public abstract void LoadMigrations();
         
         private static IEnumerable<Assembly> GetAssemblies()
         {

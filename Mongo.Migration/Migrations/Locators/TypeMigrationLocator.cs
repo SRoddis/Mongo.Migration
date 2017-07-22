@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+using Mongo.Migration.Extensions;
 
 namespace Mongo.Migration.Migrations.Locators
 {
     internal class TypeMigrationLocator : MigrationLocator
     {
-        public override IList<IMigration> LoadMigrations()
+        public override void LoadMigrations()
         {
             var migrationTypes =
                 (from assembly in Assemblies
@@ -14,7 +14,7 @@ namespace Mongo.Migration.Migrations.Locators
                 where typeof(IMigration).IsAssignableFrom(type) && !type.IsAbstract
                 select type).Distinct();
 
-            return migrationTypes.Select(t => (IMigration) Activator.CreateInstance(t)).ToList();
+            Migrations = migrationTypes.Select(t => (IMigration) Activator.CreateInstance(t)).ToMigrationDictionary();
         }
     }
 }
