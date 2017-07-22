@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using Mongo.Migration.Documents;
 using Mongo.Migration.Exceptions;
 using Mongo.Migration.Extensions;
@@ -11,6 +13,10 @@ namespace Mongo.Migration.Migrations.Locators
 {
     public abstract class MigrationLocator : IMigrationLocator
     {
+        private IEnumerable<Assembly> _assemblies;
+        
+        protected IEnumerable<Assembly> Assemblies => _assemblies ?? (_assemblies = GetAssemblies());
+
         private IDictionary<Type, IReadOnlyCollection<IMigration>> _migrations;
 
         protected IDictionary<Type, IReadOnlyCollection<IMigration>> Migrations
@@ -18,8 +24,11 @@ namespace Mongo.Migration.Migrations.Locators
             get
             {
                 if (_migrations == null)
-                    _migrations = LoadMigrations();
-
+                {
+                    var migrationList = LoadMigrations();
+                    _migrations = migrationList.ToMigrationDictionary();
+                }   
+                
                 if (_migrations.NullOrEmpty())
                     throw new NoMigrationsFoundException();
 
@@ -62,6 +71,22 @@ namespace Mongo.Migration.Migrations.Locators
             return migrations.Max(m => m.Version);
         }
 
-        public abstract IDictionary<Type, IReadOnlyCollection<IMigration>> LoadMigrations();
+        public abstract IList<IMigration> LoadMigrations();
+        
+        private static IEnumerable<Assembly> GetAssemblies()
+        {
+            var location = Assembly.GetExecutingAssembly().Location;
+            var path = Path.GetDirectoryName(location);
+
+            if (string.IsNullOrWhiteSpace(path))
+                throw new DirectoryNotFoundException(ErrorTexts.AppDirNotFound);
+
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
+            var migrationAssemblies = Directory.GetFiles(path, "*.MongoMigrations.dll").Select(Assembly.LoadFile);
+
+            assemblies.AddRange(migrationAssemblies);
+
+            return assemblies;
+        }
     }
 }

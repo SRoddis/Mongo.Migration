@@ -14,6 +14,6 @@ namespace Mongo.Migration.Migrations.Locators
 
         DocumentVersion GetLatestVersion(Type type);
 
-        IDictionary<Type, IReadOnlyCollection<IMigration>> LoadMigrations();
+        IList<IMigration> LoadMigrations();
     }
 }
