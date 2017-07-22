@@ -10,7 +10,7 @@ namespace Mongo.Migration.Migrations.Locators
 {
     internal class AttributeMigrationLocator : MigrationLocator
     {
-        public override void LoadMigrations()
+        public override IDictionary<Type, IReadOnlyCollection<IMigration>> LoadMigrations()
         {
             var assemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
 
@@ -35,7 +35,7 @@ namespace Mongo.Migration.Migrations.Locators
                 dictonary.Add(type, migrations.ToList());
             }
 
-            _migrations =  dictonary;
+            return dictonary;
         }
 
         private static void AppendMigrationAssemblies(List<Assembly> assemblies)

@@ -11,14 +11,14 @@ namespace Mongo.Migration.Migrations.Locators
 {
     public abstract class MigrationLocator : IMigrationLocator
     {
-        protected IDictionary<Type, IReadOnlyCollection<IMigration>> _migrations;
+        private IDictionary<Type, IReadOnlyCollection<IMigration>> _migrations;
 
         protected IDictionary<Type, IReadOnlyCollection<IMigration>> Migrations
         {
             get
             {
                 if (_migrations == null)
-                    LoadMigrations();
+                    _migrations = LoadMigrations();
 
                 if (_migrations.NullOrEmpty())
                     throw new NoMigrationsFoundException();
@@ -62,6 +62,6 @@ namespace Mongo.Migration.Migrations.Locators
             return migrations.Max(m => m.Version);
         }
 
-        public abstract void LoadMigrations();
+        public abstract IDictionary<Type, IReadOnlyCollection<IMigration>> LoadMigrations();
     }
 }
