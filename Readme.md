@@ -45,9 +45,8 @@ PM> Install-Package Mongo.Migration
         public DocumentVersion Version { get; set; }
     }
     ```
-3. Create a `Migration<TDocument>` and mark it with the `MigrationMarker` attribute. The versioning should be done in [Semantic Versioning]( http://semver.org/). But it is up to you, wether you just use the patch version to count the number of migrations. If there  is a duplicate for a specific type an exception is thrown on initialization.
+3. Create a migration by extending the abstract class `Migration<TDocument>`. Best practice for the version is to use [Semantic Versioning](http://semver.org/) but ultimately it is up to you. You could simply use the patch version to count the number of migrations. If there is a duplicate for a specific type an exception is thrown on initialization.
     ```csharp
-    [MigrationMarker]
     public class M001_RenameDorsToDoors : Migration<Car>
     {
         public M001_RenameDorsToDoors()
@@ -70,7 +69,8 @@ PM> Install-Package Mongo.Migration
         }
     }
     ```
-4. `(Optional)` If you want to put your migrations into an extra project make sure you reference it in the main project and name the project something like `"*.MongoMigrations"`. By convention Mongo.Migration collects all .dlls with the suffix `".MongoMigrations"` in your bin folder.
+4. `(Optional)` If you choose to put your migrations into an extra project, 
+add the suffix `".MongoMigrations"` to the name and make sure it is referenced in the main project. By convention Mongo.Migration collects all .dlls named like that in your bin folder.
     
 Compile, run and enjoy! 
 
