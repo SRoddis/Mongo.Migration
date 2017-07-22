@@ -53,7 +53,7 @@ namespace Mongo.Migration.Test.Migrations.Locators
         public void When_get_migrations_gt_and_equal_version()
         {
             // Act
-            var result = _locator.GetMigrationsGtAndEquel(typeof(TestDocumentWithTwoMigration), "0.0.1").ToList();
+            var result = _locator.GetMigrationsGtEq(typeof(TestDocumentWithTwoMigration), "0.0.1").ToList();
 
             // Assert
             result[0].Should().BeOfType<TestDocumentWithTwoMigration_0_0_1>();

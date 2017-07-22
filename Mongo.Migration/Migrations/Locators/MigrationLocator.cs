@@ -45,7 +45,7 @@ namespace Mongo.Migration.Migrations.Locators
                     .ToList();
         }
 
-        public IEnumerable<IMigration> GetMigrationsGtAndEquel(Type type, DocumentVersion version)
+        public IEnumerable<IMigration> GetMigrationsGtEq(Type type, DocumentVersion version)
         {
             var migrations = GetMigrations(type);
 
