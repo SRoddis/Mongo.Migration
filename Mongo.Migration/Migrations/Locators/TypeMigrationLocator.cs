@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Mongo.Migration.Exceptions;
 using Mongo.Migration.Extensions;
 
 namespace Mongo.Migration.Migrations.Locators
@@ -11,38 +12,55 @@ namespace Mongo.Migration.Migrations.Locators
     {
         public override IDictionary<Type, IReadOnlyCollection<IMigration>> LoadMigrations()
         {
-            var assemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
-
-            AppendMigrationAssemblies(assemblies);
-
-            var migrationTypes =
-                from a in assemblies
-                from t in a.GetTypes()
-                where typeof(IMigration).IsAssignableFrom(t) && !t.IsAbstract
-                select t;
-
-            var dictonary = new Dictionary<Type, IReadOnlyCollection<IMigration>>();
-
-            var allMigrations = migrationTypes.Select(t => (IMigration) Activator.CreateInstance(t))
-                .OrderBy(m => m.Version);
-
-            var types = allMigrations.Select(m => m.Type).Distinct();
-            foreach (var type in types)
-            {
-                var migrations = allMigrations.Where(m => m.Type == type).CheckForDuplicates();
-                dictonary.Add(type, migrations.ToList());
-            }
-
-            return dictonary;
+            var assemblies = GetAssemblies();
+            var allMigrations = GetUniqueMigrations(assemblies);
+            return GetMigrationDictionary(allMigrations);
         }
 
-        private static void AppendMigrationAssemblies(List<Assembly> assemblies)
+        private static IEnumerable<Assembly> GetAssemblies()
         {
             var location = Assembly.GetExecutingAssembly().Location;
             var path = Path.GetDirectoryName(location);
 
-            foreach (var dll in Directory.GetFiles(path, "*.MongoMigrations.dll"))
-                assemblies.Add(Assembly.LoadFile(dll));
+            if (string.IsNullOrWhiteSpace(path))
+                throw new DirectoryNotFoundException(ErrorTexts.AppDirNotFound);
+
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
+            var migrationAssemblies = Directory.GetFiles(path, "*.MongoMigrations.dll").Select(Assembly.LoadFile);
+
+            assemblies.AddRange(migrationAssemblies);
+
+            return assemblies;
+        }
+
+        private static IList<IMigration> GetUniqueMigrations(IEnumerable<Assembly> assemblies)
+        {
+            var migrationTypes =
+                from assembly in assemblies
+                from type in assembly.GetTypes()
+                where typeof(IMigration).IsAssignableFrom(type) && !type.IsAbstract
+                select type;
+
+            return migrationTypes.Distinct().Select(t => (IMigration) Activator.CreateInstance(t)).ToList();
+        }
+
+        private static IDictionary<Type, IReadOnlyCollection<IMigration>> GetMigrationDictionary(
+            IList<IMigration> migrations)
+        {
+            var dictonary = new Dictionary<Type, IReadOnlyCollection<IMigration>>();
+            var types = from m in migrations select m.Type;
+
+            foreach (var type in types)
+            {
+                if (dictonary.ContainsKey(type))
+                    continue;
+
+                var uniqueMigrations =
+                    migrations.Where(m => m.Type == type).CheckForDuplicates().OrderBy(m => m.Version).ToList();
+                dictonary.Add(type, uniqueMigrations);
+            }
+
+            return dictonary;
         }
     }
 }
