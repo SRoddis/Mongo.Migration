@@ -1,12 +1,10 @@
 ﻿using System;
 using Mongo.Migration.Demo.Model;
 using Mongo.Migration.Migrations;
-using Mongo.Migration.Migrations.Attributes;
 using MongoDB.Bson;
 
 namespace Mongo.Migration.Demo.MongoMigrations.Cars.M00
 {
-    [MigrationMarker]
     public class M001_RenameDorsToDoors : Migration<Car>
     {
         public M001_RenameDorsToDoors()

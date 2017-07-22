@@ -59,10 +59,9 @@
     <Compile Include="Exceptions\NoMigrationsFoundException.cs" />
     <Compile Include="Exceptions\VersionViolationException.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
-    <Compile Include="Migrations\Attributes\MigrationMarker.cs" />
     <Compile Include="Migrations\IMigration.cs" />
     <Compile Include="Migrations\IMigrationRunner.cs" />
-    <Compile Include="Migrations\Locators\AttributeMigrationLocator.cs" />
+    <Compile Include="Migrations\Locators\TypeMigrationLocator.cs" />
     <Compile Include="Migrations\Locators\IMigrationLocator.cs" />
     <Compile Include="Migrations\Locators\MigrationLocator.cs" />
     <Compile Include="Migrations\Migration.cs" />

@@ -8,15 +8,15 @@ using NUnit.Framework;
 namespace Mongo.Migration.Test.Migrations.Locators
 {
     [TestFixture]
-    public class AttributeMigrationLocator_when_locate
+    public class TypeMigrationLocator_when_locate
     {
-        private AttributeMigrationLocator _locator;
+        private TypeMigrationLocator _locator;
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
             // Arrange
-            _locator = new AttributeMigrationLocator();
+            _locator = new TypeMigrationLocator();
         }
 
         [Test]

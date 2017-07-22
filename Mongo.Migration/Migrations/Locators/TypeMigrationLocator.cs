@@ -4,11 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Mongo.Migration.Extensions;
-using Mongo.Migration.Migrations.Attributes;
 
 namespace Mongo.Migration.Migrations.Locators
 {
-    internal class AttributeMigrationLocator : MigrationLocator
+    internal class TypeMigrationLocator : MigrationLocator
     {
         public override IDictionary<Type, IReadOnlyCollection<IMigration>> LoadMigrations()
         {
@@ -19,13 +18,12 @@ namespace Mongo.Migration.Migrations.Locators
             var migrationTypes =
                 from a in assemblies
                 from t in a.GetTypes()
-                let attributes = t.GetCustomAttributes(typeof(MigrationMarker), true)
-                where attributes != null && attributes.Length > 0
-                select new {Type = t, Attributes = attributes.Cast<MigrationMarker>()};
+                where typeof(IMigration).IsAssignableFrom(t) && !t.IsAbstract
+                select t;
 
             var dictonary = new Dictionary<Type, IReadOnlyCollection<IMigration>>();
 
-            var allMigrations = migrationTypes.Select(t => (IMigration) Activator.CreateInstance(t.Type))
+            var allMigrations = migrationTypes.Select(t => (IMigration) Activator.CreateInstance(t))
                 .OrderBy(m => m.Version);
 
             var types = allMigrations.Select(m => m.Type).Distinct();
