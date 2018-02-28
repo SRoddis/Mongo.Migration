@@ -91,7 +91,7 @@ namespace Mongo.Migration.Migrations
         private void MigrateDown(Type type, DocumentVersion version, BsonDocument document)
         {
             var migrations = _migrationLocator
-                .GetMigrationsGtAndEquel(type, version)
+                .GetMigrationsGtEq(type, version)
                 .OrderByDescending(m => m.Version)
                 .ToList();
 

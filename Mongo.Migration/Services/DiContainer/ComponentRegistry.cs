@@ -21,7 +21,7 @@ namespace Mongo.Migration.Services.DiContainer
         {
             _container.Register<DocumentVersionSerializer, DocumentVersionSerializer>();
             _container.Register<MigrationInterceptorProvider, MigrationInterceptorProvider>();
-            _container.Register<IMigrationLocator, AttributeMigrationLocator>(new PerContainerLifetime());
+            _container.Register<IMigrationLocator, TypeMigrationLocator>(new PerContainerLifetime());
             _container.Register<IVersionLocator, VersionLocator>(new PerContainerLifetime());
 
             _container.Register<IMigrationRunner, MigrationRunner>();

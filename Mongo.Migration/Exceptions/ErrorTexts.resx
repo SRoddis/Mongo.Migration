@@ -132,4 +132,7 @@
   <data name="VersionViolated" xml:space="preserve">
     <value>CurrentVersion: '{0}', DocumentVersion: '{1}', LatestMigrationVersion: '{2}'</value>
   </data>
+  <data name="AppDirNotFound" xml:space="preserve">
+    <value>Application directory could not be found</value>
+  </data>
 </root>

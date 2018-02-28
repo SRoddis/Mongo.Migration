@@ -1,12 +1,10 @@
 ﻿using System;
 using Mongo.Migration.Demo.Model;
 using Mongo.Migration.Migrations;
-using Mongo.Migration.Migrations.Attributes;
 using MongoDB.Bson;
 
 namespace Mongo.Migration.Demo.MongoMigrations.Cars.M01
 {
-    [MigrationMarker]
     public class M011_RemoveUnnecessaryField : Migration<Car>
     {
         public M011_RemoveUnnecessaryField()

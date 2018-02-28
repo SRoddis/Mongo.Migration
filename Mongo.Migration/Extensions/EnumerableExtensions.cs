@@ -28,5 +28,24 @@ namespace Mongo.Migration.Extensions
 
             return list;
         }
+        
+        internal static IDictionary<Type, IReadOnlyCollection<IMigration>> ToMigrationDictionary(
+            this IEnumerable<IMigration> migrations)
+        {
+            var dictonary = new Dictionary<Type, IReadOnlyCollection<IMigration>>();
+            var types = from m in migrations select m.Type;
+
+            foreach (var type in types)
+            {
+                if (dictonary.ContainsKey(type))
+                    continue;
+
+                var uniqueMigrations =
+                    migrations.Where(m => m.Type == type).CheckForDuplicates().OrderBy(m => m.Version).ToList();
+                dictonary.Add(type, uniqueMigrations);
+            }
+
+            return dictonary;
+        }
     }
 }
