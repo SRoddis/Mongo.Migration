@@ -41,13 +41,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mongo.Migration\Mongo.Migration.csproj">
-      <Project>{6D7736C2-BF1B-4552-A56C-C225F9F33588}</Project>
-      <Name>Mongo.Migration</Name>
-    </ProjectReference>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <ProjectReference Include="..\Mongo.Migration\Mongo.Migration.csproj">
+      <Project>{8dffd615-1e1a-4bed-8a96-caf4c3637e81}</Project>
+      <Name>Mongo.Migration</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

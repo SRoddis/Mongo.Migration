@@ -70,7 +70,7 @@
       <Name>Mongo.Migration.Demo.Model</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mongo.Migration\Mongo.Migration.csproj">
-      <Project>{6D7736C2-BF1B-4552-A56C-C225F9F33588}</Project>
+      <Project>{8dffd615-1e1a-4bed-8a96-caf4c3637e81}</Project>
       <Name>Mongo.Migration</Name>
     </ProjectReference>
   </ItemGroup>
