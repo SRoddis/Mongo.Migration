@@ -19,3 +19,4 @@ using System.Runtime.InteropServices;
 [assembly: Guid("8d24bf60-031f-433e-ba22-98bcd4d0974a")]
 
 [assembly: InternalsVisibleTo("Mongo.Migration.Test")]
+[assembly: InternalsVisibleTo("Mongo.Migration.Test.Core")]
