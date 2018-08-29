@@ -8,13 +8,6 @@
 
   <ItemGroup>
     <Compile Include="..\Mongo.Migration.Test\**\*.cs" />
-    <!--
-    <Compile Include="..\Mongo.Migration.Test\Documents\DocumentVersion_When_casting.cs" Link="Documents\DocumentVersion_When_casting.cs" />
-    <Compile Include="..\Mongo.Migration.Test\Documents\DocumentVersion_When_compare.cs" Link="Documents\DocumentVersion_When_compare.cs" />
-    <Compile Include="..\Mongo.Migration.Test\Documents\DocumentVersion_When_creating.cs" Link="Documents\DocumentVersion_When_creating.cs" />
-    <Compile Include="..\Mongo.Migration.Test\Documents\Document_when_creating.cs" Link="Documents\Document_when_creating.cs" />
-    <Compile Include="..\Mongo.Migration.Test\Documents\Locators\AttributeMigrationLocator_when_locate.cs" Link="Documents\Locators\AttributeMigrationLocator_when_locate.cs" />
-    <Compile Include="..\Mongo.Migration.Test\Documents\Serializers\DocumentVersionSerializer_when_serialize_and_deserialize.cs" Link="Documents\Serializers\DocumentVersionSerializer_when_serialize_and_deserialize.cs" />-->
   </ItemGroup>
 
   <ItemGroup>
