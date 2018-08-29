@@ -73,7 +73,7 @@
       <Name>Mongo.Migration.Demo.MongoMigrations</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mongo.Migration.Demo.Model\Mongo.Migration.Demo.Model.csproj">
-      <Project>{8E153CCE-D7FB-4F39-B840-86AA9F4E165E}</Project>
+      <Project>{18afb639-8fc0-4c78-8552-a8355a80454b}</Project>
       <Name>Mongo.Migration.Demo.Model</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mongo.Migration\Mongo.Migration.csproj">
