@@ -1,5 +1,5 @@
 $root = (split-path -parent $MyInvocation.MyCommand.Definition) + '\..'
-$version = [System.Reflection.Assembly]::LoadFile("$root\Mongo.Migration\bin\Release\Mongo.Migration.dll").GetName().Version
+$version = [System.Reflection.Assembly]::LoadFile("$root\Mongo.Migration\bin\Release\net45\Mongo.Migration.dll").GetName().Version
 $versionStr = "{0}.{1}.{2}" -f ($version.Major, $version.Minor, $version.Build)
 
 Write-Host "Setting .nuspec version tag to $versionStr"
