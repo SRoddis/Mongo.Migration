@@ -1,3 +1,5 @@
+image: Visual Studio 2017
+
 version: 1.1.{build}
 
 environment:
@@ -11,10 +13,22 @@ assembly_info:
   assembly_file_version: "{version}"
   assembly_informational_version: "{version}"
 
+platform: Any CPU
+
 configuration: Release
 
 build:
+  parallel: true  
   project: Mongo.Migration.sln
+  publish_wap: true               
+  publish_wap_xcopy: true         
+  publish_azure: true             
+  publish_nuget: true             
+  publish_nuget_symbols: true     
+  include_nuget_references: true  
+  
+cache:
+  - packages -> **\packages.config
 
 before_build:
   - nuget restore
