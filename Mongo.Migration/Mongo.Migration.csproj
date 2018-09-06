@@ -3,6 +3,7 @@
     <TargetFrameworks>net45;net47;netstandard2.0</TargetFrameworks>
     <AssemblyName>Mongo.Migration</AssemblyName>
     <RootNamespace>Mongo.Migration</RootNamespace>
+    <Version>1.1.1</Version>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="LightInject" Version="5.0.3" />
