@@ -1,7 +1,5 @@
 version: 1.1.{build}
 
-image: Visaul Studio 2017
-
 environment:
   COVERALLS_REPO_TOKEN:
     secure: w1QgTKjQb/SRT5RvjLDGRniq5S6HV+otG5MywPqt6J3DwZYcddT+/H4SA/YZx/8y
