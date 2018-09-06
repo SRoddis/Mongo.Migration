@@ -1,6 +1,6 @@
 image: Visual Studio 2017
 
-version: 1.1.{build}
+version: 1.0.{build}
 
 environment:
   COVERALLS_REPO_TOKEN:
@@ -45,8 +45,8 @@ artifacts:
   - path: '**\Mongo.Migration.*.nupkg'
 
 #uncomment to publish to NuGet
-#deploy:
-#  provider: NuGet
-#  api_key:
-#    secure: JdTxya5xoPc0b9VqvtkITcfHkvEVrm9GYFRKdv/RNSwwzfnHQYRyBpcexoh9GmAh
-#  artifact: /.*\.nupkg/
+deploy:
+  provider: NuGet
+  api_key:
+    secure: JdTxya5xoPc0b9VqvtkITcfHkvEVrm9GYFRKdv/RNSwwzfnHQYRyBpcexoh9GmAh
+  artifact: /.*\.nupkg/
