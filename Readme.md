@@ -138,7 +138,7 @@ After bigger changes the code is analyzed with profiling tools to check for perf
 
 ## Copyright
 
-Copyright © 2017 Sean Roddis
+Copyright © 2018 Sean Roddis
 
 ## License
 
