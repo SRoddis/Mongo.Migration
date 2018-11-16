@@ -49,6 +49,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mongo.Migration.Demo.Perfor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mongo.Migration.Test.Core", "Mongo.Migration.Test.Core\Mongo.Migration.Test.Core.csproj", "{1EEC8464-61D1-4FA3-97D4-21A35A45F3FE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mongo.Migration.Demo.Core.Pkg", "Mongo.Migration.Demo.Core.Pkg\Mongo.Migration.Demo.Core.Pkg.csproj", "{DD04BE10-B6A0-49A8-937C-47A06968C270}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mongo.Migration.Demo.Pkg", "Mongo.Migration.Demo.Pkg\Mongo.Migration.Demo.Pkg.csproj", "{7CEDAEDC-F968-4075-9F40-F1C2EDC7492A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -91,6 +95,14 @@ Global
 		{1EEC8464-61D1-4FA3-97D4-21A35A45F3FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1EEC8464-61D1-4FA3-97D4-21A35A45F3FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1EEC8464-61D1-4FA3-97D4-21A35A45F3FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD04BE10-B6A0-49A8-937C-47A06968C270}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD04BE10-B6A0-49A8-937C-47A06968C270}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD04BE10-B6A0-49A8-937C-47A06968C270}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD04BE10-B6A0-49A8-937C-47A06968C270}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CEDAEDC-F968-4075-9F40-F1C2EDC7492A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CEDAEDC-F968-4075-9F40-F1C2EDC7492A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CEDAEDC-F968-4075-9F40-F1C2EDC7492A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CEDAEDC-F968-4075-9F40-F1C2EDC7492A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -102,6 +114,8 @@ Global
 		{A9AB73EC-2302-47F0-9EFB-496F0FFDF367} = {DB219944-127E-489A-9C06-1121DB9C17AD}
 		{18AFB639-8FC0-4C78-8552-A8355A80454B} = {DB219944-127E-489A-9C06-1121DB9C17AD}
 		{C374130F-B6C5-4A08-BE93-7148EA453D37} = {DB219944-127E-489A-9C06-1121DB9C17AD}
+		{DD04BE10-B6A0-49A8-937C-47A06968C270} = {DB219944-127E-489A-9C06-1121DB9C17AD}
+		{7CEDAEDC-F968-4075-9F40-F1C2EDC7492A} = {DB219944-127E-489A-9C06-1121DB9C17AD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {141CC212-9A27-4082-94E7-A80340DFDF4C}
