@@ -73,7 +73,7 @@ namespace Mongo.Migration.Migrations.Locators
         
         private static IEnumerable<Assembly> GetAssemblies()
         {
-            var location = Assembly.GetExecutingAssembly().Location;
+            var location = AppDomain.CurrentDomain.BaseDirectory;
             var path = Path.GetDirectoryName(location);
 
             if (string.IsNullOrWhiteSpace(path))
