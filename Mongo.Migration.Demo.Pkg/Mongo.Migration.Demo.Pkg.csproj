@@ -36,8 +36,8 @@
       <HintPath>..\packages\LightInject.5.0.3\lib\net46\LightInject.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Mongo.Migration, Version=1.1.16.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\Mongo.Migration.1.1.16\lib\net47\Mongo.Migration.dll</HintPath>
+    <Reference Include="Mongo.Migration, Version=1.1.17.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Mongo.Migration.1.1.17\lib\net47\Mongo.Migration.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Mongo2Go, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
