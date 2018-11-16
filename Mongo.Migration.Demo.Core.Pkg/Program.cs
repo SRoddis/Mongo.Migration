@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Mongo.Migration.Demo.Model;
+using Mongo.Migration.Demo.Model.Pkg;
 using Mongo.Migration.Services.Initializers;
 using Mongo2Go;
 using MongoDB.Bson;

@@ -11,8 +11,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Mongo.Migration.Demo.Migrations\Mongo.Migration.Demo.MongoMigrations.csproj" />
-      <ProjectReference Include="..\Mongo.Migration.Demo.Model\Mongo.Migration.Demo.Model.csproj" />
+      <ProjectReference Include="..\Mongo.Migration.Demo.Model.Pkg\Mongo.Migration.Demo.Model.Pkg.csproj" />
+      <ProjectReference Include="..\Mongo.Migration.Demo.MongoMigrations.Pkg\Mongo.Migration.Demo.MongoMigrations.Pkg.csproj" />
     </ItemGroup>
 
 </Project>
