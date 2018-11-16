@@ -80,7 +80,7 @@ namespace Mongo.Migration.Migrations.Locators
                 throw new DirectoryNotFoundException(ErrorTexts.AppDirNotFound);
 
             var assemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
-            var migrationAssemblies = Directory.GetFiles(path, "*.MongoMigrations.dll").Select(Assembly.LoadFile);
+            var migrationAssemblies = Directory.GetFiles(path, "*.MongoMigrations*.dll").Select(Assembly.LoadFile);
 
             assemblies.AddRange(migrationAssemblies);
 
