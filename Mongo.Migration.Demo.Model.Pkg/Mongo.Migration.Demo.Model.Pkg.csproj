@@ -5,7 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Mongo.Migration" Version="1.1.17" />
+      <PackageReference Include="Mongo.Migration" Version="1.1.21" />
     </ItemGroup>
 
 </Project>
