@@ -1,19 +1,17 @@
-﻿using System;
-using Mongo.Migration.Documents;
-using Mongo.Migration.Documents.Serializers;
+﻿using Mongo.Migration.Documents.Serializers;
 using Mongo.Migration.Services.Interceptors;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 
 namespace Mongo.Migration.Services.MongoDB
 {
-    internal class MongoRegistrator : IMongoRegistrator
+    internal class MongoRegistrator<TBaseDocument> : IMongoRegistrator
     {
-        private readonly MigrationInterceptorProvider _provider;
+        private readonly MigrationInterceptorProvider<TBaseDocument> _provider;
 
         private readonly DocumentVersionSerializer _serializer;
 
-        public MongoRegistrator(DocumentVersionSerializer serializer, MigrationInterceptorProvider provider)
+        public MongoRegistrator(DocumentVersionSerializer serializer, MigrationInterceptorProvider<TBaseDocument> provider)
         {
             _serializer = serializer;
             _provider = provider;

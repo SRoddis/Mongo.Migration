@@ -1,18 +1,15 @@
-﻿using System;
-using System.Diagnostics;
-using Mongo.Migration.Documents;
-using Mongo.Migration.Migrations;
+﻿using Mongo.Migration.Migrations;
 using MongoDB.Bson.IO;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 
 namespace Mongo.Migration.Services.Interceptors
 {
-    internal class MigrationInterceptor<TDocument> : BsonClassMapSerializer<TDocument> where TDocument : class, IDocument
+    internal class MigrationInterceptor<TDocument, TBaseDocument> : BsonClassMapSerializer<TDocument> where TDocument : class, TBaseDocument
     {
-        private readonly IMigrationRunner _migrationRunner;
+        private readonly IMigrationRunner<TBaseDocument> _migrationRunner;
 
-        public MigrationInterceptor(IMigrationRunner migrationRunner)
+        public MigrationInterceptor(IMigrationRunner<TBaseDocument> migrationRunner)
             : base(BsonClassMap.LookupClassMap(typeof(TDocument)))
         {
             _migrationRunner = migrationRunner;

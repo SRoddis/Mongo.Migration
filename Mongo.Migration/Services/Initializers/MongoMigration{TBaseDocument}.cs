@@ -1,10 +1,11 @@
-﻿using Mongo.Migration.Documents;
+﻿using System;
+using Mongo.Migration.Documents;
 using Mongo.Migration.Exceptions;
 using Mongo.Migration.Services.DiContainer;
 
 namespace Mongo.Migration.Services.Initializers
 {
-    public static class MongoMigration
+    public static class MongoMigration<TBaseDocument>
     {
         private static bool _isInitialized;
 
@@ -13,8 +14,14 @@ namespace Mongo.Migration.Services.Initializers
         static MongoMigration()
         {
             _components = new ComponentRegistry();
-            _components.RegisterComponents<IDocument>(d => d.Version, (d, v) => d.Version = v);
         }
+
+        public static void RegisterComponents(Func<TBaseDocument, DocumentVersion> versionGetter,
+            Action<TBaseDocument, DocumentVersion> versionSetter)
+        {
+            _components.RegisterComponents(versionGetter, versionSetter);
+        }
+
 
         public static void Initialize()
         {

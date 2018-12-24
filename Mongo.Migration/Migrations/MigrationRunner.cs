@@ -9,7 +9,7 @@ using MongoDB.Bson;
 
 namespace Mongo.Migration.Migrations
 {
-    internal class MigrationRunner : IMigrationRunner
+    internal class MigrationRunner<TBaseDocument> : IMigrationRunner<TBaseDocument>
     {
         private const string VERSION_FIELD = "Version";
 
@@ -17,16 +17,26 @@ namespace Mongo.Migration.Migrations
 
         private readonly IVersionLocator _versionLocator;
 
-        public MigrationRunner(IMigrationLocator migrationLocator, IVersionLocator versionLocator)
+        private readonly Func<TBaseDocument, DocumentVersion> _versionGetter;
+
+        private readonly Action<TBaseDocument, DocumentVersion> _versionSetter;
+
+        public MigrationRunner(
+            IMigrationLocator migrationLocator,
+            IVersionLocator versionLocator,
+            Func<TBaseDocument, DocumentVersion> versionGetter,
+            Action<TBaseDocument, DocumentVersion> versionSetter)
         {
             _migrationLocator = migrationLocator;
             _versionLocator = versionLocator;
+            _versionGetter = versionGetter;
+            _versionSetter = versionSetter;
         }
 
-        public void CheckVersion<TClass>(TClass instance) where TClass : class, IDocument
+        public void CheckVersion<TClass>(TClass instance) where TClass : class, TBaseDocument
         {
             var type = typeof(TClass);
-            var documentVersion = instance.Version.ToString();
+            var documentVersion = _versionGetter(instance).ToString();
             var latestVersion = _migrationLocator.GetLatestVersion(type);
             var currentVersion = _versionLocator.GetCurrentVersion(type) ?? latestVersion;
 
@@ -64,17 +74,18 @@ namespace Mongo.Migration.Migrations
             MigrateUp(type, documentVersion, document);
         }
 
-        private static void DetermineCurrentVersion<TClass>(
+        private void DetermineCurrentVersion<TClass>(
             TClass instance,
             DocumentVersion? currentVersion,
-            DocumentVersion latestVersion) where TClass : class, IDocument
+            DocumentVersion latestVersion) where TClass : class, TBaseDocument
         {
             if (currentVersion < latestVersion)
             {
-                instance.Version = currentVersion.ToString();
+                _versionSetter(instance, currentVersion.GetValueOrDefault());
                 return;
             }
-            instance.Version = latestVersion;
+
+            _versionSetter(instance, latestVersion);
         }
 
         private void MigrateUp(Type type, DocumentVersion version, BsonDocument document)

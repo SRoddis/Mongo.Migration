@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Linq;
-using Mongo.Migration.Documents;
-using Mongo.Migration.Migrations;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 
 namespace Mongo.Migration.Services.Interceptors
 {
-    internal class MigrationInterceptorProvider : IBsonSerializationProvider
+    internal class MigrationInterceptorProvider<TBaseDocument> : IBsonSerializationProvider
     {
         private readonly IMigrationInterceptorFactory _migrationInterceptorFactory;
 
@@ -26,7 +24,7 @@ namespace Mongo.Migration.Services.Interceptors
 
         private static bool ShouldBeMigrated(Type type)
         {
-            return type.GetInterfaces().Contains(typeof(IDocument)) && type != typeof(BsonDocument);
+            return type.GetInterfaces().Contains(typeof(TBaseDocument)) && type != typeof(BsonDocument);
         }
     }
 }

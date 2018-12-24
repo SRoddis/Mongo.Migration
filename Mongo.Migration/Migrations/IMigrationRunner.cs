@@ -4,10 +4,10 @@ using MongoDB.Bson;
 
 namespace Mongo.Migration.Migrations
 {
-    internal interface IMigrationRunner
+    internal interface IMigrationRunner<TBaseDocument>
     {
         void Run(Type type, BsonDocument document);
 
-        void CheckVersion<TClass>(TClass instance) where TClass : class, IDocument;
+        void CheckVersion<TClass>(TClass instance) where TClass : class, TBaseDocument;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using Mongo.Migration.Documents;
 using Mongo.Migration.Services.DiContainer;
 
 namespace Mongo.Migration.Test
@@ -10,7 +11,7 @@ namespace Mongo.Migration.Test
         public IntegrationTest()
         {
             _components = new ComponentRegistry();
-            _components.RegisterComponents();
+            _components.RegisterComponents<IDocument>(d => d.Version, (d, v) => d.Version = v);
         }
     }
 }

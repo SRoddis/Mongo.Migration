@@ -1,5 +1,6 @@
 ﻿using System;
 using FluentAssertions;
+using Mongo.Migration.Documents;
 using Mongo.Migration.Exceptions;
 using Mongo.Migration.Migrations;
 using Mongo.Migration.Test.TestDoubles;
@@ -10,12 +11,12 @@ namespace Mongo.Migration.Test.Migrations
     [TestFixture]
     internal class MigrationRunner_when_check_version : IntegrationTest
     {
-        private IMigrationRunner _runner;
+        private IMigrationRunner<IDocument> _runner;
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            _runner = _components.Get<IMigrationRunner>();
+            _runner = _components.Get<IMigrationRunner<IDocument>>();
         }
 
         [Test]
