@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Mongo.Migration.Documents;
 using Mongo.Migration.Documents.Locators;
+using Mongo.Migration.Documents.VersionProviders;
 using Mongo.Migration.Exceptions;
 using Mongo.Migration.Migrations.Locators;
 using MongoDB.Bson;
@@ -17,26 +18,22 @@ namespace Mongo.Migration.Migrations
 
         private readonly IVersionLocator _versionLocator;
 
-        private readonly Func<TBaseDocument, DocumentVersion> _versionGetter;
-
-        private readonly Action<TBaseDocument, DocumentVersion> _versionSetter;
+        private readonly IDocumentVersionProvider<TBaseDocument> _documentVersionProvider;
 
         public MigrationRunner(
             IMigrationLocator migrationLocator,
             IVersionLocator versionLocator,
-            Func<TBaseDocument, DocumentVersion> versionGetter,
-            Action<TBaseDocument, DocumentVersion> versionSetter)
+            IDocumentVersionProvider<TBaseDocument> documentVersionProvider)
         {
             _migrationLocator = migrationLocator;
             _versionLocator = versionLocator;
-            _versionGetter = versionGetter;
-            _versionSetter = versionSetter;
+            _documentVersionProvider = documentVersionProvider;
         }
 
         public void CheckVersion<TClass>(TClass instance) where TClass : class, TBaseDocument
         {
             var type = typeof(TClass);
-            var documentVersion = _versionGetter(instance).ToString();
+            var documentVersion = _documentVersionProvider.GetVersion(instance).ToString();
             var latestVersion = _migrationLocator.GetLatestVersion(type);
             var currentVersion = _versionLocator.GetCurrentVersion(type) ?? latestVersion;
 
@@ -81,11 +78,11 @@ namespace Mongo.Migration.Migrations
         {
             if (currentVersion < latestVersion)
             {
-                _versionSetter(instance, currentVersion.GetValueOrDefault());
+                _documentVersionProvider.SetVersion(instance, currentVersion.GetValueOrDefault());
                 return;
             }
 
-            _versionSetter(instance, latestVersion);
+            _documentVersionProvider.SetVersion(instance, latestVersion);
         }
 
         private void MigrateUp(Type type, DocumentVersion version, BsonDocument document)

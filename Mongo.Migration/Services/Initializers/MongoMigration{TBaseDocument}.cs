@@ -1,5 +1,6 @@
 ﻿using System;
 using Mongo.Migration.Documents;
+using Mongo.Migration.Documents.VersionProviders;
 using Mongo.Migration.Exceptions;
 using Mongo.Migration.Services.DiContainer;
 
@@ -16,10 +17,9 @@ namespace Mongo.Migration.Services.Initializers
             _components = new ComponentRegistry();
         }
 
-        public static void RegisterComponents(Func<TBaseDocument, DocumentVersion> versionGetter,
-            Action<TBaseDocument, DocumentVersion> versionSetter)
+        public static void RegisterComponents(IDocumentVersionProvider<TBaseDocument> documentVersionProvider)
         {
-            _components.RegisterComponents(versionGetter, versionSetter);
+            _components.RegisterComponents(documentVersionProvider);
         }
 
 

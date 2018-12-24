@@ -11,7 +11,7 @@ namespace Mongo.Migration.Test
         public IntegrationTest()
         {
             _components = new ComponentRegistry();
-            _components.RegisterComponents<IDocument>(d => d.Version, (d, v) => d.Version = v);
+            _components.RegisterComponents<IDocument>(new DocumentVersionProvider());
         }
     }
 }

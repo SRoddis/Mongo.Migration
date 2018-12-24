@@ -13,7 +13,7 @@ namespace Mongo.Migration.Services.Initializers
         static MongoMigration()
         {
             _components = new ComponentRegistry();
-            _components.RegisterComponents<IDocument>(d => d.Version, (d, v) => d.Version = v);
+            _components.RegisterComponents<IDocument>(new DocumentVersionProvider());
         }
 
         public static void Initialize()
