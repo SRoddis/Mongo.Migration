@@ -1,1 +1,7 @@
+NOW:
+1. Mode DIContainer and Initializer to DotNetFramework
+2. Add Startup for DotNetCore
+3. Add Migrate ALL on DB
+
+Later:
 Automaticallyupdate on migrated resources if attribute is provided

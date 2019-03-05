@@ -13,10 +13,10 @@ namespace Mongo.Migration.Test.MongoDB
         public void Then_serializer_is_registered()
         {
             // Arrange 
-            var registrator = _components.Get<IMongoRegistrator>();
+            var registrator = _components.Get<IMigrationStrategy>();
 
             // Act
-            registrator.Register();
+            registrator.Migrate();
 
             // Arrange
             BsonSerializer.LookupSerializer<DocumentVersion>().ValueType.Should().Be(typeof(DocumentVersion));

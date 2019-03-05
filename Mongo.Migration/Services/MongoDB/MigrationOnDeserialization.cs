@@ -7,19 +7,19 @@ using MongoDB.Bson.Serialization;
 
 namespace Mongo.Migration.Services.MongoDB
 {
-    internal class MongoRegistrator : IMongoRegistrator
+    internal class MigrationOnDeserialization : IMigrationStrategy
     {
         private readonly MigrationInterceptorProvider _provider;
 
         private readonly DocumentVersionSerializer _serializer;
 
-        public MongoRegistrator(DocumentVersionSerializer serializer, MigrationInterceptorProvider provider)
+        public MigrationOnDeserialization(DocumentVersionSerializer serializer, MigrationInterceptorProvider provider)
         {
             _serializer = serializer;
             _provider = provider;
         }
 
-        public void Register()
+        public void Migrate()
         {
             RegisterSerializationProvider();
             RegisterSerializer();
