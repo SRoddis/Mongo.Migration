@@ -1,4 +1,4 @@
-namespace Mongo.Migration.Services.DiContainer
+namespace Mongo.Migration.Services.Startup.Static
 {
     internal interface ICompoentRegistry
     {

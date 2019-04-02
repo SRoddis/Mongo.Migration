@@ -1,12 +1,10 @@
-﻿using System;
-using System.Diagnostics;
-using Mongo.Migration.Documents;
+﻿using Mongo.Migration.Documents;
 using Mongo.Migration.Migrations;
 using MongoDB.Bson.IO;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 
-namespace Mongo.Migration.Services.Interceptors
+namespace Mongo.Migration.Services.Migration.OnDeserialization.Interceptors
 {
     internal class MigrationInterceptor<TDocument> : BsonClassMapSerializer<TDocument> where TDocument : class, IDocument
     {

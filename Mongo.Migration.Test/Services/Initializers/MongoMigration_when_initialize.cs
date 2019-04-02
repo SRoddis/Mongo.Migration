@@ -1,7 +1,7 @@
 ﻿using System;
 using FluentAssertions;
 using Mongo.Migration.Exceptions;
-using Mongo.Migration.Services.Initializers;
+using Mongo.Migration.Services.Startup.Static;
 using NUnit.Framework;
 
 namespace Mongo.Migration.Test.Services.Initializers

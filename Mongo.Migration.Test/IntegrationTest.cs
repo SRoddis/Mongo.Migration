@@ -1,5 +1,4 @@
-﻿using System;
-using Mongo.Migration.Services.DiContainer;
+﻿using Mongo.Migration.Services.Startup.Static;
 
 namespace Mongo.Migration.Test
 {

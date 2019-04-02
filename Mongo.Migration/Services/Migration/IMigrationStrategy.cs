@@ -1,4 +1,4 @@
-﻿namespace Mongo.Migration.Services.MongoDB
+﻿namespace Mongo.Migration.Services.Migration
 {
     internal interface IMigrationStrategy
     {

@@ -1,11 +1,9 @@
-﻿using System;
-using Mongo.Migration.Documents;
-using Mongo.Migration.Documents.Serializers;
-using Mongo.Migration.Services.Interceptors;
+﻿using Mongo.Migration.Documents.Serializers;
+using Mongo.Migration.Services.Migration.OnDeserialization.Interceptors;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 
-namespace Mongo.Migration.Services.MongoDB
+namespace Mongo.Migration.Services.Migration.OnDeserialization
 {
     internal class MigrationOnDeserialization : IMigrationStrategy
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Mongo.Migration.Demo.Model;
-using Mongo.Migration.Services.Initializers;
+using Mongo.Migration.Services.Startup.Static;
 using Mongo2Go;
 using MongoDB.Bson;
 using MongoDB.Driver;

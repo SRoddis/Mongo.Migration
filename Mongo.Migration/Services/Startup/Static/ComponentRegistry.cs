@@ -3,10 +3,11 @@ using Mongo.Migration.Documents.Locators;
 using Mongo.Migration.Documents.Serializers;
 using Mongo.Migration.Migrations;
 using Mongo.Migration.Migrations.Locators;
-using Mongo.Migration.Services.Interceptors;
-using Mongo.Migration.Services.MongoDB;
+using Mongo.Migration.Services.Migration;
+using Mongo.Migration.Services.Migration.OnDeserialization;
+using Mongo.Migration.Services.Migration.OnDeserialization.Interceptors;
 
-namespace Mongo.Migration.Services.DiContainer
+namespace Mongo.Migration.Services.Startup.Static
 {
     internal class ComponentRegistry : ICompoentRegistry
     {

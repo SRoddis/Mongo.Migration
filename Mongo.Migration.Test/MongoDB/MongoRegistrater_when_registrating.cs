@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using Mongo.Migration.Documents;
-using Mongo.Migration.Services.MongoDB;
+using Mongo.Migration.Services.Migration;
 using MongoDB.Bson.Serialization;
 using NUnit.Framework;
 

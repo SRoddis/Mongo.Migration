@@ -1,6 +1,6 @@
 ﻿using Mongo.Migration.Documents.Locators;
 using Mongo.Migration.Migrations.Locators;
-using Mongo.Migration.Services.MongoDB;
+using Mongo.Migration.Services.Migration;
 
 namespace Mongo.Migration
 {

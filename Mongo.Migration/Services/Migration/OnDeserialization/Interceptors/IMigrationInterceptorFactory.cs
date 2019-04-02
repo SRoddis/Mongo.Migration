@@ -1,8 +1,7 @@
 ﻿using System;
-using Mongo.Migration.Documents;
 using MongoDB.Bson.Serialization;
 
-namespace Mongo.Migration.Services.Interceptors
+namespace Mongo.Migration.Services.Migration.OnDeserialization.Interceptors
 {
     internal interface IMigrationInterceptorFactory
     {
