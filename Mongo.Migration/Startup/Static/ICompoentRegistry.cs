@@ -1,4 +1,4 @@
-namespace Mongo.Migration.Services.Startup.Static
+namespace Mongo.Migration.Startup.Static
 {
     internal interface ICompoentRegistry
     {

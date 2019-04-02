@@ -8,7 +8,7 @@ using Mongo.Migration.Services.Migration.OnDeserialization;
 using Mongo.Migration.Services.Migration.OnDeserialization.Interceptors;
 using Mongo.Migration.Services.Migration.OnStartup;
 
-namespace Mongo.Migration.Services.Startup.DotNetCore
+namespace Mongo.Migration.Startup.DotNetCore
 {
     public static class MongoMigrationExtensions
     {

@@ -1,7 +1,6 @@
 ﻿using System;
 using FluentAssertions;
 using Mongo.Migration.Exceptions;
-using Mongo.Migration.Services.Startup.Static;
 using NUnit.Framework;
 
 namespace Mongo.Migration.Test.Services.Initializers
@@ -12,17 +11,17 @@ namespace Mongo.Migration.Test.Services.Initializers
         [TearDown]
         public void TearDown()
         {
-            Migration.Services.Startup.Static.MongoMigration.Reset();
+            Startup.Static.MongoMigration.Reset();
         }
 
         [Test]
         public void When_inizialize_twice_Then_throw_exception()
         {
             // Arrange
-            Migration.Services.Startup.Static.MongoMigration.MigrationOnDeserialization();
+            Startup.Static.MongoMigration.MigrationOnDeserialization();
 
             // Act
-            Action comparison = Migration.Services.Startup.Static.MongoMigration.MigrationOnDeserialization;
+            Action comparison = Startup.Static.MongoMigration.MigrationOnDeserialization;
 
             // Assert
             comparison.ShouldThrow<AlreadyInitializedException>();

@@ -8,7 +8,7 @@ using Mongo.Migration.Services.Migration.OnDeserialization;
 using Mongo.Migration.Services.Migration.OnDeserialization.Interceptors;
 using Mongo.Migration.Services.Migration.OnStartup;
 
-namespace Mongo.Migration.Services.Startup.Static
+namespace Mongo.Migration.Startup.Static
 {
     internal class ComponentRegistry : ICompoentRegistry
     {

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using FluentAssertions;
-using Mongo.Migration.Services.Startup.Static;
 using Mongo.Migration.Test.TestDoubles;
 using Mongo2Go;
 using MongoDB.Bson;
@@ -17,7 +16,7 @@ namespace Mongo.Migration.Test.Performance
         [TearDown]
         public void TearDown()
         {
-            Migration.Services.Startup.Static.MongoMigration.Reset();
+            Startup.Static.MongoMigration.Reset();
             _client = null;
             _runner.Dispose();
         }
@@ -109,7 +108,7 @@ namespace Mongo.Migration.Test.Performance
             ClearCollection();
 
             // Measure time of MongoDb processing without Mongo.Migration
-            Migration.Services.Startup.Static.MongoMigration.MigrationOnDeserialization();
+            Startup.Static.MongoMigration.MigrationOnDeserialization();
 
             var swWithMigration = new Stopwatch();
             swWithMigration.Start();

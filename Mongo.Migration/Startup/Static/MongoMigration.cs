@@ -1,6 +1,6 @@
 ﻿using Mongo.Migration.Exceptions;
 
-namespace Mongo.Migration.Services.Startup.Static
+namespace Mongo.Migration.Startup.Static
 {
     public static class MongoMigration
     {

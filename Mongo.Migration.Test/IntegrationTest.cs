@@ -1,4 +1,4 @@
-﻿using Mongo.Migration.Services.Startup.Static;
+﻿using Mongo.Migration.Startup.Static;
 
 namespace Mongo.Migration.Test
 {
