@@ -4,13 +4,13 @@ using Mongo.Migration.Services.Migration;
 
 namespace Mongo.Migration
 {
-    internal class Application : IApplication
+    internal class MongoMigration : IMongoMigration
     {
         private readonly IMigrationLocator _migrationLocator;
         private readonly IVersionLocator _versionLocator;
         private readonly IMigrationStrategy _migrationStrategy;
 
-        public Application(IMigrationLocator migrationLocator, IVersionLocator versionLocator,
+        public MongoMigration(IMigrationLocator migrationLocator, IVersionLocator versionLocator,
             IMigrationStrategy migrationStrategy)
         {
             _migrationLocator = migrationLocator;

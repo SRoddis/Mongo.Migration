@@ -12,17 +12,17 @@ namespace Mongo.Migration.Test.Services.Initializers
         [TearDown]
         public void TearDown()
         {
-            MongoMigration.Reset();
+            Migration.Services.Startup.Static.MongoMigration.Reset();
         }
 
         [Test]
         public void When_inizialize_twice_Then_throw_exception()
         {
             // Arrange
-            MongoMigration.Initialize();
+            Migration.Services.Startup.Static.MongoMigration.Initialize();
 
             // Act
-            Action comparison = MongoMigration.Initialize;
+            Action comparison = Migration.Services.Startup.Static.MongoMigration.Initialize;
 
             // Assert
             comparison.ShouldThrow<AlreadyInitializedException>();

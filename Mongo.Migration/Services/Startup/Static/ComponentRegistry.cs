@@ -28,7 +28,7 @@ namespace Mongo.Migration.Services.Startup.Static
             _container.Register<IMigrationRunner, MigrationRunner>();
             _container.Register<IMigrationInterceptorFactory, MigrationInterceptorFactory>();
             _container.Register<IMigrationStrategy, MigrationOnDeserialization>();
-            _container.Register<IApplication, Application>();
+            _container.Register<IMongoMigration, Mongo.Migration.MongoMigration>();
         }
 
         public TComponent Get<TComponent>() where TComponent : class

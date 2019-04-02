@@ -13,6 +13,15 @@
 Mongo.Migration is designed for the [MongoDB C# Driver]( https://github.com/mongodb/mongo-csharp-driver) to migrate your documents easily and on-the-fly.
 No more downtime for schema-migrations. Just write small and simple `migrations`.
 
+<!---
+add text for article here 
+https://andrewlock.net/running-async-tasks-on-app-startup-in-asp-net-core-part-1/
+
+information:
+http://www.binaryintellect.net/articles/4fb59b82-a2a8-41ce-a55f-0a0a28cd6cbc.aspx
+https://thomaslevesque.com/2018/09/25/asynchronous-initialization-in-asp-net-core-revisited/
+-->
+
 `**PLEASE NOTE**` that updates, aggregation pipeline and projections are not handled in the current version, because they don’t use serialization. You have to handle them yourself.
 
 # Installation

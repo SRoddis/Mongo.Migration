@@ -7,10 +7,10 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="LightInject" Version="5.0.3" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
     <PackageReference Include="MongoDB.Driver" Version="2.4.4" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\Migration\OnStartup" />
-    <Folder Include="Services\Startup\DotNetCore" />
   </ItemGroup>
 </Project>

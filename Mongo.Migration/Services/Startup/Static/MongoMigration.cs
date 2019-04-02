@@ -18,7 +18,7 @@ namespace Mongo.Migration.Services.Startup.Static
         {
             if (_isInitialized) throw new AlreadyInitializedException();
 
-            var app = _components.Get<IApplication>();
+            var app = _components.Get<IMongoMigration>();
             app.Run();
 
             _isInitialized = true;
