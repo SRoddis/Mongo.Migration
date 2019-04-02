@@ -11,10 +11,23 @@ namespace Mongo.Migration.Services.Startup.Static
         static MongoMigration()
         {
             _components = new ComponentRegistry();
-            _components.RegisterComponents();
+        }
+        
+        public static void MigrationOnStartup()
+        {
+            _components.RegisterMigrationOnStartup();
+
+            Initialize();
         }
 
-        public static void Initialize()
+        public static void MigrationOnDeserialization()
+        {
+            _components.RegisterMigrationOnDeserialization();
+
+            Initialize();
+        }
+
+        private static void Initialize()
         {
             if (_isInitialized) throw new AlreadyInitializedException();
 

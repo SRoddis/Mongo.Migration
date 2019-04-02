@@ -19,10 +19,10 @@ namespace Mongo.Migration.Test.Services.Initializers
         public void When_inizialize_twice_Then_throw_exception()
         {
             // Arrange
-            Migration.Services.Startup.Static.MongoMigration.Initialize();
+            Migration.Services.Startup.Static.MongoMigration.MigrationOnDeserialization();
 
             // Act
-            Action comparison = Migration.Services.Startup.Static.MongoMigration.Initialize;
+            Action comparison = Migration.Services.Startup.Static.MongoMigration.MigrationOnDeserialization;
 
             // Assert
             comparison.ShouldThrow<AlreadyInitializedException>();

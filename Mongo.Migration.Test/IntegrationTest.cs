@@ -9,7 +9,7 @@ namespace Mongo.Migration.Test
         public IntegrationTest()
         {
             _components = new ComponentRegistry();
-            _components.RegisterComponents();
+            _components.RegisterMigrationOnDeserialization();
         }
     }
 }

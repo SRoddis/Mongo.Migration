@@ -2,7 +2,9 @@ namespace Mongo.Migration.Services.Startup.Static
 {
     internal interface ICompoentRegistry
     {
-        void RegisterComponents();
+        void RegisterMigrationOnStartup();
+        
+        void RegisterMigrationOnDeserialization();
 
         TComponent Get<TComponent>() where TComponent : class;
     }

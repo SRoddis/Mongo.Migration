@@ -17,7 +17,7 @@ namespace Mongo.Migration.Demo
             var client = new MongoClient(runner.ConnectionString);
 
             // Init MongoMigration
-            MongoMigration.Initialize();
+            MongoMigration.MigrationOnDeserialization();
 
             client.GetDatabase("TestCars").DropCollection("Car");
 
