@@ -28,7 +28,7 @@ namespace Mongo.Migration.Migrations
             var type = typeof(TClass);
             var documentVersion = instance.Version.ToString();
             var latestVersion = _migrationLocator.GetLatestVersion(type);
-            var currentVersion = _versionLocator.GetCurrentVersion(type) ?? latestVersion;
+            var currentVersion = _versionLocator.GetLocateOrNull(type) ?? latestVersion;
 
             if (documentVersion == currentVersion)
                 return;
@@ -50,7 +50,7 @@ namespace Mongo.Migration.Migrations
             var documentVersion = GetVersionOrDefault(document);
             // Zeitkritisch
             var latestVersion = _migrationLocator.GetLatestVersion(type);
-            var currentVersion = _versionLocator.GetCurrentVersion(type) ?? latestVersion;
+            var currentVersion = _versionLocator.GetLocateOrNull(type) ?? latestVersion;
 
             if (documentVersion == currentVersion)
                 return;

@@ -2,10 +2,7 @@
 
 namespace Mongo.Migration.Documents.Locators
 {
-    internal interface IVersionLocator
+    internal interface IVersionLocator : ILocator<DocumentVersion, Type>
     {
-        DocumentVersion? GetCurrentVersion(Type type);
-
-        void LoadVersions();
     }
 }

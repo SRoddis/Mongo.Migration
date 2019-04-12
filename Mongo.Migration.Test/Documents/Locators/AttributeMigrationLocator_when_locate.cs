@@ -16,7 +16,7 @@ namespace Mongo.Migration.Test.Documents.Locators
             var locator = new VersionLocator();
 
             // Act
-            var currentVersion = locator.GetCurrentVersion(typeof(TestDocumentWithOneMigration));
+            var currentVersion = locator.GetLocateOrNull(typeof(TestDocumentWithOneMigration));
 
             // Assert
             currentVersion.ToString().Should().Be("0.0.1");
@@ -29,7 +29,7 @@ namespace Mongo.Migration.Test.Documents.Locators
             var locator = new VersionLocator();
 
             // Act
-            var currentVersion = locator.GetCurrentVersion(typeof(TestDocumentWithoutAttribute));
+            var currentVersion = locator.GetLocateOrNull(typeof(TestDocumentWithoutAttribute));
 
             // Assert
             currentVersion.Should().BeNull();
