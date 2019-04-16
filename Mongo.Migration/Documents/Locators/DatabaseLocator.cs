@@ -35,5 +35,10 @@ namespace Mongo.Migration.Documents.Locators
 
             LocatesDictionary = versions;
         }
+
+        public IDictionary<Type, DatabaseLocationInformation> GetLocatesOrEmpty()
+        {
+            return LocatesDictionary;
+        }
     }
 }

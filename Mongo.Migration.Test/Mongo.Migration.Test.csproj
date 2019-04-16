@@ -79,6 +79,7 @@
     <Compile Include="Documents\Serializers\DocumentVersionSerializer_when_serialize_and_deserialize.cs" />
     <Compile Include="Migrations\MigrationRunner_when_migrating_up.cs" />
     <Compile Include="MongoDB\MongoRegistrater_when_registrating.cs" />
+    <Compile Include="Performance\PerformanceOnStartup.cs" />
     <Compile Include="Performance\PerformanceTest.cs" />
     <Compile Include="Services\Initializers\MongoMigration_when_initialize.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

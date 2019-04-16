@@ -1,10 +1,21 @@
+using Mongo.Migration.Documents.Serializers;
+using Mongo.Migration.Migrations;
+
 namespace Mongo.Migration.Services.Migration.OnStartup
 {
-    public class MigrationOnStartup : IMigrationStrategy
+    internal class MigrationOnStartup : AbstractMigrationStrategy
     {
-        public void Migrate()
+        private readonly ICollectionMigrationRunner _migrationRunner;
+
+        public MigrationOnStartup(DocumentVersionSerializer serializer, ICollectionMigrationRunner migrationRunner) :
+            base(serializer)
         {
-            throw new System.NotImplementedException();
+            _migrationRunner = migrationRunner;
+        }
+
+        protected override void OnMigrate()
+        {
+            _migrationRunner.RunAll();
         }
     }
 }

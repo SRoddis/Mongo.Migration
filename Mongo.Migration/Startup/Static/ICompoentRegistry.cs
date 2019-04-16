@@ -1,8 +1,10 @@
+using MongoDB.Driver;
+
 namespace Mongo.Migration.Startup.Static
 {
     internal interface ICompoentRegistry
     {
-        void RegisterMigrationOnStartup();
+        void RegisterMigrationOnStartup(IMongoClient client);
         
         void RegisterMigrationOnDeserialization();
 

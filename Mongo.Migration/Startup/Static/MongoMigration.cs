@@ -1,4 +1,5 @@
 ﻿using Mongo.Migration.Exceptions;
+using MongoDB.Driver;
 
 namespace Mongo.Migration.Startup.Static
 {
@@ -13,9 +14,9 @@ namespace Mongo.Migration.Startup.Static
             _components = new ComponentRegistry();
         }
         
-        public static void MigrationOnStartup()
+        public static void MigrationOnStartup(IMongoClient client)
         {
-            _components.RegisterMigrationOnStartup();
+            _components.RegisterMigrationOnStartup(client);
 
             Initialize();
         }

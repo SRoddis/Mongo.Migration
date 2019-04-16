@@ -11,7 +11,7 @@ using NUnit.Framework;
 namespace Mongo.Migration.Test.Performance
 {
     [TestFixture]
-    public class PerformanceTest
+    public class PerformanceTestOnStartup
     {
         [TearDown]
         public void TearDown()
@@ -37,7 +37,7 @@ namespace Mongo.Migration.Test.Performance
 
         private const string COLLECTION_NAME = "Test";
 
-        private const int TOLERANCE_MS = 200;
+        private const int TOLERANCE_MS = 650;
 
         private MongoClient _client;
         private MongoDbRunner _runner;
@@ -108,12 +108,10 @@ namespace Mongo.Migration.Test.Performance
             ClearCollection();
 
             // Measure time of MongoDb processing without Mongo.Migration
-            Startup.Static.MongoMigration.MigrationOnDeserialization();
-
             var swWithMigration = new Stopwatch();
             swWithMigration.Start();
             InsertMany(DOCUMENT_COUNT, true);
-            MigrateAll(true);
+            Startup.Static.MongoMigration.MigrationOnStartup(_client);
             swWithMigration.Stop();
 
             ClearCollection();
