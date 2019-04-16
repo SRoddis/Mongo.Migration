@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using FluentAssertions;
+using Mongo.Migration.Startup.Static;
 using Mongo.Migration.Test.TestDoubles;
 using Mongo2Go;
 using MongoDB.Bson;
@@ -16,7 +17,7 @@ namespace Mongo.Migration.Test.Performance
         [TearDown]
         public void TearDown()
         {
-            Startup.Static.MongoMigration.Reset();
+            MongoMigrationClient.Reset();
             _client = null;
             _runner.Dispose();
         }
@@ -26,12 +27,11 @@ namespace Mongo.Migration.Test.Performance
         {
             _runner = MongoDbRunner.Start();
             _client = new MongoClient(_runner.ConnectionString);
-            
         }
 
         #region PRIVATE
 
-        private const int DOCUMENT_COUNT = 5000;
+        private const int DOCUMENT_COUNT = 500000;
 
         private const string DATABASE_NAME = "PerformanceTest";
 
@@ -111,7 +111,7 @@ namespace Mongo.Migration.Test.Performance
             var swWithMigration = new Stopwatch();
             swWithMigration.Start();
             InsertMany(DOCUMENT_COUNT, true);
-            Startup.Static.MongoMigration.MigrationOnStartup(_client);
+            MongoMigrationClient.Migrate(_client);
             swWithMigration.Stop();
 
             ClearCollection();

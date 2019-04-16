@@ -3,44 +3,44 @@ using MongoDB.Driver;
 
 namespace Mongo.Migration.Startup.Static
 {
-    public static class MongoMigration
+    public static class MongoMigrationClient
     {
-        private static bool _isInitialized;
+        private static bool _isRunning;
 
         private static readonly ICompoentRegistry _components;
 
-        static MongoMigration()
+        static MongoMigrationClient()
         {
             _components = new ComponentRegistry();
         }
         
-        public static void MigrationOnStartup(IMongoClient client)
+        public static void Migrate(IMongoClient client)
         {
             _components.RegisterMigrationOnStartup(client);
 
-            Initialize();
+            Run();
         }
 
         public static void MigrationOnDeserialization()
         {
             _components.RegisterMigrationOnDeserialization();
 
-            Initialize();
+            Run();
         }
 
-        private static void Initialize()
+        private static void Run()
         {
-            if (_isInitialized) throw new AlreadyInitializedException();
+            if (_isRunning) throw new AlreadyInitializedException();
 
             var app = _components.Get<IMongoMigration>();
             app.Run();
 
-            _isInitialized = true;
+            _isRunning = true;
         }
 
         public static void Reset()
         {
-            _isInitialized = false;
+            _isRunning = false;
         }
     }
 }

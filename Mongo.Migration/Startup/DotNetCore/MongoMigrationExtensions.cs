@@ -12,32 +12,33 @@ namespace Mongo.Migration.Startup.DotNetCore
 {
     public static class MongoMigrationExtensions
     {
-        public static void AddMigrationOnDeserialization(
-            this IServiceCollection services)
-        {
-            services.AddScoped<DocumentVersionSerializer, DocumentVersionSerializer>();
-            services.AddScoped<MigrationInterceptorProvider, MigrationInterceptorProvider>();
-            
-            services.AddScoped<IMigrationStrategy, MigrationOnDeserialization>();
-            
-            RegisterDefaults(services);
-        }
-        
         public static void AddMigrationOnStartup(
             this IServiceCollection services)
         {
-            services.AddScoped<IMigrationStrategy, MigrationOnStartup>();
-            
             RegisterDefaults(services);
+
+            services.AddScoped<ICollectionMigrationRunner, CollectionMigrationRunner>();
+            services.AddScoped<IMigrationStrategy, MigrationOnStartup>();
+        }
+        
+        public static void AddMigrationOnDeserialization(
+            this IServiceCollection services)
+        {
+            RegisterDefaults(services);
+            
+            services.AddScoped<IMigrationRunner, MigrationRunner>();
+            services.AddScoped<IMigrationStrategy, MigrationOnDeserialization>();            
+            services.AddScoped<MigrationInterceptorProvider, MigrationInterceptorProvider>();
         }
         
         private static void RegisterDefaults(IServiceCollection services)
         {
             services.AddSingleton<IMigrationLocator, TypeMigrationLocator>();
+            services.AddSingleton<IDatabaseLocator, DatabaseLocator>();
             services.AddSingleton<IVersionLocator, VersionLocator>();
 
-            services.AddScoped<IMigrationRunner, MigrationRunner>();
             services.AddScoped<IMigrationInterceptorFactory, MigrationInterceptorFactory>();
+            services.AddScoped<DocumentVersionSerializer, DocumentVersionSerializer>();
             
             services.AddScoped<IMongoMigration, MongoMigration>();
         }

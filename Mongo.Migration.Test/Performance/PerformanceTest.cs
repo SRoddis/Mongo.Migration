@@ -16,7 +16,7 @@ namespace Mongo.Migration.Test.Performance
         [TearDown]
         public void TearDown()
         {
-            Startup.Static.MongoMigration.Reset();
+            Startup.Static.MongoMigrationClient.Reset();
             _client = null;
             _runner.Dispose();
         }
@@ -108,7 +108,7 @@ namespace Mongo.Migration.Test.Performance
             ClearCollection();
 
             // Measure time of MongoDb processing without Mongo.Migration
-            Startup.Static.MongoMigration.MigrationOnDeserialization();
+            Startup.Static.MongoMigrationClient.MigrationOnDeserialization();
 
             var swWithMigration = new Stopwatch();
             swWithMigration.Start();

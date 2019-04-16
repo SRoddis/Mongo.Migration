@@ -98,7 +98,7 @@ namespace Mongo.Migration.Demo.Performance.Console
             ClearCollection();
 
             // Measure time of MongoDb processing without Mongo.Migration
-            MongoMigration.MigrationOnDeserialization();
+            MongoMigrationClient.MigrationOnDeserialization();
 
             var swWithMigration = new Stopwatch();
             swWithMigration.Start();

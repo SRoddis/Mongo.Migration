@@ -25,6 +25,7 @@ namespace Mongo.Migration.Startup.Static
             RegisterDefaults();
 
             _container.RegisterInstance(client);
+            
             _container.Register<ICollectionMigrationRunner, CollectionMigrationRunner>();
             _container.Register<IMigrationStrategy, MigrationOnStartup>();
         }
