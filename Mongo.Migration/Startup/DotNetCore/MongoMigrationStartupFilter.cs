@@ -14,7 +14,6 @@ namespace Mongo.Migration.Startup.DotNetCore
         public MongoMigrationStartupFilter(IMongoMigration migration)
             : this(migration, NullLoggerFactory.Instance)
         {
-            
         }
 
         public MongoMigrationStartupFilter(IMongoMigration migration, ILoggerFactory loggerFactory)

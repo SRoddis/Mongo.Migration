@@ -47,7 +47,7 @@ namespace Mongo.Migration.Startup.Static
         private void RegisterDefaults()
         {
             _container.Register<IMigrationLocator, TypeMigrationLocator>(new PerContainerLifetime());
-            _container.Register<IDatabaseLocator, DatabaseLocator>(new PerContainerLifetime());
+            _container.Register<ICollectionLocator, CollectionLocator>(new PerContainerLifetime());
             _container.Register<IVersionLocator, VersionLocator>(new PerContainerLifetime());
 
             _container.Register<IMigrationInterceptorFactory, MigrationInterceptorFactory>();

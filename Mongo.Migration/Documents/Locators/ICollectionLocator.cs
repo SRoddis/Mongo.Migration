@@ -5,8 +5,8 @@ using Mongo.Migration.Documents.Attributes;
 
 namespace Mongo.Migration.Documents.Locators
 {
-    public interface IDatabaseLocator : ILocator<DatabaseLocationInformation, Type>
+    public interface ICollectionLocator : ILocator<CollectionLocationInformation, Type>
     {
-        IDictionary<Type, DatabaseLocationInformation> GetLocatesOrEmpty();
+        IDictionary<Type, CollectionLocationInformation> GetLocatesOrEmpty();
     }
 }

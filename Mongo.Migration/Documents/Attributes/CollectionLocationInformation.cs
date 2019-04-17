@@ -1,8 +1,8 @@
 namespace Mongo.Migration.Documents.Attributes
 {
-    public struct DatabaseLocationInformation
+    public struct CollectionLocationInformation
     {
-        public DatabaseLocationInformation(string database, string collection)
+        public CollectionLocationInformation(string database, string collection)
         {
             Database = database;
             Collection = collection;

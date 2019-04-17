@@ -34,7 +34,7 @@ namespace Mongo.Migration.Startup.DotNetCore
         private static void RegisterDefaults(IServiceCollection services)
         {
             services.AddSingleton<IMigrationLocator, TypeMigrationLocator>();
-            services.AddSingleton<IDatabaseLocator, DatabaseLocator>();
+            services.AddSingleton<ICollectionLocator, CollectionLocator>();
             services.AddSingleton<IVersionLocator, VersionLocator>();
 
             services.AddScoped<IMigrationInterceptorFactory, MigrationInterceptorFactory>();

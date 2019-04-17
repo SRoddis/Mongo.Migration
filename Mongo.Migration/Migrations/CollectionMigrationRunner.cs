@@ -1,6 +1,10 @@
+using System;
 using System.Collections.Generic;
+using Microsoft.Extensions.Options;
+using Mongo.Migration.Documents.Attributes;
 using Mongo.Migration.Documents.Locators;
 using Mongo.Migration.Migrations.Locators;
+using Mongo.Migration.Startup.DotNetCore;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
@@ -10,24 +14,45 @@ namespace Mongo.Migration.Migrations
     {
         private readonly IMongoClient _client;
 
-        private readonly IDatabaseLocator _databaseLocator;
+        private readonly ICollectionLocator _collectionLocator;
+        
+        private readonly string _databaseName;
 
-        public CollectionMigrationRunner(IMongoClient client, IDatabaseLocator databaseLocator,
+        public CollectionMigrationRunner(IOptions<MongoMigrationSettings> options, ICollectionLocator collectionLocator,
+            IMigrationLocator migrationLocator, IVersionLocator versionLocator)
+            : this(new MongoClient(options.Value.ConnectionString), collectionLocator, migrationLocator, versionLocator)
+        {
+            _databaseName = options.Value.Database;
+            _collectionLocator = collectionLocator;
+        }
+        
+        public CollectionMigrationRunner(IMongoClient client, ICollectionLocator collectionLocator,
             IMigrationLocator migrationLocator, IVersionLocator versionLocator)
             : base(migrationLocator, versionLocator)
         {
             _client = client;
-            _databaseLocator = databaseLocator;
+            _collectionLocator = collectionLocator;
+        }
+
+        private string GetDatabaseOrDefault(CollectionLocationInformation information)
+        {
+            if (String.IsNullOrEmpty(information.Database))
+            {
+                return _databaseName;
+            }
+
+            return information.Database;
         }
 
         public void RunAll()
         {
-            var locations = _databaseLocator.GetLocatesOrEmpty();
+            var locations = _collectionLocator.GetLocatesOrEmpty();
 
             foreach (var locate in locations)
             {
                 var information = locate.Value;
-                var collection = _client.GetDatabase(information.Database)
+                var databaseName = GetDatabaseOrDefault(information);
+                var collection = _client.GetDatabase(databaseName)
                     .GetCollection<BsonDocument>(information.Collection);
 
                 var documents = collection.FindSync(_ => true).ToList();
