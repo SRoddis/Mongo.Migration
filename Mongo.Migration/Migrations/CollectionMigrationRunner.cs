@@ -10,28 +10,28 @@ using MongoDB.Driver;
 
 namespace Mongo.Migration.Migrations
 {
-    internal class CollectionMigrationRunner : MigrationRunner, ICollectionMigrationRunner
+    internal class CollectionMigrationRunner : ICollectionMigrationRunner
     {
         private readonly IMongoClient _client;
 
         private readonly ICollectionLocator _collectionLocator;
         
+        private readonly IMigrationRunner _migrationRunner;
+
         private readonly string _databaseName;
 
-        public CollectionMigrationRunner(IOptions<MongoMigrationSettings> options, ICollectionLocator collectionLocator,
-            IMigrationLocator migrationLocator, IVersionLocator versionLocator)
-            : this(new MongoClient(options.Value.ConnectionString), collectionLocator, migrationLocator, versionLocator)
+        public CollectionMigrationRunner(IOptions<MongoMigrationSettings> options, ICollectionLocator collectionLocator, IMigrationRunner migrationRunner)
+            : this(new MongoClient(options.Value.ConnectionString), collectionLocator, migrationRunner)
         {
             _databaseName = options.Value.Database;
             _collectionLocator = collectionLocator;
         }
         
-        public CollectionMigrationRunner(IMongoClient client, ICollectionLocator collectionLocator,
-            IMigrationLocator migrationLocator, IVersionLocator versionLocator)
-            : base(migrationLocator, versionLocator)
+        public CollectionMigrationRunner(IMongoClient client, ICollectionLocator collectionLocator, IMigrationRunner migrationRunner)
         {
             _client = client;
             _collectionLocator = collectionLocator;
+            _migrationRunner = migrationRunner;
         }
 
         private string GetDatabaseOrDefault(CollectionLocationInformation information)
@@ -63,7 +63,7 @@ namespace Mongo.Migration.Migrations
 
                 documents.ForEach(document =>
                 {
-                    Run(type, document);
+                    _migrationRunner.Run(type, document);
                     var update = new ReplaceOneModel<BsonDocument>(
                         new BsonDocument {{"_id", document["_id"]}},
                         document

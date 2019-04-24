@@ -33,7 +33,7 @@ namespace Mongo.Migration.Demo
             var bsonCollection =
                 client.GetDatabase("TestCars").GetCollection<BsonDocument>("Car");
 
-           bsonCollection.InsertManyAsync(cars).Wait();
+            bsonCollection.InsertManyAsync(cars).Wait();
 
             Console.WriteLine("Migrate from:");
             cars.ForEach(c => Console.WriteLine(c.ToBsonDocument() + "\n"));
@@ -52,8 +52,6 @@ namespace Mongo.Migration.Demo
 
             typedCollection.InsertOne(car);
             var test = typedCollection.FindAsync(Builders<Car>.Filter.Eq(c => c.Type, type)).Result.Single();
-
-
 
             var aggregate = typedCollection.Aggregate()
                 .Match(new BsonDocument {{"Dors", 3}});

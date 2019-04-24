@@ -2,7 +2,7 @@ using MongoDB.Driver;
 
 namespace Mongo.Migration.Migrations
 {
-    internal interface ICollectionMigrationRunner : IMigrationRunner
+    internal interface ICollectionMigrationRunner
     {
         void RunAll();
     }

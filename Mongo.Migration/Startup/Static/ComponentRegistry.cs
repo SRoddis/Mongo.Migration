@@ -34,9 +34,7 @@ namespace Mongo.Migration.Startup.Static
         {
             RegisterDefaults();
             
-            _container.Register<IMigrationRunner, MigrationRunner>();
             _container.Register<IMigrationStrategy, MigrationOnDeserialization>();
-            _container.Register<MigrationInterceptorProvider, MigrationInterceptorProvider>();
         }
 
         public TComponent Get<TComponent>() where TComponent : class
@@ -53,6 +51,9 @@ namespace Mongo.Migration.Startup.Static
             _container.Register<IMigrationInterceptorFactory, MigrationInterceptorFactory>();
             _container.Register<DocumentVersionSerializer, DocumentVersionSerializer>();
 
+            _container.Register<IMigrationRunner, MigrationRunner>();
+            _container.Register<MigrationInterceptorProvider, MigrationInterceptorProvider>();
+            
             _container.Register<IMongoMigration, Migration.MongoMigration>();
         }
     }

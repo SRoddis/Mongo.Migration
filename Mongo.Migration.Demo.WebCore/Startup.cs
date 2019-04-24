@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Mongo.Migration.Startup.DotNetCore;
+using MongoDB.Driver;
 
 namespace Mongo.Migration.Demo.WebCore
 {
@@ -24,20 +25,31 @@ namespace Mongo.Migration.Demo.WebCore
             services.Configure<MongoMigrationSettings>(
                 options =>
                 {
-                    
                     options.ConnectionString = _configuration.GetSection("MongoDb:ConnectionString").Value;
                     options.Database = _configuration.GetSection("MongoDb:Database").Value;
                 });
             services.AddMigrationOnStartup();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
+            
+            // add insert to db here
 
-
-            app.Run(async context => { await context.Response.WriteAsync("Hello World!"); });
+            app.Run(async context =>
+            {
+                using (var scope = context.RequestServices.CreateScope())
+                {
+                    scope.ServiceProvider.GetService<IMongoClient>();
+                     
+                   
+                    // add response here
+                }
+                await context.Response.WriteAsync("Hello World!");
+            });
         }
     }
 }

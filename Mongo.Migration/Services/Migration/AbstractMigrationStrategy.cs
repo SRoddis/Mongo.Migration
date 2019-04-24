@@ -1,3 +1,5 @@
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Mongo.Migration.Documents.Serializers;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
@@ -8,9 +10,17 @@ namespace Mongo.Migration.Services.Migration
     {
         private readonly DocumentVersionSerializer _serializer;
 
+        private readonly ILogger<AbstractMigrationStrategy> _logger;
+
         protected AbstractMigrationStrategy(DocumentVersionSerializer serializer)
+            : this(serializer, NullLoggerFactory.Instance)
+        {
+        }
+
+        protected AbstractMigrationStrategy(DocumentVersionSerializer serializer, ILoggerFactory loggerFactory)
         {
             _serializer = serializer;
+            _logger = loggerFactory.CreateLogger<AbstractMigrationStrategy>();
         }
 
         public void Migrate()
@@ -27,11 +37,13 @@ namespace Mongo.Migration.Services.Migration
             {
                 BsonSerializer.RegisterSerializer(_serializer.ValueType, _serializer);
             }
-            catch (BsonSerializationException exception)
+            catch (BsonSerializationException ex)
             {
-                // Catch if Serializer was registered alread... not great, I know.
+                // Catch if Serializer was registered already ... not great, I know.
                 // We have to do this, because there is always a default DocumentVersionSerialzer.
                 // BsonSerializer.LookupSerializer(), does not work.
+                
+                _logger.LogError(ex, ex.GetType().ToString());
             }
         }
     }
