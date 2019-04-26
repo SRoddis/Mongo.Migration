@@ -57,8 +57,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mongo.Migration.Demo.Model.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mongo.Migration.Demo.MongoMigrations.Pkg", "Mongo.Migration.Demo.MongoMigrations.Pkg\Mongo.Migration.Demo.MongoMigrations.Pkg.csproj", "{668385C6-5FE3-4336-B9EA-52EC03F47100}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mongo.Migration.Demo.WebCore", "Mongo.Migration.Demo.WebCore\Mongo.Migration.Demo.WebCore.csproj", "{61592E3A-4FAC-4426-B784-2411F022FF7A}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -113,10 +111,6 @@ Global
 		{668385C6-5FE3-4336-B9EA-52EC03F47100}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{668385C6-5FE3-4336-B9EA-52EC03F47100}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{668385C6-5FE3-4336-B9EA-52EC03F47100}.Release|Any CPU.Build.0 = Release|Any CPU
-		{61592E3A-4FAC-4426-B784-2411F022FF7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{61592E3A-4FAC-4426-B784-2411F022FF7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{61592E3A-4FAC-4426-B784-2411F022FF7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{61592E3A-4FAC-4426-B784-2411F022FF7A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -132,7 +126,6 @@ Global
 		{DD04BE10-B6A0-49A8-937C-47A06968C270} = {5AD796F1-D82B-4816-B4A9-5415C8F68FF3}
 		{79EF2D4A-8F99-47B2-96F1-B40040B8AE64} = {5AD796F1-D82B-4816-B4A9-5415C8F68FF3}
 		{668385C6-5FE3-4336-B9EA-52EC03F47100} = {5AD796F1-D82B-4816-B4A9-5415C8F68FF3}
-		{61592E3A-4FAC-4426-B784-2411F022FF7A} = {DB219944-127E-489A-9C06-1121DB9C17AD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {141CC212-9A27-4082-94E7-A80340DFDF4C}

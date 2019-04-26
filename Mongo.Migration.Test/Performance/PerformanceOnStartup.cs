@@ -31,13 +31,13 @@ namespace Mongo.Migration.Test.Performance
 
         #region PRIVATE
 
-        private const int DOCUMENT_COUNT = 500000;
+        private const int DOCUMENT_COUNT = 10000;
 
         private const string DATABASE_NAME = "PerformanceTest";
 
         private const string COLLECTION_NAME = "Test";
 
-        private const int TOLERANCE_MS = 650;
+        private const int TOLERANCE_MS = 700;
 
         private MongoClient _client;
         private MongoDbRunner _runner;
@@ -99,18 +99,18 @@ namespace Mongo.Migration.Test.Performance
 
             // Act
             // Measure time of MongoDb processing without Mongo.Migration
+            InsertMany(DOCUMENT_COUNT, false);
             var sw = new Stopwatch();
             sw.Start();
-            InsertMany(DOCUMENT_COUNT, false);
             MigrateAll(false);
             sw.Stop();
 
             ClearCollection();
 
             // Measure time of MongoDb processing without Mongo.Migration
+            InsertMany(DOCUMENT_COUNT, true);
             var swWithMigration = new Stopwatch();
             swWithMigration.Start();
-            InsertMany(DOCUMENT_COUNT, true);
             MongoMigrationClient.Migrate(_client);
             swWithMigration.Stop();
 

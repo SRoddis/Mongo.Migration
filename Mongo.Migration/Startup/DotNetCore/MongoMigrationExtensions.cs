@@ -26,9 +26,7 @@ namespace Mongo.Migration.Startup.DotNetCore
         {
             RegisterDefaults(services);
             
-            services.AddScoped<IMigrationRunner, MigrationRunner>();
             services.AddScoped<IMigrationStrategy, MigrationOnDeserialization>();            
-            services.AddScoped<MigrationInterceptorProvider, MigrationInterceptorProvider>();
         }
         
         private static void RegisterDefaults(IServiceCollection services)
@@ -39,6 +37,9 @@ namespace Mongo.Migration.Startup.DotNetCore
 
             services.AddScoped<IMigrationInterceptorFactory, MigrationInterceptorFactory>();
             services.AddScoped<DocumentVersionSerializer, DocumentVersionSerializer>();
+            
+            services.AddScoped<IMigrationRunner, MigrationRunner>();
+            services.AddScoped<MigrationInterceptorProvider, MigrationInterceptorProvider>();
             
             services.AddScoped<IMongoMigration, MongoMigration>();
         }

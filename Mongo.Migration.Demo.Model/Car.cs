@@ -6,7 +6,7 @@ using MongoDB.Bson;
 namespace Mongo.Migration.Demo.Model
 {
     [CurrentVersion("0.1.1")]
-    [CollectionLocation("Car")]
+    [CollectionLocation("Car", "TestCars")]
     public class Car : IDocument
     {
         public ObjectId Id { get; set; }

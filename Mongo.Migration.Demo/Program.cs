@@ -16,8 +16,7 @@ namespace Mongo.Migration.Demo
             var runner = MongoDbRunner.StartForDebugging();
             var client = new MongoClient(runner.ConnectionString);
 
-            // Init MongoMigration
-            MongoMigrationClient.MigrationOnDeserialization();
+ 
 
             client.GetDatabase("TestCars").DropCollection("Car");
 
@@ -34,6 +33,10 @@ namespace Mongo.Migration.Demo
                 client.GetDatabase("TestCars").GetCollection<BsonDocument>("Car");
 
             bsonCollection.InsertManyAsync(cars).Wait();
+            
+            
+            // Init MongoMigration
+            MongoMigrationClient.Migrate(client);
 
             Console.WriteLine("Migrate from:");
             cars.ForEach(c => Console.WriteLine(c.ToBsonDocument() + "\n"));
