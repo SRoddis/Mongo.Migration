@@ -11,7 +11,7 @@ namespace Mongo.Migration.Migrations
 {
     internal class MigrationRunner : IMigrationRunner
     {
-        private const string VERSION_FIELD = "Version";
+        public static string VERSION_FIELD = "Version";
 
         private readonly IMigrationLocator _migrationLocator;
 
@@ -48,7 +48,6 @@ namespace Mongo.Migration.Migrations
         public void Run(Type type, BsonDocument document)
         {
             var documentVersion = GetVersionOrDefault(document);
-            // Zeitkritisch
             var latestVersion = _migrationLocator.GetLatestVersion(type);
             var currentVersion = _versionLocator.GetLocateOrNull(type) ?? latestVersion;
 

@@ -51,6 +51,9 @@ namespace Mongo.Migration.Migrations
 
                 var bulkOps = new List<WriteModel<BsonDocument>>();
 
+                // where version != current || version does not exist!!
+/*                var existFilter = Builders<BsonDocument>.Filter.Exists(MigrationRunner.VERSION_FIELD, false);
+                var existFilter = Builders<BsonDocument>.Filter.Exists(MigrationRunner.VERSION_FIELD, false);*/
                 using (var cursor = collection.FindSync(_ => true))
                 {
                     while (cursor.MoveNext())
