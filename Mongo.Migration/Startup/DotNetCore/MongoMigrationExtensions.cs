@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Mongo.Migration.Documents.Locators;
 using Mongo.Migration.Documents.Serializers;
@@ -21,29 +22,30 @@ namespace Mongo.Migration.Startup.DotNetCore
             services.AddScoped<ICollectionMigrationRunner, CollectionMigrationRunner>();
             services.AddScoped<IMigrationStrategy, MigrationOnStartup>();
         }
-        
+
         public static void AddMigrationOnDeserialization(
             this IServiceCollection services)
         {
             RegisterDefaults(services);
-            
-            services.AddScoped<IMigrationStrategy, MigrationOnDeserialization>();            
+
+            services.AddScoped<IMigrationStrategy, MigrationOnDeserialization>();
         }
-        
+
         private static void RegisterDefaults(IServiceCollection services)
         {
             services.AddSingleton<IMigrationLocator, TypeMigrationLocator>();
             services.AddSingleton<ICollectionLocator, CollectionLocator>();
             services.AddSingleton<IVersionLocator, VersionLocator>();
 
-            services.AddScoped<IVersionService, VersionService>(); 
+            services.AddScoped<IVersionService, VersionService>();
             services.AddScoped<IMigrationInterceptorFactory, MigrationInterceptorFactory>();
             services.AddScoped<DocumentVersionSerializer, DocumentVersionSerializer>();
-            
+
             services.AddScoped<IMigrationRunner, MigrationRunner>();
             services.AddScoped<MigrationInterceptorProvider, MigrationInterceptorProvider>();
-            
+
             services.AddScoped<IMongoMigration, MongoMigration>();
+            services.AddTransient<IStartupFilter, MongoMigrationStartupFilter>();
         }
     }
 }

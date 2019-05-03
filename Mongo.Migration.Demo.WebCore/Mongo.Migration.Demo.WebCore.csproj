@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
         <TargetFramework>netcoreapp2.2</TargetFramework>
@@ -8,9 +8,12 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.App" />
         <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+        <PackageReference Include="Mongo2Go" Version="2.2.7" />
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Mongo.Migration.Demo.Migrations\Mongo.Migration.Demo.MongoMigrations.csproj" />
+      <ProjectReference Include="..\Mongo.Migration.Demo.Model\Mongo.Migration.Demo.Model.csproj" />
       <ProjectReference Include="..\Mongo.Migration\Mongo.Migration.csproj" />
     </ItemGroup>
 

@@ -1,7 +1,8 @@
 NOW:
-1. Mode DIContainer and Initializer to DotNetFramework
-2. Add Startup for DotNetCore
-3. Add Migrate ALL on DB
+1. Refactor AbstractMigrationStrategy -> not needed
+2. Refactor ComponentRegistry -> abstract register components
+2. Tests for StartupFilter
+2. Write Readme
 
 Later:
 Automaticallyupdate on migrated resources if attribute is provided
