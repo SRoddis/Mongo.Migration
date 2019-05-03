@@ -3,6 +3,7 @@ using Mongo.Migration.Documents.Locators;
 using Mongo.Migration.Documents.Serializers;
 using Mongo.Migration.Migrations;
 using Mongo.Migration.Migrations.Locators;
+using Mongo.Migration.Services;
 using Mongo.Migration.Services.Migration;
 using Mongo.Migration.Services.Migration.OnDeserialization;
 using Mongo.Migration.Services.Migration.OnDeserialization.Interceptors;
@@ -25,7 +26,7 @@ namespace Mongo.Migration.Startup.Static
             RegisterDefaults();
 
             _container.RegisterInstance(client);
-            
+
             _container.Register<ICollectionMigrationRunner, CollectionMigrationRunner>();
             _container.Register<IMigrationStrategy, MigrationOnStartup>();
         }
@@ -33,7 +34,7 @@ namespace Mongo.Migration.Startup.Static
         public void RegisterMigrationOnDeserialization()
         {
             RegisterDefaults();
-            
+
             _container.Register<IMigrationStrategy, MigrationOnDeserialization>();
         }
 
@@ -48,13 +49,14 @@ namespace Mongo.Migration.Startup.Static
             _container.Register<ICollectionLocator, CollectionLocator>(new PerContainerLifetime());
             _container.Register<IVersionLocator, VersionLocator>(new PerContainerLifetime());
 
+            _container.Register<IVersionService, VersionService>();
             _container.Register<IMigrationInterceptorFactory, MigrationInterceptorFactory>();
             _container.Register<DocumentVersionSerializer, DocumentVersionSerializer>();
 
             _container.Register<IMigrationRunner, MigrationRunner>();
             _container.Register<MigrationInterceptorProvider, MigrationInterceptorProvider>();
-            
-            _container.Register<IMongoMigration, Migration.MongoMigration>();
+
+            _container.Register<IMongoMigration, MongoMigration>();
         }
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using Mongo.Migration.Documents.Attributes;
 using Mongo.Migration.Documents.Locators;
 using Mongo.Migration.Exceptions;
+using Mongo.Migration.Services;
 using Mongo.Migration.Startup.DotNetCore;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -15,23 +16,24 @@ namespace Mongo.Migration.Migrations
 
         private readonly ICollectionLocator _collectionLocator;
 
+        private readonly IVersionService _versionService;
+
         private readonly string _databaseName;
 
         private readonly IMigrationRunner _migrationRunner;
 
-        public CollectionMigrationRunner(IOptions<MongoMigrationSettings> options, ICollectionLocator collectionLocator,
-            IMigrationRunner migrationRunner)
-            : this(new MongoClient(options.Value.ConnectionString), collectionLocator, migrationRunner)
+        public CollectionMigrationRunner(IOptions<MongoMigrationSettings> options, ICollectionLocator collectionLocator, IVersionService versionService, IMigrationRunner migrationRunner)
+            : this(new MongoClient(options.Value.ConnectionString), collectionLocator, versionService, migrationRunner)
         {
             _databaseName = options.Value.Database;
             _collectionLocator = collectionLocator;
         }
 
-        public CollectionMigrationRunner(IMongoClient client, ICollectionLocator collectionLocator,
-            IMigrationRunner migrationRunner)
+        public CollectionMigrationRunner(IMongoClient client, ICollectionLocator collectionLocator, IVersionService versionService, IMigrationRunner migrationRunner)
         {
             _client = client;
             _collectionLocator = collectionLocator;
+            _versionService = versionService;
             _migrationRunner = migrationRunner;
         }
 
@@ -43,7 +45,7 @@ namespace Mongo.Migration.Migrations
             {
                 var information = locate.Value;
                 var databaseName = GetDatabaseOrDefault(information);
-
+                
                 var collection = _client.GetDatabase(databaseName)
                     .GetCollection<BsonDocument>(information.Collection);
 
@@ -52,8 +54,8 @@ namespace Mongo.Migration.Migrations
                 var bulkOps = new List<WriteModel<BsonDocument>>();
 
                 // where version != current || version does not exist!!
-/*                var existFilter = Builders<BsonDocument>.Filter.Exists(MigrationRunner.VERSION_FIELD, false);
-                var existFilter = Builders<BsonDocument>.Filter.Exists(MigrationRunner.VERSION_FIELD, false);*/
+                var existFilter = Builders<BsonDocument>.Filter.Exists(_versionService.GetVersionFieldName(), false);
+                
                 using (var cursor = collection.FindSync(_ => true))
                 {
                     while (cursor.MoveNext())

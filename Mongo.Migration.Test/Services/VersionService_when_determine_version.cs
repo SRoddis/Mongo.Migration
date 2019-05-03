@@ -1,21 +1,21 @@
 ﻿using System;
 using FluentAssertions;
 using Mongo.Migration.Exceptions;
-using Mongo.Migration.Migrations;
+using Mongo.Migration.Services;
 using Mongo.Migration.Test.TestDoubles;
 using NUnit.Framework;
 
-namespace Mongo.Migration.Test.Migrations
+namespace Mongo.Migration.Test.Services
 {
     [TestFixture]
-    internal class MigrationRunner_when_check_version : IntegrationTest
+    internal class VersionService_when_determine_version : IntegrationTest
     {
-        private IMigrationRunner _runner;
+        private IVersionService _service;
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            _runner = _components.Get<IMigrationRunner>();
+            _service = _components.Get<IVersionService>();
         }
 
         [Test]
@@ -25,7 +25,7 @@ namespace Mongo.Migration.Test.Migrations
             var document = new TestDocumentWithTwoMigrationMiddleVersion();
 
             // Act
-            _runner.CheckVersion(document);
+            _service.DetermineVersion(document);
 
             // Assert
             document.Version.Should().Be("0.0.1");
@@ -38,7 +38,7 @@ namespace Mongo.Migration.Test.Migrations
             var document = new TestDocumentWithTwoMigrationHighestVersion();
 
             // Act
-            _runner.CheckVersion(document);
+            _service.DetermineVersion(document);
 
             // Assert
             document.Version.Should().Be("0.0.2");
@@ -51,7 +51,7 @@ namespace Mongo.Migration.Test.Migrations
             var document = new TestDocumentWithTwoMigrationHighestVersion { Version = "0.0.1"};
 
             // Act// Act
-            Action checkAction = () => { _runner.CheckVersion(document); };
+            Action checkAction = () => { _service.DetermineVersion(document); };
 
             // Assert
             checkAction.ShouldThrow<VersionViolationException>();
