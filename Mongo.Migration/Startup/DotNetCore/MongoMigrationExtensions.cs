@@ -3,6 +3,7 @@ using Mongo.Migration.Documents.Locators;
 using Mongo.Migration.Documents.Serializers;
 using Mongo.Migration.Migrations;
 using Mongo.Migration.Migrations.Locators;
+using Mongo.Migration.Services;
 using Mongo.Migration.Services.Migration;
 using Mongo.Migration.Services.Migration.OnDeserialization;
 using Mongo.Migration.Services.Migration.OnDeserialization.Interceptors;
@@ -35,6 +36,7 @@ namespace Mongo.Migration.Startup.DotNetCore
             services.AddSingleton<ICollectionLocator, CollectionLocator>();
             services.AddSingleton<IVersionLocator, VersionLocator>();
 
+            services.AddScoped<IVersionService, VersionService>(); 
             services.AddScoped<IMigrationInterceptorFactory, MigrationInterceptorFactory>();
             services.AddScoped<DocumentVersionSerializer, DocumentVersionSerializer>();
             

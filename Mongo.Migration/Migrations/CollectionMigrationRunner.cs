@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.Options;
 using Mongo.Migration.Documents.Attributes;
@@ -16,20 +17,32 @@ namespace Mongo.Migration.Migrations
 
         private readonly ICollectionLocator _collectionLocator;
 
-        private readonly IVersionService _versionService;
-
-        private readonly string _databaseName;
-
         private readonly IMigrationRunner _migrationRunner;
 
-        public CollectionMigrationRunner(IOptions<MongoMigrationSettings> options, ICollectionLocator collectionLocator, IVersionService versionService, IMigrationRunner migrationRunner)
-            : this(new MongoClient(options.Value.ConnectionString), collectionLocator, versionService, migrationRunner)
+        private readonly IVersionService _versionService;
+        
+        private readonly string _databaseName;
+
+        public CollectionMigrationRunner(
+            IOptions<MongoMigrationSettings> options,
+            ICollectionLocator collectionLocator,
+            IVersionService versionService,
+            IMigrationRunner migrationRunner)
+            : this(
+                new MongoClient(options.Value.ConnectionString),
+                collectionLocator,
+                versionService,
+                migrationRunner)
         {
             _databaseName = options.Value.Database;
             _collectionLocator = collectionLocator;
         }
 
-        public CollectionMigrationRunner(IMongoClient client, ICollectionLocator collectionLocator, IVersionService versionService, IMigrationRunner migrationRunner)
+        public CollectionMigrationRunner(
+            IMongoClient client,
+            ICollectionLocator collectionLocator,
+            IVersionService versionService,
+            IMigrationRunner migrationRunner)
         {
             _client = client;
             _collectionLocator = collectionLocator;
@@ -44,24 +57,22 @@ namespace Mongo.Migration.Migrations
             foreach (var locate in locations)
             {
                 var information = locate.Value;
+                var type = locate.Key;
                 var databaseName = GetDatabaseOrDefault(information);
-                
+
                 var collection = _client.GetDatabase(databaseName)
                     .GetCollection<BsonDocument>(information.Collection);
 
-                var type = locate.Key;
+                var bulk = new List<WriteModel<BsonDocument>>();
 
-                var bulkOps = new List<WriteModel<BsonDocument>>();
+                var query = CreateQueryForRelevantDocuments(type);
 
-                // where version != current || version does not exist!!
-                var existFilter = Builders<BsonDocument>.Filter.Exists(_versionService.GetVersionFieldName(), false);
-                
-                using (var cursor = collection.FindSync(_ => true))
+                using (var cursor = collection.FindSync(query))
                 {
                     while (cursor.MoveNext())
                     {
                         var batch = cursor.Current;
-                        foreach (BsonDocument document in batch)
+                        foreach (var document in batch)
                         {
                             _migrationRunner.Run(type, document);
                             var update = new ReplaceOneModel<BsonDocument>(
@@ -69,12 +80,12 @@ namespace Mongo.Migration.Migrations
                                 document
                             );
 
-                            bulkOps.Add(update);
+                            bulk.Add(update);
                         }
                     }
                 }
 
-                collection.BulkWrite(bulkOps);
+                collection.BulkWrite(bulk);
             }
         }
 
@@ -84,6 +95,19 @@ namespace Mongo.Migration.Migrations
                 throw new NoDatabaseNameFoundException();
 
             return string.IsNullOrEmpty(information.Database) ? _databaseName : information.Database;
+        }
+
+        private FilterDefinition<BsonDocument> CreateQueryForRelevantDocuments(
+            Type type)
+        {
+            var currentVersion = _versionService.GetVersion(type);
+
+            var existFilter = Builders<BsonDocument>.Filter.Exists(_versionService.GetVersionFieldName(), false);
+            var notEqualFilter = Builders<BsonDocument>.Filter.Ne(
+                _versionService.GetVersionFieldName(),
+                currentVersion);
+
+            return Builders<BsonDocument>.Filter.Or(existFilter, notEqualFilter);
         }
     }
 }
