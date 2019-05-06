@@ -1,29 +1,32 @@
 ﻿using Mongo.Migration.Documents.Locators;
 using Mongo.Migration.Migrations.Locators;
-using Mongo.Migration.Services.Migration;
+using Mongo.Migration.Services;
 
 namespace Mongo.Migration
 {
     internal class MongoMigration : IMongoMigration
     {
+        private readonly ICollectionLocator _collectionLocator;
         private readonly IMigrationLocator _migrationLocator;
+        private readonly IMigrationService _migrationService;
         private readonly IVersionLocator _versionLocator;
-        private readonly IMigrationStrategy _migrationStrategy;
 
         public MongoMigration(IMigrationLocator migrationLocator, IVersionLocator versionLocator,
-            IMigrationStrategy migrationStrategy)
+            ICollectionLocator collectionLocator, IMigrationService migrationService)
         {
             _migrationLocator = migrationLocator;
             _versionLocator = versionLocator;
-            _migrationStrategy = migrationStrategy;
+            _collectionLocator = collectionLocator;
+            _migrationService = migrationService;
         }
 
         public void Run()
         {
-            _migrationLocator.LoadMigrations();
+            _migrationLocator.Locate();
             _versionLocator.Locate();
-            
-            _migrationStrategy.Migrate();
+            _collectionLocator.Locate();
+
+            _migrationService.Migrate();
         }
     }
 }

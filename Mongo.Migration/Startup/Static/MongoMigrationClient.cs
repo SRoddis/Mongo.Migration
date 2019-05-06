@@ -1,4 +1,5 @@
-﻿using Mongo.Migration.Exceptions;
+﻿using System;
+using Mongo.Migration.Exceptions;
 using MongoDB.Driver;
 
 namespace Mongo.Migration.Startup.Static
@@ -7,35 +8,22 @@ namespace Mongo.Migration.Startup.Static
     {
         private static bool _isRunning;
 
-        private static readonly ICompoentRegistry _components;
-
-        static MongoMigrationClient()
-        {
-            _components = new ComponentRegistry();
-        }
-        
-        public static void Migrate(IMongoClient client)
-        {
-            _components.RegisterMigrationOnStartup(client);
-
-            Run();
-        }
-
-        public static void MigrationOnDeserialization()
-        {
-            _components.RegisterMigrationOnDeserialization();
-
-            Run();
-        }
-
-        private static void Run()
+        public static void Initialize(IComponentRegistry componentRegistry)
         {
             if (_isRunning) throw new AlreadyInitializedException();
 
-            var app = _components.Get<IMongoMigration>();
+            var app = componentRegistry.Get<IMongoMigration>();
             app.Run();
-
+            
             _isRunning = true;
+        }
+        
+        public static void Initialize(IMongoClient client)
+        {
+            var componentRegistry = new ComponentRegistry();
+            componentRegistry.RegisterComponents(client);
+
+            Initialize(componentRegistry);
         }
 
         public static void Reset()

@@ -111,7 +111,7 @@ namespace Mongo.Migration.Test.Performance
             InsertMany(DOCUMENT_COUNT, true);
             var swWithMigration = new Stopwatch();
             swWithMigration.Start();
-            MongoMigrationClient.Migrate(_client);
+            MongoMigrationClient.Initialize(_client);
             swWithMigration.Stop();
 
             ClearCollection();

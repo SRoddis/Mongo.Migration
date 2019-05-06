@@ -85,7 +85,10 @@ namespace Mongo.Migration.Migrations
                     }
                 }
 
-                collection.BulkWrite(bulk);
+                if (bulk.Count > 0)
+                {
+                    collection.BulkWrite(bulk);
+                }
             }
         }
 

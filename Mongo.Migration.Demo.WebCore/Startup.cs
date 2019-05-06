@@ -41,7 +41,7 @@ namespace Mongo.Migration.Demo.WebCore
                         runner.ConnectionString; //_configuration.GetSection("MongoDb:ConnectionString").Value;
                     options.Database = _configuration.GetSection("MongoDb:Database").Value;
                 });
-            services.AddMigrationOnDeserialization();
+            services.AddMigration();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

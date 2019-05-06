@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using Mongo.Migration.Documents;
-using Mongo.Migration.Services.Migration;
+using Mongo.Migration.Services;
 using MongoDB.Bson.Serialization;
 using NUnit.Framework;
 
@@ -13,10 +13,10 @@ namespace Mongo.Migration.Test.MongoDB
         public void Then_serializer_is_registered()
         {
             // Arrange 
-            var registrator = _components.Get<IMigrationStrategy>();
+            var migrationService = _components.Get<IMigrationService>();
 
             // Act
-            registrator.Migrate();
+            migrationService.Migrate();
 
             // Arrange
             BsonSerializer.LookupSerializer<DocumentVersion>().ValueType.Should().Be(typeof(DocumentVersion));

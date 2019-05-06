@@ -6,7 +6,7 @@ namespace Mongo.Migration.Migrations.Locators
 {
     internal class TypeMigrationLocator : MigrationLocator
     {
-        public override void LoadMigrations()
+        public override void Locate()
         {
             var migrationTypes =
                 (from assembly in Assemblies

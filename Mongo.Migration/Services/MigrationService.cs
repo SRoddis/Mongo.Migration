@@ -1,41 +1,49 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Mongo.Migration.Documents.Serializers;
-using Mongo.Migration.Services.Migration.OnDeserialization.Interceptors;
+using Mongo.Migration.Migrations;
+using Mongo.Migration.Services.Interceptors;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 
-namespace Mongo.Migration.Services.Migration
+namespace Mongo.Migration.Services
 {
-    internal abstract class AbstractMigrationStrategy : IMigrationStrategy
+    internal class MigrationService : IMigrationService
     {
-        private readonly ILogger<AbstractMigrationStrategy> _logger;
-        private readonly DocumentVersionSerializer _serializer;
+        private readonly ILogger<MigrationService> _logger;
+        private readonly ICollectionMigrationRunner _migrationRunner;
         private readonly MigrationInterceptorProvider _provider;
+        private readonly DocumentVersionSerializer _serializer;
 
-        protected AbstractMigrationStrategy(DocumentVersionSerializer serializer, MigrationInterceptorProvider provider)
+        public MigrationService(DocumentVersionSerializer serializer, MigrationInterceptorProvider provider,
+            ICollectionMigrationRunner migrationRunner)
             : this(serializer, provider, NullLoggerFactory.Instance)
         {
+            _migrationRunner = migrationRunner;
         }
 
-        protected AbstractMigrationStrategy(
+        private MigrationService(
             DocumentVersionSerializer serializer,
             MigrationInterceptorProvider provider,
             ILoggerFactory loggerFactory)
         {
             _serializer = serializer;
             _provider = provider;
-            _logger = loggerFactory.CreateLogger<AbstractMigrationStrategy>();
+            _logger = loggerFactory.CreateLogger<MigrationService>();
         }
 
         public void Migrate()
         {
             BsonSerializer.RegisterSerializationProvider(_provider);
             RegisterSerializer();
-            OnMigrate();
+
+            OnStartup();
         }
 
-        protected abstract void OnMigrate();
+        private void OnStartup()
+        {
+            _migrationRunner.RunAll();
+        }
 
         private void RegisterSerializer()
         {

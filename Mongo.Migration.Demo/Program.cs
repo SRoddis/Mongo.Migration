@@ -36,7 +36,7 @@ namespace Mongo.Migration.Demo
             
             
             // Init MongoMigration
-            MongoMigrationClient.Migrate(client);
+            MongoMigrationClient.Initialize(client);
 
             Console.WriteLine("Migrate from:");
             cars.ForEach(c => Console.WriteLine(c.ToBsonDocument() + "\n"));

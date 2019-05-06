@@ -4,15 +4,12 @@ using Mongo.Migration.Documents.Serializers;
 using Mongo.Migration.Migrations;
 using Mongo.Migration.Migrations.Locators;
 using Mongo.Migration.Services;
-using Mongo.Migration.Services.Migration;
-using Mongo.Migration.Services.Migration.OnDeserialization;
-using Mongo.Migration.Services.Migration.OnDeserialization.Interceptors;
-using Mongo.Migration.Services.Migration.OnStartup;
+using Mongo.Migration.Services.Interceptors;
 using MongoDB.Driver;
 
 namespace Mongo.Migration.Startup.Static
 {
-    internal class ComponentRegistry : ICompoentRegistry
+    internal class ComponentRegistry : IComponentRegistry
     {
         private readonly ServiceContainer _container;
 
@@ -21,21 +18,13 @@ namespace Mongo.Migration.Startup.Static
             _container = new ServiceContainer();
         }
 
-        public void RegisterMigrationOnStartup(IMongoClient client)
+        public void RegisterComponents(IMongoClient client)
         {
             RegisterDefaults();
 
             _container.RegisterInstance(client);
-
-            _container.Register<ICollectionMigrationRunner, CollectionMigrationRunner>();
-            _container.Register<IMigrationStrategy, MigrationOnStartup>();
-        }
-
-        public void RegisterMigrationOnDeserialization()
-        {
-            RegisterDefaults();
-
-            _container.Register<IMigrationStrategy, MigrationOnDeserialization>();
+            
+            _container.Register<IMigrationService, MigrationService>();
         }
 
         public TComponent Get<TComponent>() where TComponent : class
@@ -53,6 +42,7 @@ namespace Mongo.Migration.Startup.Static
             _container.Register<IMigrationInterceptorFactory, MigrationInterceptorFactory>();
             _container.Register<DocumentVersionSerializer, DocumentVersionSerializer>();
 
+            _container.Register<ICollectionMigrationRunner, CollectionMigrationRunner>();
             _container.Register<IMigrationRunner, MigrationRunner>();
             _container.Register<MigrationInterceptorProvider, MigrationInterceptorProvider>();
 

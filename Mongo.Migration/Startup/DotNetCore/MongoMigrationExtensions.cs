@@ -5,30 +5,18 @@ using Mongo.Migration.Documents.Serializers;
 using Mongo.Migration.Migrations;
 using Mongo.Migration.Migrations.Locators;
 using Mongo.Migration.Services;
-using Mongo.Migration.Services.Migration;
-using Mongo.Migration.Services.Migration.OnDeserialization;
-using Mongo.Migration.Services.Migration.OnDeserialization.Interceptors;
-using Mongo.Migration.Services.Migration.OnStartup;
+using Mongo.Migration.Services.Interceptors;
 
 namespace Mongo.Migration.Startup.DotNetCore
 {
     public static class MongoMigrationExtensions
     {
-        public static void AddMigrationOnStartup(
+        public static void AddMigration(
             this IServiceCollection services)
         {
             RegisterDefaults(services);
 
-            services.AddScoped<ICollectionMigrationRunner, CollectionMigrationRunner>();
-            services.AddScoped<IMigrationStrategy, MigrationOnStartup>();
-        }
-
-        public static void AddMigrationOnDeserialization(
-            this IServiceCollection services)
-        {
-            RegisterDefaults(services);
-
-            services.AddScoped<IMigrationStrategy, MigrationOnDeserialization>();
+            services.AddScoped<IMigrationService, MigrationService>();
         }
 
         private static void RegisterDefaults(IServiceCollection services)
@@ -41,6 +29,7 @@ namespace Mongo.Migration.Startup.DotNetCore
             services.AddScoped<IMigrationInterceptorFactory, MigrationInterceptorFactory>();
             services.AddScoped<DocumentVersionSerializer, DocumentVersionSerializer>();
 
+            services.AddScoped<ICollectionMigrationRunner, CollectionMigrationRunner>();
             services.AddScoped<IMigrationRunner, MigrationRunner>();
             services.AddScoped<MigrationInterceptorProvider, MigrationInterceptorProvider>();
 

@@ -4,7 +4,7 @@ using MongoDB.Bson.IO;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 
-namespace Mongo.Migration.Services.Migration.OnDeserialization.Interceptors
+namespace Mongo.Migration.Services.Interceptors
 {
     internal class MigrationInterceptor<TDocument> : BsonClassMapSerializer<TDocument> where TDocument : class, IDocument
     {

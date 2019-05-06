@@ -24,7 +24,7 @@ namespace Mongo.Migration.Migrations.Locators
             get
             {
                 if (_migrations == null)
-                    LoadMigrations();
+                    Locate();
                 
                 if (_migrations.NullOrEmpty())
                     throw new NoMigrationsFoundException();
@@ -69,7 +69,7 @@ namespace Mongo.Migration.Migrations.Locators
             return migrations.Max(m => m.Version);
         }
 
-        public abstract void LoadMigrations();
+        public abstract void Locate();
         
         private static IEnumerable<Assembly> GetAssemblies()
         {
