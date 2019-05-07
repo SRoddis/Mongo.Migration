@@ -59,6 +59,7 @@ namespace Mongo.Migration.Migrations
                 var information = locate.Value;
                 var type = locate.Key;
                 var databaseName = GetDatabaseOrDefault(information);
+                var collectionVersion = _versionService.GetCollectionVersion(type);
 
                 var collection = _client.GetDatabase(databaseName)
                     .GetCollection<BsonDocument>(information.Collection);
@@ -74,7 +75,7 @@ namespace Mongo.Migration.Migrations
                         var batch = cursor.Current;
                         foreach (var document in batch)
                         {
-                            _migrationRunner.Run(type, document);
+                            _migrationRunner.Run(type, document, collectionVersion);
                             var update = new ReplaceOneModel<BsonDocument>(
                                 new BsonDocument {{"_id", document["_id"]}},
                                 document

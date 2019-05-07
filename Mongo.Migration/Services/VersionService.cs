@@ -38,7 +38,7 @@ namespace Mongo.Migration.Services
             return GetCurrentVersion(type) ?? latestVersion;
         }
         
-        public DocumentVersion GetCollectionVersion(BsonDocument document, Type type)
+        public DocumentVersion GetCollectionVersion(Type type)
         {
             var version = GetVersion(type);
             return _collectionVersionLocator.GetLocateOrNull(type) ?? version;

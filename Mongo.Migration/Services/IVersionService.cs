@@ -11,10 +11,10 @@ namespace Mongo.Migration.Services
         string GetVersionFieldName();
 
         DocumentVersion GetVersion(Type type);
+        
+        DocumentVersion GetCollectionVersion(Type type);
 
         DocumentVersion GetVersionOrDefault(BsonDocument document);
-
-        DocumentVersion GetCollectionVersion(BsonDocument document, Type type);
         
         void SetVersion(BsonDocument document, DocumentVersion version);
 
