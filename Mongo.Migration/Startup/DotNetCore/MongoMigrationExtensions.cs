@@ -23,7 +23,8 @@ namespace Mongo.Migration.Startup.DotNetCore
         {
             services.AddSingleton<IMigrationLocator, TypeMigrationLocator>();
             services.AddSingleton<ICollectionLocator, CollectionLocator>();
-            services.AddSingleton<IVersionLocator, VersionLocator>();
+            services.AddSingleton<ICurrentVersionLocator, CurrentVersionLocator>();
+            services.AddSingleton<ICollectionVersionLocator, CollectionVersionLocator>();
 
             services.AddScoped<IVersionService, VersionService>();
             services.AddScoped<IMigrationInterceptorFactory, MigrationInterceptorFactory>();

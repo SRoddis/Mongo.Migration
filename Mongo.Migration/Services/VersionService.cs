@@ -16,12 +16,12 @@ namespace Mongo.Migration.Services
 
         private readonly IMigrationLocator _migrationLocator;
 
-        private readonly IVersionLocator _versionLocator;
+        private readonly ICurrentVersionLocator _currentVersionLocator;
 
-        public VersionService(IMigrationLocator migrationLocator, IVersionLocator versionLocator)
+        public VersionService(IMigrationLocator migrationLocator, ICurrentVersionLocator currentVersionLocator)
         {
             _migrationLocator = migrationLocator;
-            _versionLocator = versionLocator;
+            _currentVersionLocator = currentVersionLocator;
         }
 
         public string GetVersionFieldName()
@@ -32,7 +32,7 @@ namespace Mongo.Migration.Services
         public DocumentVersion GetVersion(Type type)
         {
             var latestVersion = _migrationLocator.GetLatestVersion(type);
-            return _versionLocator.GetLocateOrNull(type) ?? latestVersion;
+            return _currentVersionLocator.GetLocateOrNull(type) ?? latestVersion;
         }
 
         public DocumentVersion GetVersionOrDefault(BsonDocument document)
@@ -56,7 +56,7 @@ namespace Mongo.Migration.Services
             var type = typeof(TClass);
             var documentVersion = instance.Version.ToString();
             var latestVersion = _migrationLocator.GetLatestVersion(type);
-            var currentVersion = _versionLocator.GetLocateOrNull(type) ?? latestVersion;
+            var currentVersion = _currentVersionLocator.GetLocateOrNull(type) ?? latestVersion;
 
             if (documentVersion == currentVersion)
                 return;

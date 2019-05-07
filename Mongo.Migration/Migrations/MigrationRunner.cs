@@ -29,7 +29,7 @@ namespace Mongo.Migration.Migrations
 
             if (version > currentVersion)
             {
-                MigrateDown(type, currentVersion.ToString(), document);
+                MigrateDown(type, document, currentVersion);
                 return;
             }
 
@@ -54,7 +54,7 @@ namespace Mongo.Migration.Migrations
             }
         }
 
-        private void MigrateDown(Type type, DocumentVersion version, BsonDocument document)
+        private void MigrateDown(Type type, BsonDocument document, DocumentVersion version)
         {
             var migrations = _migrationLocator
                 .GetMigrationsGtEq(type, version)
