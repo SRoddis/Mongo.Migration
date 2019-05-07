@@ -14,6 +14,8 @@ namespace Mongo.Migration.Services
 
         DocumentVersion GetVersionOrDefault(BsonDocument document);
 
+        DocumentVersion GetCollectionVersion(BsonDocument document, Type type);
+        
         void SetVersion(BsonDocument document, DocumentVersion version);
 
         void DetermineVersion<TClass>(TClass instance) where TClass : class, IDocument;
