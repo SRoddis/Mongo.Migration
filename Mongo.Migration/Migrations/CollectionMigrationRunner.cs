@@ -11,7 +11,7 @@ using MongoDB.Driver;
 
 namespace Mongo.Migration.Migrations
 {
-    internal class CollectionMigrationRunner : ICollectionMigrationRunner
+    internal class  CollectionMigrationRunner : ICollectionMigrationRunner
     {
         private readonly IMongoClient _client;
 

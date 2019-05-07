@@ -41,6 +41,17 @@ namespace Mongo.Migration.Migrations.Locators
 
             return migrations;
         }
+        
+        public IEnumerable<IMigration> GetMigrationsBetween(Type type, DocumentVersion version, DocumentVersion otherVersion)
+        {
+            var migrations = GetMigrations(type);
+
+            return
+                migrations
+                    .Where(m => m.Version <= version)
+                    .Where(m => m.Version > otherVersion)
+                    .ToList();
+        }
 
         public IEnumerable<IMigration> GetMigrationsGt(Type type, DocumentVersion version)
         {
