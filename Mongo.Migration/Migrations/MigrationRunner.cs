@@ -20,24 +20,30 @@ namespace Mongo.Migration.Migrations
             _versionService = versionService;
         }
 
-        public void Run(Type type, BsonDocument document)
+        public void Run(Type type, BsonDocument document, DocumentVersion version)
         {
-            var documentVersion = _versionService.GetVersionOrDefault(document);
             var currentVersion = _versionService.GetVersion(type);
 
-            if (documentVersion == currentVersion)
+            if (version == currentVersion)
                 return;
 
-            if (documentVersion > currentVersion)
+            if (version > currentVersion)
             {
                 MigrateDown(type, currentVersion.ToString(), document);
                 return;
             }
 
-            MigrateUp(type, documentVersion, document);
+            MigrateUp(type, document, version);
+        }
+        
+        public void Run(Type type, BsonDocument document)
+        {
+            var documentVersion = _versionService.GetVersionOrDefault(document);
+            
+            Run(type, document, documentVersion);
         }
 
-        private void MigrateUp(Type type, DocumentVersion version, BsonDocument document)
+        private void MigrateUp(Type type, BsonDocument document, DocumentVersion version)
         {
             var migrations = _migrationLocator.GetMigrationsGt(type, version).ToList();
 

@@ -6,6 +6,8 @@ namespace Mongo.Migration.Migrations
 {
     internal interface IMigrationRunner
     {
+        void Run(Type type, BsonDocument document, DocumentVersion version);
+        
         void Run(Type type, BsonDocument document);
     }
 }
