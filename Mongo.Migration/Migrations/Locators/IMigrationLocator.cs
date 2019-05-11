@@ -12,7 +12,7 @@ namespace Mongo.Migration.Migrations.Locators
 
         IEnumerable<IMigration> GetMigrationsGtEq(Type type, DocumentVersion version);
 
-        IEnumerable<IMigration> GetMigrationsBetween(Type type, DocumentVersion version, DocumentVersion otherVersion);
+        IEnumerable<IMigration> GetMigrationsFromTo(Type type, DocumentVersion version, DocumentVersion otherVersion);
 
         DocumentVersion GetLatestVersion(Type type);
 

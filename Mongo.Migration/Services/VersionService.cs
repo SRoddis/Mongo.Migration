@@ -32,7 +32,7 @@ namespace Mongo.Migration.Services
             return VERSION_FIELD_NAME;
         }
 
-        public DocumentVersion GetVersion(Type type)
+        public DocumentVersion GetCurrentOrLatestMigrationVersion(Type type)
         {
             var latestVersion = _migrationLocator.GetLatestVersion(type);
             return GetCurrentVersion(type) ?? latestVersion;
@@ -40,10 +40,10 @@ namespace Mongo.Migration.Services
         
         public DocumentVersion GetCollectionVersion(Type type)
         {
-            var version = GetVersion(type);
+            var version = GetCurrentOrLatestMigrationVersion(type);
             return _collectionVersionLocator.GetLocateOrNull(type) ?? version;
         }
-
+        
         public DocumentVersion GetVersionOrDefault(BsonDocument document)
         {
             BsonValue value;

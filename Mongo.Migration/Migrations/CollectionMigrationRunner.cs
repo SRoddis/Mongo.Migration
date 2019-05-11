@@ -76,6 +76,8 @@ namespace Mongo.Migration.Migrations
                         foreach (var document in batch)
                         {
                             _migrationRunner.Run(type, document, collectionVersion);
+                            
+                            
                             var update = new ReplaceOneModel<BsonDocument>(
                                 new BsonDocument {{"_id", document["_id"]}},
                                 document
@@ -104,7 +106,7 @@ namespace Mongo.Migration.Migrations
         private FilterDefinition<BsonDocument> CreateQueryForRelevantDocuments(
             Type type)
         {
-            var currentVersion = _versionService.GetVersion(type);
+            var currentVersion = _versionService.GetCurrentOrLatestMigrationVersion(type);
 
             var existFilter = Builders<BsonDocument>.Filter.Exists(_versionService.GetVersionFieldName(), false);
             var notEqualFilter = Builders<BsonDocument>.Filter.Ne(

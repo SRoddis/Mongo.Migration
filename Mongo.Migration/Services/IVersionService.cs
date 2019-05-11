@@ -10,7 +10,7 @@ namespace Mongo.Migration.Services
     {
         string GetVersionFieldName();
 
-        DocumentVersion GetVersion(Type type);
+        DocumentVersion GetCurrentOrLatestMigrationVersion(Type type);
         
         DocumentVersion GetCollectionVersion(Type type);
 

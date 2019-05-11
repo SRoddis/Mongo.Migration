@@ -19,40 +19,48 @@ namespace Mongo.Migration.Migrations
             _migrationLocator = migrationLocator;
             _versionService = versionService;
         }
-
-        public void Run(Type type, BsonDocument document, DocumentVersion version)
-        {
-            // Check current Document Version! 
-            var documentVersion = _versionService.GetVersion(type);
-
-            if (version == documentVersion)
-                return;
-
-            if (version > documentVersion)
-            {
-                MigrateDown(type, document, documentVersion);
-                return;
-            }
-
-            MigrateUp(type, document, version, documentVersion);
-        }
         
         public void Run(Type type, BsonDocument document)
         {
             var documentVersion = _versionService.GetVersionOrDefault(document);
+            var currentOrLatest = _versionService.GetCurrentOrLatestMigrationVersion(type);
+
+            if (documentVersion == currentOrLatest)
+                return;
+
+            MigrateUpOrDown(type, document, documentVersion, currentOrLatest);
+        }
+        
+        public void Run(Type type, BsonDocument document, DocumentVersion to)
+        {
+            var documentVersion = _versionService.GetVersionOrDefault(document);
+            var currentOrLatest = _versionService.GetCurrentOrLatestMigrationVersion(type);
+
+            if (documentVersion == to || documentVersion == currentOrLatest)
+                return;
             
-            Run(type, document, documentVersion);
+            MigrateUpOrDown(type, document, documentVersion, to);
         }
 
-        private void MigrateUp(Type type, BsonDocument document, DocumentVersion version, DocumentVersion documentVersion)
+        private void MigrateUpOrDown(
+            Type type,
+            BsonDocument document,
+            DocumentVersion documentVersion,
+            DocumentVersion to)
         {
-            var migrations = _migrationLocator.GetMigrationsGt(type, version).ToList();
-            
-            if (documentVersion != version)
+            if (documentVersion > to)
             {
-               migrations =  _migrationLocator.GetMigrationsBetween(type, version, documentVersion).ToList(); 
+                MigrateDown(type, document, to);
+                return;
             }
 
+            MigrateUp(type, document, documentVersion, to);
+        }
+
+        private void MigrateUp(Type type, BsonDocument document, DocumentVersion version, DocumentVersion toVersion)
+        {
+            var migrations = _migrationLocator.GetMigrationsFromTo(type, version, toVersion).ToList();
+            
             foreach (var migration in migrations)
             {
                 migration.Up(document);
