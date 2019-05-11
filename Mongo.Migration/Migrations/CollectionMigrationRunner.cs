@@ -66,8 +66,6 @@ namespace Mongo.Migration.Migrations
                 var type = locate.Key;
                 var databaseName = GetDatabaseOrDefault(information);
                 var collectionVersion = _versionService.GetCollectionVersion(type);
-
-                CheckDatabaseAndConnection(databaseName);
                 
                 var collection = _client.GetDatabase(databaseName)
                     .GetCollection<BsonDocument>(information.Collection);
@@ -102,17 +100,7 @@ namespace Mongo.Migration.Migrations
                 }
             }
         }
-
-        private void CheckDatabaseAndConnection(string databaseName)
-        {
-            var databases = _client.ListDatabases().ToList().Select(db => db.GetValue("name").AsString);
-            
-            if (!databases.Contains(databaseName))
-            {
-                throw new MongoMigrationDatabaseNotFound(databaseName, _options.Value.ConnectionString);
-            }
-        }
-
+        
         private string GetDatabaseOrDefault(CollectionLocationInformation information)
         {
             if (string.IsNullOrEmpty(_databaseName) && string.IsNullOrEmpty(information.Database))

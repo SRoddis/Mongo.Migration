@@ -16,8 +16,6 @@ namespace Mongo.Migration.Demo
             var runner = MongoDbRunner.StartForDebugging();
             var client = new MongoClient(runner.ConnectionString);
 
- 
-
             client.GetDatabase("TestCars").DropCollection("Car");
 
             // Insert old and new version of cars into MongoDB

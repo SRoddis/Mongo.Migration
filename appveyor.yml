@@ -45,11 +45,9 @@ after_test:
    - cmd: .\post_build.cmd
 
 artifacts:
-  - path: Mongo.Migration\bin\Release\net45\Mongo.Migration.dll
-    name: Mongo.Migration.dll
   - path: Mongo.Migration\bin\Release\net47\Mongo.Migration.dll
     name: Mongo.Migration.dll
-  - path: Mongo.Migration\bin\Release\netstandard2.0\Mongo.Migration.dll
+  - path: Mongo.Migration\bin\Release\netstandard2.2\Mongo.Migration.dll
     name: Mongo.Migration.dll
   - path: '**\Mongo.Migration.*.nupkg'
 
