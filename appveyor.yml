@@ -42,7 +42,6 @@ before_build:
   - nuget restore
 
 after_test: 
-   - ps: .\nuget\pack.ps1
    - cmd: .\post_build.cmd
 
 artifacts:
