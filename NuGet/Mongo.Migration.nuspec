@@ -9,18 +9,19 @@
     <iconUrl>https://raw.githubusercontent.com/SRoddis/Mongo.Migration/master/NuGet/nuget.jpg</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Mongo.Migration is designed for MongoDB C# Driver to migrate your documents easily on-the-fly.</description>
-    <copyright>Copyright 2017 Sean Roddis</copyright>
+    <copyright>Copyright 2019 Sean Roddis</copyright>
     <tags>mongodb mongo migration schema web dotnet schema-migration csharp</tags>
     <dependencies>
-      <dependency id="LightInject" version="5.0.3" />
-      <dependency id="MongoDB.Bson" version="2.4.4" />
-      <dependency id="MongoDB.Driver" version="2.4.4" />
-      <dependency id="MongoDB.Driver.Core" version="2.4.4" />
+      <dependency id="LightInject" version="5.4.0" />
+      <dependency id="Microsoft.AspNetCore" version="2.2.0" />
+      <dependency id="Microsoft.Extensions.DependencyInjection" version="2.2.0" />
+      <dependency id="Microsoft.NETCore.App" version="2.2.0" />
+      <dependency id="MongoDB.Driver" version="2.8.0" />
+      <dependency id="System.ValueTuple" version="2.5.0" />
     </dependencies>
   </metadata>
   <files>
-    <file src="..\Mongo.Migration\bin\Release\net45\Mongo.Migration.dll" target="lib\net45" />
     <file src="..\Mongo.Migration\bin\Release\net47\Mongo.Migration.dll" target="lib\net47" />
-    <file src="..\Mongo.Migration\bin\Release\netstandard2.0\Mongo.Migration.dll" target="lib\netstandard2.0" />
+    <file src="..\Mongo.Migration\bin\Release\netcoreapp2.2\Mongo.Migration.dll" target="lib\netcoreapp2.2" />
   </files>
 </package>
