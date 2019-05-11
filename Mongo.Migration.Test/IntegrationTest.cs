@@ -1,5 +1,6 @@
 ﻿using Mongo.Migration.Startup.Static;
 using Mongo2Go;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace Mongo.Migration.Test
@@ -16,6 +17,8 @@ namespace Mongo.Migration.Test
         {
             _mongoToGoRunner = MongoDbRunner.Start();
             _client = new MongoClient(_mongoToGoRunner.ConnectionString);
+
+            _client.GetDatabase("PerformanceTest").CreateCollection("Test");
 
             _components = new ComponentRegistry();
             _components.RegisterComponents(_client);
