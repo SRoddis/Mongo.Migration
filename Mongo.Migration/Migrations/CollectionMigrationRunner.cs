@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using Microsoft.Extensions.Options;
 using Mongo.Migration.Documents.Attributes;
 using Mongo.Migration.Documents.Locators;
@@ -23,6 +25,9 @@ namespace Mongo.Migration.Migrations
         
         private readonly string _databaseName;
 
+        private readonly IOptions<MongoMigrationSettings> _options;
+        
+        private const int CONNECTION_CHECK_TIMEOUT = 1000;
         public CollectionMigrationRunner(
             IOptions<MongoMigrationSettings> options,
             ICollectionLocator collectionLocator,
@@ -34,6 +39,7 @@ namespace Mongo.Migration.Migrations
                 versionService,
                 migrationRunner)
         {
+            _options = options;
             _databaseName = options.Value.Database;
             _collectionLocator = collectionLocator;
         }
@@ -61,9 +67,11 @@ namespace Mongo.Migration.Migrations
                 var databaseName = GetDatabaseOrDefault(information);
                 var collectionVersion = _versionService.GetCollectionVersion(type);
 
+                CheckDatabaseAndConnection(databaseName);
+                
                 var collection = _client.GetDatabase(databaseName)
                     .GetCollection<BsonDocument>(information.Collection);
-
+                
                 var bulk = new List<WriteModel<BsonDocument>>();
 
                 var query = CreateQueryForRelevantDocuments(type);
@@ -92,6 +100,16 @@ namespace Mongo.Migration.Migrations
                 {
                     collection.BulkWrite(bulk);
                 }
+            }
+        }
+
+        private void CheckDatabaseAndConnection(string databaseName)
+        {
+            var databases = _client.ListDatabases().ToList().Select(db => db.GetValue("name").AsString);
+            
+            if (!databases.Contains(databaseName))
+            {
+                throw new MongoMigrationDatabaseNotFound(databaseName, _options.Value.ConnectionString);
             }
         }
 

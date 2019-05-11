@@ -32,13 +32,13 @@ namespace Mongo.Migration.Demo.WebCore
 
             var runner = MongoDbRunner.Start();
             _client = new MongoClient(runner.ConnectionString);
+            
             CreateTestDocuments();
 
             services.Configure<MongoMigrationSettings>(
                 options =>
                 {
-                    options.ConnectionString =
-                        runner.ConnectionString; //_configuration.GetSection("MongoDb:ConnectionString").Value;
+                    options.ConnectionString =_configuration.GetSection("MongoDb:ConnectionString").Value; //With Mongo2Go use: runner.ConnectionString;
                     options.Database = _configuration.GetSection("MongoDb:Database").Value;
                 });
             services.AddMigration();

@@ -135,4 +135,7 @@
   <data name="AppDirNotFound" xml:space="preserve">
     <value>Application directory could not be found</value>
   </data>
+  <data name="ConnectionCheckError" xml:space="preserve">
+    <value>Database could not be found for: '{0}', database: '{1}'</value>
+  </data>
 </root>
