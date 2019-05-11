@@ -13,10 +13,18 @@ namespace Mongo.Migration.Test.Migrations
     {
         private IMigrationRunner _runner;
 
-        [OneTimeSetUp]
-        public void OneTimeSetUp()
+        [SetUp]
+        public void SetUp()
         {
+            base.OnSetUp();
+            
             _runner = _components.Get<IMigrationRunner>();
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            this.Dispose();
         }
 
         [Test]

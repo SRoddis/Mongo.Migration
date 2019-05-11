@@ -1,11 +1,12 @@
-﻿using Mongo.Migration.Startup.Static;
+﻿using System;
+using Mongo.Migration.Startup.Static;
 using Mongo2Go;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace Mongo.Migration.Test
 {
-    public class IntegrationTest
+    public class IntegrationTest : IDisposable
     {
         protected IMongoClient _client;
 
@@ -13,7 +14,7 @@ namespace Mongo.Migration.Test
 
         protected MongoDbRunner _mongoToGoRunner;
 
-        protected IntegrationTest()
+        protected void OnSetUp()
         {
             _mongoToGoRunner = MongoDbRunner.Start();
             _client = new MongoClient(_mongoToGoRunner.ConnectionString);
@@ -22,6 +23,11 @@ namespace Mongo.Migration.Test
 
             _components = new ComponentRegistry();
             _components.RegisterComponents(_client);
+        }
+
+        public void Dispose()
+        {
+            _mongoToGoRunner?.Dispose();
         }
     }
 }

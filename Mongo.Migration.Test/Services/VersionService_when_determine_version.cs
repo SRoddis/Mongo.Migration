@@ -11,11 +11,19 @@ namespace Mongo.Migration.Test.Services
     internal class VersionService_when_determine_version : IntegrationTest
     {
         private IVersionService _service;
-
-        [OneTimeSetUp]
-        public void OneTimeSetUp()
+        
+        [SetUp]
+        public void SetUp()
         {
+            base.OnSetUp();
+            
             _service = _components.Get<IVersionService>();
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            this.Dispose();
         }
 
         [Test]

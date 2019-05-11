@@ -9,6 +9,18 @@ namespace Mongo.Migration.Test.MongoDB
     [TestFixture]
     internal class MongoRegistrator_when_registrating : IntegrationTest
     {
+        [SetUp]
+        public void SetUp()
+        {
+            base.OnSetUp();
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            this.Dispose();
+        }
+        
         [Test]
         public void Then_serializer_is_registered()
         {
