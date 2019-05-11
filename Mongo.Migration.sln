@@ -3,10 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26430.15
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mongo.Migration.Test", "Mongo.Migration.Test\Mongo.Migration.Test.csproj", "{8EDF4429-251A-416D-BB68-93F227191BCF}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mongo.Migration.Demo", "Mongo.Migration.Demo\Mongo.Migration.Demo.csproj", "{4EEB72CC-4663-460F-A93B-58400E6898C9}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Git", "Git", "{CB26356F-6A6A-4B13-BD95-672A8AF24518}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
@@ -28,8 +24,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demo", "Demo", "{DB219944-127E-489A-9C06-1121DB9C17AD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mongo.Migration.Demo.MongoMigrations", "Mongo.Migration.Demo.Migrations\Mongo.Migration.Demo.MongoMigrations.csproj", "{71448FB3-5F4F-4BE1-A019-B68E35CB3DA6}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mongo.Migration.Demo.Performance.Console", "Mongo.Migration.Demo.Performance.Console\Mongo.Migration.Demo.Performance.Console.csproj", "{E571258E-54B6-4AEE-816E-B53E48485759}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{47979B8A-45B3-41C4-803A-98FE92A9A405}"
 	ProjectSection(SolutionItems) = preProject
@@ -65,22 +59,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8EDF4429-251A-416D-BB68-93F227191BCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8EDF4429-251A-416D-BB68-93F227191BCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8EDF4429-251A-416D-BB68-93F227191BCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8EDF4429-251A-416D-BB68-93F227191BCF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4EEB72CC-4663-460F-A93B-58400E6898C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4EEB72CC-4663-460F-A93B-58400E6898C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4EEB72CC-4663-460F-A93B-58400E6898C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4EEB72CC-4663-460F-A93B-58400E6898C9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{71448FB3-5F4F-4BE1-A019-B68E35CB3DA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{71448FB3-5F4F-4BE1-A019-B68E35CB3DA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{71448FB3-5F4F-4BE1-A019-B68E35CB3DA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{71448FB3-5F4F-4BE1-A019-B68E35CB3DA6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E571258E-54B6-4AEE-816E-B53E48485759}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E571258E-54B6-4AEE-816E-B53E48485759}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E571258E-54B6-4AEE-816E-B53E48485759}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E571258E-54B6-4AEE-816E-B53E48485759}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8DFFD615-1E1A-4BED-8A96-CAF4C3637E81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8DFFD615-1E1A-4BED-8A96-CAF4C3637E81}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8DFFD615-1E1A-4BED-8A96-CAF4C3637E81}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -122,9 +104,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{4EEB72CC-4663-460F-A93B-58400E6898C9} = {DB219944-127E-489A-9C06-1121DB9C17AD}
 		{71448FB3-5F4F-4BE1-A019-B68E35CB3DA6} = {DB219944-127E-489A-9C06-1121DB9C17AD}
-		{E571258E-54B6-4AEE-816E-B53E48485759} = {DB219944-127E-489A-9C06-1121DB9C17AD}
 		{A9AB73EC-2302-47F0-9EFB-496F0FFDF367} = {DB219944-127E-489A-9C06-1121DB9C17AD}
 		{18AFB639-8FC0-4C78-8552-A8355A80454B} = {DB219944-127E-489A-9C06-1121DB9C17AD}
 		{C374130F-B6C5-4A08-BE93-7148EA453D37} = {DB219944-127E-489A-9C06-1121DB9C17AD}
