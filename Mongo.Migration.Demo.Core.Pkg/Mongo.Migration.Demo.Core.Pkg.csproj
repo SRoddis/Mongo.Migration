@@ -8,6 +8,7 @@
     <ItemGroup>
       <PackageReference Include="Mongo.Migration" Version="1.1.21" />
       <PackageReference Include="Mongo2Go" Version="2.2.11" />
+      <PackageReference Include="System.ValueTuple" Version="4.5.0" />
     </ItemGroup>
 
     <ItemGroup>

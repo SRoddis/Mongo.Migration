@@ -8,4 +8,8 @@
       <ProjectReference Include="..\Mongo.Migration.Demo.Model.Pkg\Mongo.Migration.Demo.Model.Pkg.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="System.ValueTuple" Version="4.5.0" />
+    </ItemGroup>
+
 </Project>
