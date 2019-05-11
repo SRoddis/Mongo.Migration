@@ -54,7 +54,7 @@ namespace Mongo.Migration.Test.Services
             Action checkAction = () => { _service.DetermineVersion(document); };
 
             // Assert
-            checkAction.ShouldThrow<VersionViolationException>();
+            checkAction.Should().Throw<VersionViolationException>();
         }
     }
 }

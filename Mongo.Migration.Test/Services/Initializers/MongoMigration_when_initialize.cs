@@ -31,7 +31,7 @@ namespace Mongo.Migration.Test.Services.Initializers
             Action comparison = () => MongoMigrationClient.Initialize(registry);
 
             // Assert
-            comparison.ShouldThrow<AlreadyInitializedException>();
+            comparison.Should().Throw<AlreadyInitializedException>();
         }
     }
 }

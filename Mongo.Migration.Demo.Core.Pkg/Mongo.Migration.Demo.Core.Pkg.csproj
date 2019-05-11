@@ -7,7 +7,7 @@
 
     <ItemGroup>
       <PackageReference Include="Mongo.Migration" Version="1.1.21" />
-      <PackageReference Include="Mongo2Go" Version="2.2.7" />
+      <PackageReference Include="Mongo2Go" Version="2.2.11" />
     </ItemGroup>
 
     <ItemGroup>

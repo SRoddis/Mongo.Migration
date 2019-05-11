@@ -8,7 +8,7 @@
     <Compile Include="..\Mongo.Migration.Demo.Performance.Console\Program.cs" Link="Program.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Mongo2Go" Version="2.2.7" />
+    <PackageReference Include="Mongo2Go" Version="2.2.11" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mongo.Migration.Demo.Migrations\Mongo.Migration.Demo.MongoMigrations.csproj" />

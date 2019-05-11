@@ -22,7 +22,7 @@ namespace Mongo.Migration.Test.Documents
         {
             Action act = () => new DocumentVersion("a.0.0");
 
-            act.ShouldThrow<InvalidVersionValueException>();
+            act.Should().Throw<InvalidVersionValueException>();
         }
 
         [Test]
@@ -46,7 +46,7 @@ namespace Mongo.Migration.Test.Documents
         {
             Action act = () => new DocumentVersion("0.a.0");
 
-            act.ShouldThrow<InvalidVersionValueException>();
+            act.Should().Throw<InvalidVersionValueException>();
         }
 
         [Test]
@@ -54,7 +54,7 @@ namespace Mongo.Migration.Test.Documents
         {
             Action act = () => new DocumentVersion("0.0.a");
 
-            act.ShouldThrow<InvalidVersionValueException>();
+            act.Should().Throw<InvalidVersionValueException>();
         }
 
         [Test]
@@ -62,7 +62,7 @@ namespace Mongo.Migration.Test.Documents
         {
             Action act = () => new DocumentVersion("0.0.0.0");
 
-            act.ShouldThrow<VersionStringToLongException>();
+            act.Should().Throw<VersionStringToLongException>();
         }
     }
 }

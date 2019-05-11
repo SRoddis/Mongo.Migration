@@ -32,7 +32,7 @@ namespace Mongo.Migration.Test.Services.Interceptors
             Action act = () => factory.Create(typeof(TestClass));
 
             // Assert
-            act.ShouldThrowExactly<ArgumentException>();
+            act.Should().ThrowExactly<ArgumentException>();
         }
         
         [Test]
@@ -45,7 +45,7 @@ namespace Mongo.Migration.Test.Services.Interceptors
             Action act = () => factory.Create(null);
 
             // Assert
-            act.ShouldThrowExactly<ArgumentNullException>();
+            act.Should().ThrowExactly<ArgumentNullException>();
         }  
     }
 }
