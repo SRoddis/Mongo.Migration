@@ -8,8 +8,8 @@ namespace Mongo.Migration.Startup.DotNetCore
 {
     public class MongoMigrationStartupFilter : IStartupFilter
     {
-        private readonly IMongoMigration _migration;
         private readonly ILogger<MongoMigrationStartupFilter> _logger;
+        private readonly IMongoMigration _migration;
 
         public MongoMigrationStartupFilter(IMongoMigration migration)
             : this(migration, NullLoggerFactory.Instance)
