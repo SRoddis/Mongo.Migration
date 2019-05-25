@@ -5,7 +5,7 @@ using MongoDB.Bson;
 
 namespace Mongo.Migration.Test.TestDoubles
 {
-    [CurrentVersion("0.0.2")]
+    [RuntimeVersion("0.0.2")]
     [CollectionLocation("Test", "PerformanceTest")]
     internal class TestDocumentWithTwoMigrationHighestVersion : Document
     {

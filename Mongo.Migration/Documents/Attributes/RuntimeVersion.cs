@@ -3,9 +3,9 @@
 namespace Mongo.Migration.Documents.Attributes
 {
     [AttributeUsage(AttributeTargets.Class)]
-    public class CurrentVersion : Attribute
+    public class RuntimeVersion : Attribute
     {
-        public CurrentVersion(string version)
+        public RuntimeVersion(string version)
         {
             Version = version;
         }

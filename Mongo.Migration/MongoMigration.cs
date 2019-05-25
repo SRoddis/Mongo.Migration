@@ -7,27 +7,27 @@ namespace Mongo.Migration
     internal class MongoMigration : IMongoMigration
     {
         private readonly ICollectionLocator _collectionLocator;
-        private readonly ICollectionVersionLocator _collectionVersionLocator;
+        private readonly IStartUpVersionLocator _startUpVersionLocator;
         private readonly IMigrationLocator _migrationLocator;
         private readonly IMigrationService _migrationService;
-        private readonly ICurrentVersionLocator _currentVersionLocator;
+        private readonly IRuntimeVersionLocator _runtimeVersionLocator;
 
-        public MongoMigration(IMigrationLocator migrationLocator, ICurrentVersionLocator currentVersionLocator,
-            ICollectionLocator collectionLocator, ICollectionVersionLocator collectionVersionLocator, IMigrationService migrationService)
+        public MongoMigration(IMigrationLocator migrationLocator, IRuntimeVersionLocator runtimeVersionLocator,
+            ICollectionLocator collectionLocator, IStartUpVersionLocator startUpVersionLocator, IMigrationService migrationService)
         {
             _migrationLocator = migrationLocator;
-            _currentVersionLocator = currentVersionLocator;
+            _runtimeVersionLocator = runtimeVersionLocator;
             _collectionLocator = collectionLocator;
-            _collectionVersionLocator = collectionVersionLocator;
+            _startUpVersionLocator = startUpVersionLocator;
             _migrationService = migrationService;
         }
 
         public void Run()
         {
             _migrationLocator.Locate();
-            _currentVersionLocator.Locate();
+            _runtimeVersionLocator.Locate();
             _collectionLocator.Locate();
-            _collectionVersionLocator.Locate();
+            _startUpVersionLocator.Locate();
 
             _migrationService.Migrate();
         }

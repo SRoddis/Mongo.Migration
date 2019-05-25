@@ -6,7 +6,7 @@ using Mongo.Migration.Documents.Attributes;
 
 namespace Mongo.Migration.Documents.Locators
 {
-    internal class CurrentVersionLocator : AbstractLocator<DocumentVersion, Type>, ICurrentVersionLocator
+    internal class StartUpVersionLocator : AbstractLocator<DocumentVersion, Type>, IStartUpVersionLocator
     {
         public override DocumentVersion? GetLocateOrNull(Type identifier)
         {
@@ -22,9 +22,9 @@ namespace Mongo.Migration.Documents.Locators
             var types =
                 from a in AppDomain.CurrentDomain.GetAssemblies()
                 from t in a.GetTypes()
-                let attributes = t.GetCustomAttributes(typeof(CurrentVersion), true)
+                let attributes = t.GetCustomAttributes(typeof(StartUpVersion), true)
                 where attributes != null && attributes.Length > 0
-                select new {Type = t, Attributes = attributes.Cast<CurrentVersion>()};
+                select new {Type = t, Attributes = attributes.Cast<StartUpVersion>()};
 
             var versions = new Dictionary<Type, DocumentVersion>();
 

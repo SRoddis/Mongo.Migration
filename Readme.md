@@ -10,19 +10,10 @@
 ![](https://media.giphy.com/media/10tLOFXDFDjgQM/giphy.gif)
 
 
-Mongo.Migration is designed for the [MongoDB C# Driver]( https://github.com/mongodb/mongo-csharp-driver) to migrate your documents easily and on-the-fly.
+Mongo.Migration is designed for the [MongoDB C# Driver](https://github.com/mongodb/mongo-csharp-driver) to migrate your documents easily and on-the-fly.
 No more downtime for schema-migrations. Just write small and simple `migrations`.
 
-<!---
-add text for article here 
-https://andrewlock.net/running-async-tasks-on-app-startup-in-asp-net-core-part-1/
-
-information:
-http://www.binaryintellect.net/articles/4fb59b82-a2a8-41ce-a55f-0a0a28cd6cbc.aspx
-https://thomaslevesque.com/2018/09/25/asynchronous-initialization-in-asp-net-core-revisited/
--->
-
-`**PLEASE NOTE**` that updates, aggregation pipeline and projections are not handled in the current version, because they don’t use serialization. You have to handle them yourself.
+`**PLEASE NOTE**` If you use on-the-fly migration updates, aggregation pipeline and projections are not handled, because they don’t use serialization. You have to handle them yourself.
 
 # Installation
 
@@ -32,8 +23,9 @@ Install via nuget https://www.nuget.org/packages/Mongo.Migration
 PM> Install-Package Mongo.Migration
 ```
 
-# How to use
+# Quick Start 
 
+#### .Net Framework
 1. Initialize `MongoMigration` behind the `MongoClient`. ([Mongo2Go](https://github.com/Mongo2Go/Mongo2Go))
     ```csharp
 	// Init MongoDB
@@ -41,12 +33,35 @@ PM> Install-Package Mongo.Migration
 	var client = new MongoClient(runner.ConnectionString);
 	
 	// Init MongoMigration
-	MongoMigration.Initialize();
+	MongoMigrationClient.Initialize(client);
     ```
-2. Implement `IDocument` or add `Document` to your entities to provide the `DocumentVersion`. (Optional) Add the `CurrentVersion` attribute to mark the current version of the document. So you have the possibility to downgrade in case of a rollback.
+    
+#### .Net Core
+
+1. Add `MongoMigration` with the StartupFilter
+    ```csharp
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services.AddMvc();
+
+        _client = new MongoClient( _configuration.GetSection("MongoDb:ConnectionString").Value);
+        
+        services.Configure<MongoMigrationSettings>(
+            options =>
+            {
+                options.ConnectionString = _configuration.GetSection("MongoDb:ConnectionString").Value;
+                options.Database = _configuration.GetSection("MongoDb:Database").Value;
+            });
+            
+        services.AddMigration();
+    }
+
+    ```
+    
+2. Implement `IDocument` or add `Document` to your entities to provide the `DocumentVersion`. (Optional) Add the `RunTimeVersion` attribute to mark the current version of the document. So you have the possibility to downgrade in case of a rollback.
 
     ```csharp
-    [CurrentVersion("0.1.1")]
+    [RunTimeVersion("0.0.1")]
     public class Car : IDocument
     {
         public ObjectId Id { get; set; }
@@ -85,7 +100,104 @@ PM> Install-Package Mongo.Migration
 4. `(Optional)` If you choose to put your migrations into an extra project, 
 add the suffix `".MongoMigrations"` to the name and make sure it is referenced in the main project. By convention Mongo.Migration collects all .dlls named like that in your bin folder.
     
-Compile, run and enjoy! 
+Compile, run and enjoy!
+
+## How to use
+
+With version 3.0.0 of Mongo.Migration I added the possibility to run migrations on StartUp. 
+In order to keep the core of Mongo.Migration in focus, it is still possible to run migrations at runtime (on-the-fly). 
+In addition, there is now the option of executing migrations at the start of the application.
+
+#### At runtime
+
+See `Quick Start ` 
+
+#### On startup
+
+If you want to run migrations on StartUp, the only thing you have to do is add the attribute `CollectionLocation`. 
+Now all migrations you add for a `IDocument` will be executed at StartUp.
+
+```csharp
+    [CollectionLocation("Car", "TestCars")]
+    public class Car : IDocument
+    {
+        public ObjectId Id { get; set; }
+
+        public string Type { get; set; }
+
+        public int Doors { get; set; }
+
+        public DocumentVersion Version { get; set; }
+    }
+```
+
+Additionally you can fix the version of the document with  `StartUpVersion`
+
+```csharp
+    [StartUpVersion("0.1.1")]
+    [CollectionLocation("Car", "TestCars")]
+    public class Car : IDocument
+    {
+        public ObjectId Id { get; set; }
+
+        public string Type { get; set; }
+
+        public int Doors { get; set; }
+
+        public DocumentVersion Version { get; set; }
+    }
+```
+
+`**PLEASE NOTE**` 
+Mongo.Migration uses the IStartUpFilter for .net core. 
+Maybe you want to read this [article](https://andrewlock.net/running-async-tasks-on-app-startup-in-asp-net-core-part-1/), to check if there is a better option to migrate with Mongo.Migration at StartUp.
+
+#### On startup and at runtime
+
+This is an example how you can use both.
+At startup the version will be 0.0.1 and at runtime, when a document will be deserialized the version will be migrated to 0.1.1
+
+```csharp
+    [RuntimeVersion("0.1.1")]
+    [StartUpVersion("0.0.1")]
+    [CollectionLocation("Car", "TestCars")]
+    public class Car : IDocument
+    {
+        public ObjectId Id { get; set; }
+
+        public string Type { get; set; }
+
+        public int Doors { get; set; }
+
+        public DocumentVersion Version { get; set; }
+    }
+```
+
+
+## Annotations
+
+#### RuntimeVersion
+Add `RuntimeVersion` attribute to mark the current version of the document. So you have the possibility to downgrade in case of a rollback.
+If you do not set the `RuntimeVersion`, all migrations will be applied.
+```
+[RuntimeVersion("0.0.1")]   
+public class Car : IDocument
+...
+```
+#### CollectionLocation
+Add `CollectionLocation` attribute if you want to migrate your collections at startup. This attribute tells Mongo.Migration where to find your Collections.
+```
+[CollectionLocation("Car", "TestCars")]
+public class Car : IDocument
+...   
+```
+#### StartUpVersion
+Add `StartUpVersion` attribute to set the version you want to migrate to at startup. This attribute limits the migrations to be performed on startup
+```
+[StartUpVersion("0.0.1")]
+public class Car : IDocument
+...
+```
 
 ## Demo
 
@@ -145,9 +257,7 @@ After bigger changes the code is analyzed with profiling tools to check for perf
 
 ## Next Feature/Todo
 
-	1. Automatically insert after migrating. So migration is done only once. (MongoDB has its performance on read. I will test if it has big performance issues with the automatically insert.)
-	2. Tool to upgrade all documents in the database, to the current version. Maybe this is needet for long life applications.
-	3. Intercept updates, aggregation pipeline and projections.
+	1. Intercept updates, aggregation pipeline and projections.
 
 ## Copyright
 

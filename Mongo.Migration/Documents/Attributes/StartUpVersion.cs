@@ -3,9 +3,9 @@
 namespace Mongo.Migration.Documents.Attributes
 {
     [AttributeUsage(AttributeTargets.Class)]
-    public class CollectionVersion : Attribute
+    public class StartUpVersion : Attribute
     {
-        public CollectionVersion(string version)
+        public StartUpVersion(string version)
         {
             Version = version;
         }
