@@ -1,6 +1,7 @@
 using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
@@ -11,14 +12,14 @@ namespace Mongo.Migration.Startup.DotNetCore
         private readonly ILogger<MongoMigrationStartupFilter> _logger;
         private readonly IMongoMigration _migration;
 
-        public MongoMigrationStartupFilter(IMongoMigration migration)
-            : this(migration, NullLoggerFactory.Instance)
+        public MongoMigrationStartupFilter(IServiceScopeFactory serviceScopeFactory)
+            : this(serviceScopeFactory, NullLoggerFactory.Instance)
         {
         }
 
-        public MongoMigrationStartupFilter(IMongoMigration migration, ILoggerFactory loggerFactory)
+        public MongoMigrationStartupFilter(IServiceScopeFactory serviceScopeFactory, ILoggerFactory loggerFactory)
         {
-            _migration = migration;
+            _migration = serviceScopeFactory.CreateScope().ServiceProvider.GetService<IMongoMigration>();
             _logger = loggerFactory.CreateLogger<MongoMigrationStartupFilter>();
         }
 
