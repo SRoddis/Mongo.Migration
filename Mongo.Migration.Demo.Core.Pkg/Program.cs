@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Mongo.Migration.Demo.Model;
 using Mongo.Migration.Demo.Model.Pkg;
-using Mongo.Migration.Services.Initializers;
+using Mongo.Migration.Startup.Static;
 using Mongo2Go;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -18,7 +17,7 @@ namespace Mongo.Migration.Demo.Core.Pkg
             var client = new MongoClient(runner.ConnectionString);
 
             // Init MongoMigration
-            MongoMigration.Initialize();
+            MongoMigrationClient.Initialize(client);
 
             client.GetDatabase("TestCars").DropCollection("Car");
 
@@ -53,8 +52,6 @@ namespace Mongo.Migration.Demo.Core.Pkg
 
             typedCollection.InsertOne(car);
             var test = typedCollection.FindAsync(Builders<Car>.Filter.Eq(c => c.Type, type)).Result.Single();
-
-
 
             var aggregate = typedCollection.Aggregate()
                 .Match(new BsonDocument {{"Dors", 3}});

@@ -5,7 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Mongo.Migration" Version="1.1.21" />
+      <PackageReference Include="Mongo.Migration" Version="3.0.67" />
       <PackageReference Include="System.ValueTuple" Version="4.5.0" />
     </ItemGroup>
 
