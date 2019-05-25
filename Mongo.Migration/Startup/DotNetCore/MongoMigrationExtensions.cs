@@ -26,15 +26,15 @@ namespace Mongo.Migration.Startup.DotNetCore
             services.AddSingleton<ICurrentVersionLocator, CurrentVersionLocator>();
             services.AddSingleton<ICollectionVersionLocator, CollectionVersionLocator>();
 
-            services.AddScoped<IVersionService, VersionService>();
-            services.AddScoped<IMigrationInterceptorFactory, MigrationInterceptorFactory>();
-            services.AddScoped<DocumentVersionSerializer, DocumentVersionSerializer>();
+            services.AddTransient<IVersionService, VersionService>();
+            services.AddTransient<IMigrationInterceptorFactory, MigrationInterceptorFactory>();
+            services.AddTransient<DocumentVersionSerializer, DocumentVersionSerializer>();
 
-            services.AddScoped<ICollectionMigrationRunner, CollectionMigrationRunner>();
-            services.AddScoped<IMigrationRunner, MigrationRunner>();
-            services.AddScoped<MigrationInterceptorProvider, MigrationInterceptorProvider>();
+            services.AddTransient<ICollectionMigrationRunner, CollectionMigrationRunner>();
+            services.AddTransient<IMigrationRunner, MigrationRunner>();
+            services.AddTransient<MigrationInterceptorProvider, MigrationInterceptorProvider>();
 
-            services.AddScoped<IMongoMigration, MongoMigration>();
+            services.AddTransient<IMongoMigration, MongoMigration>();
             services.AddTransient<IStartupFilter, MongoMigrationStartupFilter>();
         }
     }
