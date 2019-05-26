@@ -39,7 +39,7 @@ PM> Install-Package Mongo.Migration
     
 #### .Net Core
 
-1. Add `MongoMigration` with the StartupFilte
+1. Add `MongoMigration` with the StartupFilter
 
     ```csharp
     public void ConfigureServices(IServiceCollection services)
