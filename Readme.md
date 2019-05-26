@@ -27,6 +27,7 @@ PM> Install-Package Mongo.Migration
 
 #### .Net Framework
 1. Initialize `MongoMigration` behind the `MongoClient`. ([Mongo2Go](https://github.com/Mongo2Go/Mongo2Go))
+
     ```csharp
 	// Init MongoDB
 	var runner = MongoDbRunner.Start(); // Mongo2Go
@@ -38,7 +39,8 @@ PM> Install-Package Mongo.Migration
     
 #### .Net Core
 
-1. Add `MongoMigration` with the StartupFilter
+1. Add `MongoMigration` with the StartupFilte
+
     ```csharp
     public void ConfigureServices(IServiceCollection services)
     {
@@ -74,6 +76,7 @@ PM> Install-Package Mongo.Migration
     }
     ```
 3. Create a migration by extending the abstract class `Migration<TDocument>`. Best practice for the version is to use [Semantic Versioning](http://semver.org/) but ultimately it is up to you. You could simply use the patch version to count the number of migrations. If there is a duplicate for a specific type an exception is thrown on initialization.
+
     ```csharp
     public class M001_RenameDorsToDoors : Migration<Car>
     {
@@ -179,21 +182,24 @@ At startup the version will be 0.0.1 and at runtime, when a document will be des
 #### RuntimeVersion
 Add `RuntimeVersion` attribute to mark the current version of the document. So you have the possibility to downgrade in case of a rollback.
 If you do not set the `RuntimeVersion`, all migrations will be applied.
-```
+
+```csharp
 [RuntimeVersion("0.0.1")]   
 public class Car : IDocument
 ...
 ```
 #### CollectionLocation
 Add `CollectionLocation` attribute if you want to migrate your collections at startup. This attribute tells Mongo.Migration where to find your Collections.
-```
+
+```csharp
 [CollectionLocation("Car", "TestCars")]
 public class Car : IDocument
 ...   
 ```
 #### StartUpVersion
 Add `StartUpVersion` attribute to set the version you want to migrate to at startup. This attribute limits the migrations to be performed on startup
-```
+
+```csharp
 [StartUpVersion("0.0.1")]
 public class Car : IDocument
 ...
