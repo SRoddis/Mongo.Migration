@@ -10,6 +10,9 @@ using MongoDB.Bson;
 
 namespace Mongo.Migration.Services
 {
+    using Microsoft.Extensions.Options;
+    using Startup.DotNetCore;
+
     internal class VersionService : IVersionService
     {
         private static readonly string VERSION_FIELD_NAME = "Version";
@@ -20,16 +23,25 @@ namespace Mongo.Migration.Services
         
         private readonly IStartUpVersionLocator _startUpVersionLocator;
 
-        public VersionService(IMigrationLocator migrationLocator, IRuntimeVersionLocator runtimeVersionLocator, IStartUpVersionLocator startUpVersionLocator)
+        private string _versionFieldName;
+
+        public VersionService(
+            IMigrationLocator migrationLocator, 
+            IRuntimeVersionLocator runtimeVersionLocator,
+            IStartUpVersionLocator startUpVersionLocator, 
+            IOptions<MongoMigrationSettings> mongoMigrationSettings)
         {
             _migrationLocator = migrationLocator;
             _runtimeVersionLocator = runtimeVersionLocator;
             _startUpVersionLocator = startUpVersionLocator;
+            _versionFieldName = string.IsNullOrWhiteSpace(mongoMigrationSettings.Value.VersionFieldName)
+                ? VERSION_FIELD_NAME
+                : mongoMigrationSettings.Value.VersionFieldName;
         }
 
         public string GetVersionFieldName()
         {
-            return VERSION_FIELD_NAME;
+            return _versionFieldName;
         }
 
         public DocumentVersion GetCurrentOrLatestMigrationVersion(Type type)
