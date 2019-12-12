@@ -60,10 +60,10 @@ PM> Install-Package Mongo.Migration
 
     ```
     
-2. Implement `IDocument` or add `Document` to your entities to provide the `DocumentVersion`. (Optional) Add the `RunTimeVersion` attribute to mark the current version of the document. So you have the possibility to downgrade in case of a rollback.
+2. Implement `IDocument` or add `Document` to your entities to provide the `DocumentVersion`. (Optional) Add the `RuntimeVersion` attribute to mark the current version of the document. So you have the possibility to downgrade in case of a rollback.
 
     ```csharp
-    [RunTimeVersion("0.0.1")]
+    [RuntimeVersion("0.0.1")]
     public class Car : IDocument
     {
         public ObjectId Id { get; set; }
