@@ -52,7 +52,6 @@ PM> Install-Package Mongo.Migration
                     
         services.AddMigration();
     }
-
     ```
 1.2 Add `MongoMigration` with the StartupFilter add connection setting to use separate client
 
@@ -68,7 +67,6 @@ PM> Install-Package Mongo.Migration
             VersionFieldName = "TestVersionName" // Optional
         });
     }
-
     ```
 
     
