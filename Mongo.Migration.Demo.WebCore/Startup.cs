@@ -35,14 +35,11 @@ namespace Mongo.Migration.Demo.WebCore
             _runner = MongoDbRunner.Start();
             _client = new MongoClient(_runner.ConnectionString);
 
+            services.AddSingleton(_client);
+            
             CreateTestDocuments();
 
-            
-            services.AddMigration(new MongoMigrationSettings
-            {
-                ConnectionString = _configuration.GetSection("MongoDb:ConnectionString").Value,
-                Database = _configuration.GetSection("MongoDb:Database").Value
-            });
+            services.AddMigration();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

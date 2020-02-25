@@ -14,14 +14,16 @@ namespace Mongo.Migration.Startup.DotNetCore
         public static void AddMigration(
             this IServiceCollection services, IMongoMigrationSettings settings = null)
         {
-            RegisterDefaults(services, settings);
+            RegisterDefaults(services, settings ?? new MongoMigrationSettings());
 
             services.AddScoped<IMigrationService, MigrationService>();
         }
 
         private static void RegisterDefaults(IServiceCollection services, IMongoMigrationSettings settings)
         {
+            
             services.AddSingleton(settings);
+            
             services.AddSingleton<IMigrationLocator, TypeMigrationLocator>();
             services.AddSingleton<ICollectionLocator, CollectionLocator>();
             services.AddSingleton<IRuntimeVersionLocator, RuntimeVersionLocator>();

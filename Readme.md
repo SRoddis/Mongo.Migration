@@ -39,7 +39,7 @@ PM> Install-Package Mongo.Migration
     
 #### .Net Core
 
-1. Add `MongoMigration` with the StartupFilter
+1.1 Add `MongoMigration` with the StartupFilter (`IMongoClient` has to be registered at the DI-container before)
 
     ```csharp
     public void ConfigureServices(IServiceCollection services)
@@ -47,17 +47,30 @@ PM> Install-Package Mongo.Migration
         services.AddMvc();
 
         _client = new MongoClient( _configuration.GetSection("MongoDb:ConnectionString").Value);
+        
+        services.AddSingleton<IMongoClient>(_client);
+                    
+        services.AddMigration();
+    }
+
+    ```
+1.2 Add `MongoMigration` with the StartupFilter add connection setting to use separate client
+
+    ```csharp
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services.AddMvc();
                     
         services.AddMigration(new MongoMigrationSettings
         {
             ConnectionString = _configuration.GetSection("MongoDb:ConnectionString").Value,
-            Database = _configuration.GetSection("MongoDb:Database").Value 
-            //,
-            // VersionFieldName = "TestVersionName"
+            Database = _configuration.GetSection("MongoDb:Database").Value, 
+            VersionFieldName = "TestVersionName" // Optional
         });
     }
 
     ```
+
     
 2. Implement `IDocument` or add `Document` to your entities to provide the `DocumentVersion`. (Optional) Add the `RuntimeVersion` attribute to mark the current version of the document. So you have the possibility to downgrade in case of a rollback.
 
