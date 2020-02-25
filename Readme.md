@@ -54,7 +54,6 @@ PM> Install-Package Mongo.Migration
     }
     ```
 1.2 Add `MongoMigration` with the StartupFilter add connection setting to use separate client
-
     ```csharp
     public void ConfigureServices(IServiceCollection services)
     {
