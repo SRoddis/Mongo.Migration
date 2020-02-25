@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using FluentAssertions;
+using Mongo.Migration.Startup;
 using Mongo.Migration.Startup.Static;
 using Mongo.Migration.Test.TestDoubles;
 using Mongo2Go;

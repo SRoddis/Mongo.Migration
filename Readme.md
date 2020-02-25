@@ -47,15 +47,12 @@ PM> Install-Package Mongo.Migration
         services.AddMvc();
 
         _client = new MongoClient( _configuration.GetSection("MongoDb:ConnectionString").Value);
-        
-        services.Configure<MongoMigrationSettings>(
-            options =>
-            {
-                options.ConnectionString = _configuration.GetSection("MongoDb:ConnectionString").Value;
-                options.Database = _configuration.GetSection("MongoDb:Database").Value;
-            });
-            
-        services.AddMigration();
+                    
+        services.AddMigration(new MongoMigrationSettings
+        {
+            ConnectionString = _configuration.GetSection("MongoDb:ConnectionString").Value,
+            Database = _configuration.GetSection("MongoDb:Database").Value
+        });
     }
 
     ```

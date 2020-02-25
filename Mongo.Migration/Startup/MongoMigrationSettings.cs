@@ -1,6 +1,6 @@
-namespace Mongo.Migration.Startup.DotNetCore
+namespace Mongo.Migration.Startup
 {
-    public class MongoMigrationSettings
+    public class MongoMigrationSettings : IMongoMigrationSettings
     {
         public string ConnectionString { get; set; }
         

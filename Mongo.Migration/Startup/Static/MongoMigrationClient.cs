@@ -1,5 +1,4 @@
-﻿using System;
-using Mongo.Migration.Exceptions;
+﻿using Mongo.Migration.Exceptions;
 using MongoDB.Driver;
 
 namespace Mongo.Migration.Startup.Static
@@ -14,13 +13,13 @@ namespace Mongo.Migration.Startup.Static
 
             var app = componentRegistry.Get<IMongoMigration>();
             app.Run();
-            
+
             _isRunning = true;
         }
-        
-        public static void Initialize(IMongoClient client)
+
+        public static void Initialize(IMongoClient client, IMongoMigrationSettings settings = null)
         {
-            var componentRegistry = new ComponentRegistry();
+            var componentRegistry = new ComponentRegistry(settings ?? new MongoMigrationSettings());
             componentRegistry.RegisterComponents(client);
 
             Initialize(componentRegistry);

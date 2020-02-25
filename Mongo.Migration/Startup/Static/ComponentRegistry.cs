@@ -11,10 +11,12 @@ namespace Mongo.Migration.Startup.Static
 {
     internal class ComponentRegistry : IComponentRegistry
     {
+        private readonly IMongoMigrationSettings _settings;
         private readonly ServiceContainer _container;
 
-        public ComponentRegistry()
+        public ComponentRegistry(IMongoMigrationSettings settings)
         {
+            _settings = settings;
             _container = new ServiceContainer();
         }
 
@@ -34,6 +36,7 @@ namespace Mongo.Migration.Startup.Static
 
         private void RegisterDefaults()
         {
+            _container.RegisterInstance(_settings);
             _container.Register<IMigrationLocator, TypeMigrationLocator>(new PerContainerLifetime());
             _container.Register<ICollectionLocator, CollectionLocator>(new PerContainerLifetime());
             _container.Register<IRuntimeVersionLocator, RuntimeVersionLocator>(new PerContainerLifetime());

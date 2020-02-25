@@ -1,4 +1,5 @@
 ﻿using System;
+using Mongo.Migration.Startup;
 using Mongo.Migration.Startup.Static;
 using Mongo2Go;
 using MongoDB.Bson;
@@ -21,7 +22,7 @@ namespace Mongo.Migration.Test
 
             _client.GetDatabase("PerformanceTest").CreateCollection("Test");
 
-            _components = new ComponentRegistry();
+            _components = new ComponentRegistry( new MongoMigrationSettings() {ConnectionString = _mongoToGoRunner.ConnectionString, Database = "PerformanceTest"});
             _components.RegisterComponents(_client);
         }
 

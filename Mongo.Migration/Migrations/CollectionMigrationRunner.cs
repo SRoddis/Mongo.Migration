@@ -1,56 +1,50 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
-using Microsoft.Extensions.Options;
 using Mongo.Migration.Documents.Attributes;
 using Mongo.Migration.Documents.Locators;
 using Mongo.Migration.Exceptions;
 using Mongo.Migration.Services;
-using Mongo.Migration.Startup.DotNetCore;
+using Mongo.Migration.Startup;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace Mongo.Migration.Migrations
 {
-    internal class  CollectionMigrationRunner : ICollectionMigrationRunner
+    internal class CollectionMigrationRunner : ICollectionMigrationRunner
     {
         private readonly IMongoClient _client;
 
         private readonly ICollectionLocator _collectionLocator;
 
+        private readonly string _databaseName;
+
         private readonly IMigrationRunner _migrationRunner;
 
         private readonly IVersionService _versionService;
-        
-        private readonly string _databaseName;
-
-        private readonly IOptions<MongoMigrationSettings> _options;
-        
-        private const int CONNECTION_CHECK_TIMEOUT = 1000;
         public CollectionMigrationRunner(
-            IOptions<MongoMigrationSettings> options,
+            IMongoClient client,
+            IMongoMigrationSettings settings,
             ICollectionLocator collectionLocator,
             IVersionService versionService,
             IMigrationRunner migrationRunner)
             : this(
-                new MongoClient(options.Value.ConnectionString),
                 collectionLocator,
                 versionService,
                 migrationRunner)
         {
-            _options = options;
-            _databaseName = options.Value.Database;
-            _collectionLocator = collectionLocator;
+            _client = client;
+            
+            if (settings.ConnectionString == null && settings.Database == null) return;
+            
+            _client = new MongoClient(settings.ConnectionString);
+            _databaseName = settings.Database;
         }
 
-        public CollectionMigrationRunner(
-            IMongoClient client,
+        private CollectionMigrationRunner(
             ICollectionLocator collectionLocator,
             IVersionService versionService,
             IMigrationRunner migrationRunner)
         {
-            _client = client;
             _collectionLocator = collectionLocator;
             _versionService = versionService;
             _migrationRunner = migrationRunner;
@@ -66,10 +60,10 @@ namespace Mongo.Migration.Migrations
                 var type = locate.Key;
                 var databaseName = GetDatabaseOrDefault(information);
                 var collectionVersion = _versionService.GetCollectionVersion(type);
-                
+
                 var collection = _client.GetDatabase(databaseName)
                     .GetCollection<BsonDocument>(information.Collection);
-                
+
                 var bulk = new List<WriteModel<BsonDocument>>();
 
                 var query = CreateQueryForRelevantDocuments(type);
@@ -82,8 +76,8 @@ namespace Mongo.Migration.Migrations
                         foreach (var document in batch)
                         {
                             _migrationRunner.Run(type, document, collectionVersion);
-                            
-                            
+
+
                             var update = new ReplaceOneModel<BsonDocument>(
                                 new BsonDocument {{"_id", document["_id"]}},
                                 document
@@ -94,13 +88,10 @@ namespace Mongo.Migration.Migrations
                     }
                 }
 
-                if (bulk.Count > 0)
-                {
-                    collection.BulkWrite(bulk);
-                }
+                if (bulk.Count > 0) collection.BulkWrite(bulk);
             }
         }
-        
+
         private string GetDatabaseOrDefault(CollectionLocationInformation information)
         {
             if (string.IsNullOrEmpty(_databaseName) && string.IsNullOrEmpty(information.Database))

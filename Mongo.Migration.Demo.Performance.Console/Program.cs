@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Mongo.Migration.Demo.Model;
+using Mongo.Migration.Startup;
 using Mongo.Migration.Startup.Static;
 using Mongo2Go;
 using MongoDB.Bson;
@@ -98,7 +99,7 @@ namespace Mongo.Migration.Demo.Performance.Console
             ClearCollection();
 
             // Measure time of MongoDb processing without Mongo.Migration
-            MongoMigrationClient.Initialize(_client);
+            MongoMigrationClient.Initialize(_client, new MongoMigrationSettings());
 
             var swWithMigration = new Stopwatch();
             swWithMigration.Start();

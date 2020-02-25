@@ -6,13 +6,11 @@ using Mongo.Migration.Documents.Locators;
 using Mongo.Migration.Exceptions;
 using Mongo.Migration.Migrations;
 using Mongo.Migration.Migrations.Locators;
+using Mongo.Migration.Startup;
 using MongoDB.Bson;
 
 namespace Mongo.Migration.Services
 {
-    using Microsoft.Extensions.Options;
-    using Startup.DotNetCore;
-
     internal class VersionService : IVersionService
     {
         private static readonly string VERSION_FIELD_NAME = "Version";
@@ -20,23 +18,23 @@ namespace Mongo.Migration.Services
         private readonly IMigrationLocator _migrationLocator;
 
         private readonly IRuntimeVersionLocator _runtimeVersionLocator;
-        
+
         private readonly IStartUpVersionLocator _startUpVersionLocator;
 
-        private string _versionFieldName;
+        private readonly string _versionFieldName;
 
         public VersionService(
-            IMigrationLocator migrationLocator, 
+            IMigrationLocator migrationLocator,
             IRuntimeVersionLocator runtimeVersionLocator,
-            IStartUpVersionLocator startUpVersionLocator, 
-            IOptions<MongoMigrationSettings> mongoMigrationSettings)
+            IStartUpVersionLocator startUpVersionLocator,
+            IMongoMigrationSettings mongoMigrationSettings)
         {
             _migrationLocator = migrationLocator;
             _runtimeVersionLocator = runtimeVersionLocator;
             _startUpVersionLocator = startUpVersionLocator;
-            _versionFieldName = string.IsNullOrWhiteSpace(mongoMigrationSettings.Value.VersionFieldName)
+            _versionFieldName = string.IsNullOrWhiteSpace(mongoMigrationSettings.VersionFieldName)
                 ? VERSION_FIELD_NAME
-                : mongoMigrationSettings.Value.VersionFieldName;
+                : mongoMigrationSettings.VersionFieldName;
         }
 
         public string GetVersionFieldName()
@@ -49,13 +47,13 @@ namespace Mongo.Migration.Services
             var latestVersion = _migrationLocator.GetLatestVersion(type);
             return GetCurrentVersion(type) ?? latestVersion;
         }
-        
+
         public DocumentVersion GetCollectionVersion(Type type)
         {
             var version = GetCurrentOrLatestMigrationVersion(type);
             return _startUpVersionLocator.GetLocateOrNull(type) ?? version;
         }
-        
+
         public DocumentVersion GetVersionOrDefault(BsonDocument document)
         {
             BsonValue value;

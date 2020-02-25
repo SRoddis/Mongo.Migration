@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Mongo.Migration.Demo.Model;
+using Mongo.Migration.Startup;
 using Mongo.Migration.Startup.DotNetCore;
 using Mongo2Go;
 using MongoDB.Bson;
@@ -32,16 +32,14 @@ namespace Mongo.Migration.Demo.WebCore
 
             var runner = MongoDbRunner.Start();
             _client = new MongoClient(runner.ConnectionString);
-            
-            CreateTestDocuments();
 
-            services.Configure<MongoMigrationSettings>(
-                options =>
-                {
-                    options.ConnectionString =_configuration.GetSection("MongoDb:ConnectionString").Value; //With Mongo2Go use: runner.ConnectionString;
-                    options.Database = _configuration.GetSection("MongoDb:Database").Value;
-                });
-            services.AddMigration();
+            CreateTestDocuments();
+            
+            services.AddMigration(new MongoMigrationSettings
+            {
+                ConnectionString = _configuration.GetSection("MongoDb:ConnectionString").Value,
+                Database = _configuration.GetSection("MongoDb:Database").Value
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -71,15 +69,12 @@ namespace Mongo.Migration.Demo.WebCore
 
                     var response = "";
                     result.ForEach(
-                        d =>
-                        {
-                             response += d.ToBsonDocument().ToString() + "\n";            
-                        });
-                    
+                        d => { response += d.ToBsonDocument().ToString() + "\n"; });
+
                     await context.Response.WriteAsync(response);
                 });
         }
-        
+
         private void CreateTestDocuments()
         {
             _client.GetDatabase("TestCars").DropCollection("Car");
@@ -98,6 +93,5 @@ namespace Mongo.Migration.Demo.WebCore
 
             bsonCollection.InsertManyAsync(cars).Wait();
         }
-
     }
 }
