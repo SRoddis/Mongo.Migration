@@ -16,8 +16,6 @@ namespace Mongo.Migration.Demo.Model
 
         public int Doors { get; set; }
         
-        public string UnnecessaryField { get; set; }
-        
         public DocumentVersion Version { get; set; }
         
     }

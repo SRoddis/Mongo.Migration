@@ -129,6 +129,9 @@
   <data name="VersionStringToLong" xml:space="preserve">
     <value>Versions must have format: major.minor.revision, this doesn't match: {0}</value>
   </data>
+  <data name="NoMongoClient" xml:space="preserve">
+    <value>No MongoClient, you need to register a MongoClient to the DI-Container or define connection settings with MongoMigrationSettings</value>
+  </data>
   <data name="VersionViolated" xml:space="preserve">
     <value>CurrentVersion: '{0}', DocumentVersion: '{1}', LatestMigrationVersion: '{2}'</value>
   </data>

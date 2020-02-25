@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using MongoDB.Driver;
 
 namespace Mongo.Migration.Startup.DotNetCore
 {
@@ -11,7 +12,7 @@ namespace Mongo.Migration.Startup.DotNetCore
     {
         private readonly ILogger<MongoMigrationStartupFilter> _logger;
         private readonly IMongoMigration _migration;
-
+        
         public MongoMigrationStartupFilter(IServiceScopeFactory serviceScopeFactory)
             : this(serviceScopeFactory, NullLoggerFactory.Instance)
         {

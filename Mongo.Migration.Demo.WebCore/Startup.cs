@@ -18,6 +18,8 @@ namespace Mongo.Migration.Demo.WebCore
         private readonly IConfiguration _configuration;
 
         private IMongoClient _client;
+        
+        private MongoDbRunner _runner;
 
         public Startup(IConfiguration configuration)
         {
@@ -30,10 +32,11 @@ namespace Mongo.Migration.Demo.WebCore
         {
             services.AddMvc();
 
-            var runner = MongoDbRunner.Start();
-            _client = new MongoClient(runner.ConnectionString);
+            _runner = MongoDbRunner.Start();
+            _client = new MongoClient(_runner.ConnectionString);
 
             CreateTestDocuments();
+
             
             services.AddMigration(new MongoMigrationSettings
             {

@@ -106,6 +106,15 @@ namespace Mongo.Migration.Exceptions {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No MongoClient, you need to register a MongoClient to the DI-Container or define connection settings with MongoMigrationSettings.
+        /// </summary>
+        public static string NoMongoClient {
+            get {
+                return ResourceManager.GetString("NoMongoClient", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Versions must have format: major.minor.revision, this doesn&apos;t match: {0}.
         /// </summary>
         public static string VersionStringToLong {

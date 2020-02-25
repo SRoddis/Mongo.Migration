@@ -21,6 +21,23 @@ namespace Mongo.Migration.Migrations
         private readonly IMigrationRunner _migrationRunner;
 
         private readonly IVersionService _versionService;
+        
+        public CollectionMigrationRunner(
+            IMongoMigrationSettings settings,
+            ICollectionLocator collectionLocator,
+            IVersionService versionService,
+            IMigrationRunner migrationRunner)
+            : this(
+                collectionLocator,
+                versionService,
+                migrationRunner)
+        {
+            if (settings.ConnectionString == null && settings.Database == null) throw new MongoMigrationNoMongoClientException();
+            
+            _client = new MongoClient(settings.ConnectionString);
+            _databaseName = settings.Database;
+        }
+        
         public CollectionMigrationRunner(
             IMongoClient client,
             IMongoMigrationSettings settings,
@@ -76,7 +93,6 @@ namespace Mongo.Migration.Migrations
                         foreach (var document in batch)
                         {
                             _migrationRunner.Run(type, document, collectionVersion);
-
 
                             var update = new ReplaceOneModel<BsonDocument>(
                                 new BsonDocument {{"_id", document["_id"]}},
