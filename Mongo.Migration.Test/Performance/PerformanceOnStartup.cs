@@ -38,7 +38,7 @@ namespace Mongo.Migration.Test.Performance
 
         private const string COLLECTION_NAME = "Test";
 
-        private const int TOLERANCE_MS = 1300;
+        private const int TOLERANCE_MS = 1600;
 
         private MongoClient _client;
         private MongoDbRunner _runner;
