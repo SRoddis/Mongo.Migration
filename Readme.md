@@ -51,7 +51,9 @@ PM> Install-Package Mongo.Migration
         services.AddMigration(new MongoMigrationSettings
         {
             ConnectionString = _configuration.GetSection("MongoDb:ConnectionString").Value,
-            Database = _configuration.GetSection("MongoDb:Database").Value
+            Database = _configuration.GetSection("MongoDb:Database").Value 
+            //,
+            // VersionFieldName = "TestVersionName"
         });
     }
 

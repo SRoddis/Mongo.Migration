@@ -2,7 +2,7 @@
   <PropertyGroup>
     <IsPackable>false</IsPackable>
     <OutputType>Library</OutputType>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFrameworks>netstandard2.0;netcoreapp2.2</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\Mongo.Migration.Test\**\*.cs" />
@@ -20,7 +20,7 @@
     <PackageReference Include="NSubstitute" Version="4.1.0" />
     <PackageReference Include="NUnit" Version="3.11.0" />
     <PackageReference Include="Mongo2Go" Version="2.2.11" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.13.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.16.1" />
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
   <ItemGroup>
