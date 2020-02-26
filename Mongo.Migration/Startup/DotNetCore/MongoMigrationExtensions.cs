@@ -3,9 +3,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Mongo.Migration.Documents.Locators;
 using Mongo.Migration.Documents.Serializers;
 using Mongo.Migration.Migrations;
+using Mongo.Migration.Migrations.Adapters;
 using Mongo.Migration.Migrations.Locators;
 using Mongo.Migration.Services;
 using Mongo.Migration.Services.Interceptors;
+using ServiceProvider = Mongo.Migration.Migrations.Adapters.ServiceProvider;
 
 namespace Mongo.Migration.Startup.DotNetCore
 {
@@ -21,10 +23,10 @@ namespace Mongo.Migration.Startup.DotNetCore
 
         private static void RegisterDefaults(IServiceCollection services, IMongoMigrationSettings settings)
         {
-            
             services.AddSingleton(settings);
             
-            services.AddSingleton<IMigrationLocator, TypeMigrationLocator>();
+            services.AddSingleton<IContainerProvider, ServiceProvider>();
+            services.AddSingleton<IMigrationLocator, TypeMigrationDependencyLocator>();
             services.AddSingleton<ICollectionLocator, CollectionLocator>();
             services.AddSingleton<IRuntimeVersionLocator, RuntimeVersionLocator>();
             services.AddSingleton<IStartUpVersionLocator, StartUpVersionLocator>();

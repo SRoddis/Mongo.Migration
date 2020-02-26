@@ -33,7 +33,8 @@ namespace Mongo.Migration.Extensions
             this IEnumerable<IMigration> migrations)
         {
             var dictonary = new Dictionary<Type, IReadOnlyCollection<IMigration>>();
-            var types = from m in migrations select m.Type;
+            var list = migrations.ToList();
+            var types = (from m in list select m.Type).Distinct();
 
             foreach (var type in types)
             {
@@ -41,7 +42,7 @@ namespace Mongo.Migration.Extensions
                     continue;
 
                 var uniqueMigrations =
-                    migrations.Where(m => m.Type == type).CheckForDuplicates().OrderBy(m => m.Version).ToList();
+                    list.Where(m => m.Type == type).CheckForDuplicates().OrderBy(m => m.Version).ToList();
                 dictonary.Add(type, uniqueMigrations);
             }
 

@@ -2,6 +2,7 @@
 using Mongo.Migration.Documents.Locators;
 using Mongo.Migration.Documents.Serializers;
 using Mongo.Migration.Migrations;
+using Mongo.Migration.Migrations.Adapters;
 using Mongo.Migration.Migrations.Locators;
 using Mongo.Migration.Services;
 using Mongo.Migration.Services.Interceptors;
@@ -12,45 +13,53 @@ namespace Mongo.Migration.Startup.Static
     internal class ComponentRegistry : IComponentRegistry
     {
         private readonly IMongoMigrationSettings _settings;
-        private readonly ServiceContainer _container;
+        private readonly IContainerAdapter _containerAdapter;
 
-        public ComponentRegistry(IMongoMigrationSettings settings)
+        public ComponentRegistry(IMongoMigrationSettings settings, IContainerAdapter containerAdapter = null)
         {
             _settings = settings;
-            _container = new ServiceContainer();
+            
+            if(containerAdapter == null)
+                containerAdapter = new LightInjectAdapter(new ServiceContainer());
+            
+            _containerAdapter = containerAdapter;
         }
 
         public void RegisterComponents(IMongoClient client)
         {
             RegisterDefaults();
 
-            _container.RegisterInstance(client);
+            _containerAdapter.RegisterInstance<IMongoClient>(client);
             
-            _container.Register<IMigrationService, MigrationService>();
+            _containerAdapter.Register<IMigrationService, MigrationService>();
         }
 
         public TComponent Get<TComponent>() where TComponent : class
         {
-            return _container.GetInstance<TComponent>();
+            return (TComponent) _containerAdapter.GetInstance(typeof(TComponent));
         }
 
         private void RegisterDefaults()
         {
-            _container.RegisterInstance(_settings);
-            _container.Register<IMigrationLocator, TypeMigrationLocator>(new PerContainerLifetime());
-            _container.Register<ICollectionLocator, CollectionLocator>(new PerContainerLifetime());
-            _container.Register<IRuntimeVersionLocator, RuntimeVersionLocator>(new PerContainerLifetime());
-            _container.Register<IStartUpVersionLocator, StartUpVersionLocator>(new PerContainerLifetime());
+            _containerAdapter.RegisterInstance<IContainerProvider>(_containerAdapter);
+            
+            _containerAdapter.RegisterSingleton<IMigrationLocator, TypeMigrationDependencyLocator>();
+            
+            _containerAdapter.RegisterInstance<IMongoMigrationSettings>(_settings);
+            
+            _containerAdapter.RegisterSingleton<ICollectionLocator, CollectionLocator>();
+            _containerAdapter.RegisterSingleton<IRuntimeVersionLocator, RuntimeVersionLocator>();
+            _containerAdapter.RegisterSingleton<IStartUpVersionLocator, StartUpVersionLocator>();
 
-            _container.Register<IVersionService, VersionService>();
-            _container.Register<IMigrationInterceptorFactory, MigrationInterceptorFactory>();
-            _container.Register<DocumentVersionSerializer, DocumentVersionSerializer>();
+            _containerAdapter.Register<IVersionService, VersionService>();
+            _containerAdapter.Register<IMigrationInterceptorFactory, MigrationInterceptorFactory>();
+            _containerAdapter.Register<DocumentVersionSerializer, DocumentVersionSerializer>();
 
-            _container.Register<ICollectionMigrationRunner, CollectionMigrationRunner>();
-            _container.Register<IMigrationRunner, MigrationRunner>();
-            _container.Register<MigrationInterceptorProvider, MigrationInterceptorProvider>();
+            _containerAdapter.Register<ICollectionMigrationRunner, CollectionMigrationRunner>();
+            _containerAdapter.Register<IMigrationRunner, MigrationRunner>();
+            _containerAdapter.Register<MigrationInterceptorProvider, MigrationInterceptorProvider>();
 
-            _container.Register<IMongoMigration, MongoMigration>();
+            _containerAdapter.Register<IMongoMigration, MongoMigration>();
         }
     }
 }

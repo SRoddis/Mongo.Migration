@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using Mongo.Migration.Demo.Model;
+using Mongo.Migration.Migrations.Adapters;
 using Mongo.Migration.Startup.Static;
 using Mongo2Go;
 using MongoDB.Bson;
@@ -34,7 +36,7 @@ namespace Mongo.Migration.Demo
             
             
             // Init MongoMigration
-            MongoMigrationClient.Initialize(client);
+            MongoMigrationClient.Initialize(client, new LightInjectAdapter(new LightInject.ServiceContainer()));
 
             Console.WriteLine("Migrate from:");
             cars.ForEach(c => Console.WriteLine(c.ToBsonDocument() + "\n"));

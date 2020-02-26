@@ -36,7 +36,7 @@ namespace Mongo.Migration.Demo.WebCore
             _client = new MongoClient(_runner.ConnectionString);
 
             services.AddSingleton(_client);
-            
+
             CreateTestDocuments();
 
             services.AddMigration();
