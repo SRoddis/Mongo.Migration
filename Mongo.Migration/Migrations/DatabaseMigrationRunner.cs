@@ -15,7 +15,7 @@ namespace Mongo.Migration.Migrations
         private readonly string _runningVersion;
 
         private readonly IOptions<MongoMigrationSettings> _options;
-        
+
         private const int CONNECTION_CHECK_TIMEOUT = 1000;
         public DatabaseMigrationRunner(
             IOptions<MongoMigrationSettings> options,

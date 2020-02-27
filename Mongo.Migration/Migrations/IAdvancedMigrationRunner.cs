@@ -6,7 +6,7 @@ namespace Mongo.Migration.Migrations
     internal interface IAdvancedMigrationRunner
     {
         IAdvancedMigrationLocator _migrationLocator { get; }
-        
+
         void Run(IMongoDatabase db, string runnigVersion);
     }
 }
