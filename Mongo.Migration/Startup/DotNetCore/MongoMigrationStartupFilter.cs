@@ -28,7 +28,11 @@ namespace Mongo.Migration.Startup.DotNetCore
         {
             try
             {
+                _logger.LogInformation("Running migration. Please wait....");
+
                 _migration.Run();
+
+                _logger.LogInformation("Migration has been done");
             }
             catch (Exception ex)
             {
