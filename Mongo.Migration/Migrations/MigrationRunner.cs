@@ -10,7 +10,7 @@ namespace Mongo.Migration.Migrations
 {
     internal class MigrationRunner : IMigrationRunner
     {
-        private readonly IMigrationLocator _migrationLocator;
+        public IMigrationLocator _migrationLocator { get; }
 
         private readonly IVersionService _versionService;
 
@@ -19,7 +19,7 @@ namespace Mongo.Migration.Migrations
             _migrationLocator = migrationLocator;
             _versionService = versionService;
         }
-        
+
         public void Run(Type type, BsonDocument document)
         {
             var documentVersion = _versionService.GetVersionOrDefault(document);
@@ -30,7 +30,7 @@ namespace Mongo.Migration.Migrations
 
             MigrateUpOrDown(type, document, documentVersion, currentOrLatest);
         }
-        
+
         public void Run(Type type, BsonDocument document, DocumentVersion to)
         {
             var documentVersion = _versionService.GetVersionOrDefault(document);
