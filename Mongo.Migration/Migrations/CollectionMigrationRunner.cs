@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
 using Microsoft.Extensions.Options;
 using Mongo.Migration.Documents.Attributes;
 using Mongo.Migration.Documents.Locators;
@@ -16,6 +14,8 @@ namespace Mongo.Migration.Migrations
     internal class  CollectionMigrationRunner : ICollectionMigrationRunner
     {
         private readonly IMongoClient _client;
+
+        private IMongoDatabase _db;
 
         private readonly ICollectionLocator _collectionLocator;
 
@@ -58,6 +58,7 @@ namespace Mongo.Migration.Migrations
 
         public void RunAll()
         {
+            _db = _client.GetDatabase(_databaseName);
             var locations = _collectionLocator.GetLocatesOrEmpty();
 
             foreach (var locate in locations)
@@ -66,10 +67,9 @@ namespace Mongo.Migration.Migrations
                 var type = locate.Key;
                 var databaseName = GetDatabaseOrDefault(information);
                 var collectionVersion = _versionService.GetCollectionVersion(type);
-                
-                var collection = _client.GetDatabase(databaseName)
-                    .GetCollection<BsonDocument>(information.Collection);
-                
+
+                var collection = _db.GetCollection<BsonDocument>(information.Collection);
+
                 var bulk = new List<WriteModel<BsonDocument>>();
 
                 var query = CreateQueryForRelevantDocuments(type);
@@ -82,14 +82,14 @@ namespace Mongo.Migration.Migrations
                         foreach (var document in batch)
                         {
                             _migrationRunner.Run(type, document, collectionVersion);
-                            
-                            
+
                             var update = new ReplaceOneModel<BsonDocument>(
                                 new BsonDocument {{"_id", document["_id"]}},
                                 document
                             );
 
                             bulk.Add(update);
+                            //migrationshistory.InsertOne(new BsonDocument {{"migrationId", nameof(type)}, {"productVersion", _runningVersion}});
                         }
                     }
                 }
