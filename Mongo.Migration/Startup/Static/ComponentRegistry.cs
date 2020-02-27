@@ -35,6 +35,7 @@ namespace Mongo.Migration.Startup.Static
         private void RegisterDefaults()
         {
             _container.Register<IMigrationLocator, TypeMigrationLocator>(new PerContainerLifetime());
+            _container.Register<IAdvancedMigrationLocator, AdvancedTypeMigrationLocator>(new PerContainerLifetime());
             _container.Register<ICollectionLocator, CollectionLocator>(new PerContainerLifetime());
             _container.Register<IRuntimeVersionLocator, RuntimeVersionLocator>(new PerContainerLifetime());
             _container.Register<IStartUpVersionLocator, StartUpVersionLocator>(new PerContainerLifetime());
@@ -44,7 +45,9 @@ namespace Mongo.Migration.Startup.Static
             _container.Register<DocumentVersionSerializer, DocumentVersionSerializer>();
 
             _container.Register<ICollectionMigrationRunner, CollectionMigrationRunner>();
+            _container.Register<IDatabaseMigrationRunner, DatabaseMigrationRunner>();
             _container.Register<IMigrationRunner, MigrationRunner>();
+            _container.Register<IAdvancedMigrationRunner, AdvancedMigrationRunner>();
             _container.Register<MigrationInterceptorProvider, MigrationInterceptorProvider>();
 
             _container.Register<IMongoMigration, MongoMigration>();
