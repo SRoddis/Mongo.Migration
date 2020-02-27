@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Options;
+using Mongo.Migration.Startup;
 using Mongo.Migration.Startup.DotNetCore;
 using MongoDB.Driver;
 
