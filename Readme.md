@@ -217,6 +217,10 @@ public class Car : IDocument
 ## Dependency injection
 With the latest update (3.0.94) I added a requested feature to `Mongo.Migration`. `Migration` can be injected with dependencies from now on.
 
+#### .NetCore
+It is pitty simple with .NetCore. `Mongo.Migration` uses the `IServiceProvider` to resolve all used dependencies. So you have access to all registered dependencies.
+
+
 #### .Net Framework
 When you initialize `Mongo.Migration` you can now add a `IContainerAdapter`. At the moment following Containers can be used out of the box:
 - LightInject
@@ -256,12 +260,6 @@ When that is done, you can pass the Adapter as a parameter to initialize `Mongo.
 
     ...
 ```
-
-
-
-
-#### .NetCore
-It is pitty simple with .NetCore. `Mongo.Migration` uses the `IServiceProvider` to resolve all used dependencies. So you have access to all registered dependencies.
 
 ## Demo
 
