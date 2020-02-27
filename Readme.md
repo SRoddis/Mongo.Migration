@@ -13,6 +13,10 @@
 Mongo.Migration is designed for the [MongoDB C# Driver](https://github.com/mongodb/mongo-csharp-driver) to migrate your documents easily and on-the-fly.
 No more downtime for schema-migrations. Just write small and simple `migrations`.
 
+`**Edit**`
+
+With version 3.0.0 of Mongo.Migration I added the possibility to run migrations on StartUp. In order to keep the core of Mongo.Migration in focus, it is still possible to run migrations at runtime (on-the-fly). In addition, there is now the option of executing migrations at the start of the application.
+
 `**PLEASE NOTE**` If you use on-the-fly migration updates, aggregation pipeline and projections are not handled, because they don’t use serialization. You have to handle them yourself.
 
 # Installation
