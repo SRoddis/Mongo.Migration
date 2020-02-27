@@ -28,14 +28,14 @@ PM> Install-Package Mongo.Migration
 #### .Net Framework
 1. Initialize `MongoMigration` behind the `MongoClient`. ([Mongo2Go](https://github.com/Mongo2Go/Mongo2Go))
 
-    ```csharp
-	// Init MongoDB
-	var runner = MongoDbRunner.Start(); // Mongo2Go
-	var client = new MongoClient(runner.ConnectionString);
-	
-	// Init MongoMigration
-	MongoMigrationClient.Initialize(client);
-    ```
+```csharp
+// Init MongoDB
+var runner = MongoDbRunner.Start(); // Mongo2Go
+var client = new MongoClient(runner.ConnectionString);
+
+// Init MongoMigration
+MongoMigrationClient.Initialize(client);
+```
     
 #### .Net Core
 
@@ -71,44 +71,44 @@ public void ConfigureServices(IServiceCollection services)
     
 2. Implement `IDocument` or add `Document` to your entities to provide the `DocumentVersion`. (Optional) Add the `RuntimeVersion` attribute to mark the current version of the document. So you have the possibility to downgrade in case of a rollback.
 
-    ```csharp
-    [RuntimeVersion("0.0.1")]
-    public class Car : IDocument
-    {
-        public ObjectId Id { get; set; }
+```csharp
+[RuntimeVersion("0.0.1")]
+public class Car : IDocument
+{
+    public ObjectId Id { get; set; }
 
-        public string Type { get; set; }
+    public string Type { get; set; }
 
-        public int Doors { get; set; }
+    public int Doors { get; set; }
 
-        public DocumentVersion Version { get; set; }
-    }
-    ```
+    public DocumentVersion Version { get; set; }
+}
+```
 3. Create a migration by extending the abstract class `Migration<TDocument>`. Best practice for the version is to use [Semantic Versioning](http://semver.org/) but ultimately it is up to you. You could simply use the patch version to count the number of migrations. If there is a duplicate for a specific type an exception is thrown on initialization.
 
-    ```csharp
-    public class M001_RenameDorsToDoors : Migration<Car>
+```csharp
+public class M001_RenameDorsToDoors : Migration<Car>
+{
+    public M001_RenameDorsToDoors()
+        : base("0.0.1")
     {
-        public M001_RenameDorsToDoors()
-            : base("0.0.1")
-        {
-        }
-
-        public override void Up(BsonDocument document)
-        {
-            var doors = document["Dors"].ToInt32();
-            document.Add("Doors", doors);
-            document.Remove("Dors");
-        }
-
-        public override void Down(BsonDocument document)
-        {
-            var doors = document["Doors"].ToInt32();
-            document.Add("Dors", doors);
-            document.Remove("Doors");
-        }
     }
-    ```
+
+    public override void Up(BsonDocument document)
+    {
+        var doors = document["Dors"].ToInt32();
+        document.Add("Doors", doors);
+        document.Remove("Dors");
+    }
+
+    public override void Down(BsonDocument document)
+    {
+        var doors = document["Doors"].ToInt32();
+        document.Add("Dors", doors);
+        document.Remove("Doors");
+    }
+}
+```
 4. `(Optional)` If you choose to put your migrations into an extra project, 
 add the suffix `".MongoMigrations"` to the name and make sure it is referenced in the main project. By convention Mongo.Migration collects all .dlls named like that in your bin folder.
     
@@ -213,6 +213,55 @@ Add `StartUpVersion` attribute to set the version you want to migrate to at star
 public class Car : IDocument
 ...
 ```
+
+## Dependency injection
+With the latest update (3.0.94) I added a requested feature to `Mongo.Migration`. `Migration` can be injected with dependencies from now on.
+
+#### .Net Framework
+When you initialize `Mongo.Migration` you can now add a `IContainerAdapter`. At the moment following Containers can be used out of the box:
+- LightInject
+- .NetCore ServiceProvider
+- ... more planned in the future.
+
+If you use an other Container, you have to implement the interface yourself. As an example, see `LightInjectAdapter`.
+
+When that is done, you can pass the Adapter as a parameter to initialize `Mongo.Migration`.
+
+```csharp
+    // Your Container
+    var conatiner = ServiceContainer()
+    ontainer.Register<IYourDependency, YourDependency>();
+
+    // Init MongoDB
+    var runner = MongoDbRunner.Start(); // Mongo2Go
+    var client = new MongoClient(runner.ConnectionString);
+
+    // Your Adapter implementation to abstract the container
+    var adapter = new LightInjectAdapter(container)
+
+    // Init MongoMigration
+    MongoMigrationClient.Initialize(client, adapter);
+```
+
+```csharp
+    public class M001_RenameDorsToDoors : Migration<Car>
+    {
+        private readonly IYourDependency _service;
+
+        public M001_RenameDorsToDoors(IYourDependency service)
+            : base("0.0.1")
+        {
+            _service = service;
+        }
+
+    ...
+```
+
+
+
+
+#### .NetCore
+It is pitty simple with .NetCore. `Mongo.Migration` uses the `IServiceProvider` to resolve all used dependencies. So you have access to all registered dependencies.
 
 ## Demo
 
