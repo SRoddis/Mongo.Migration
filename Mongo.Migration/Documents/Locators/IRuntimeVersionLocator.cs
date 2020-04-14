@@ -2,7 +2,7 @@
 
 namespace Mongo.Migration.Documents.Locators
 {
-    internal interface IRuntimeVersionLocator : ILocator<DocumentVersion, Type>
+    public interface IRuntimeVersionLocator : ILocator<DocumentVersion, Type>
     {
     }
 }
