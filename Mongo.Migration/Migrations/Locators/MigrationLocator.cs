@@ -77,7 +77,7 @@ namespace Mongo.Migration.Migrations.Locators
         {         
             var migrations = GetMigrations(type);
 
-            return migrations.Max(m => m.Version);
+            return migrations?.Max(m => m.Version) ?? DocumentVersion.Default();
         }
 
         public abstract void Locate();
