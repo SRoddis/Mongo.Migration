@@ -14,6 +14,8 @@ namespace Mongo.Migration.Migrations
     {
         private readonly IMongoClient _client;
 
+        private IMongoDatabase _db;
+
         private readonly ICollectionLocator _collectionLocator;
 
         private readonly string _databaseName;
@@ -74,6 +76,7 @@ namespace Mongo.Migration.Migrations
 
         public void RunAll()
         {
+            _db = _client.GetDatabase(_databaseName);
             var locations = _collectionLocator.GetLocatesOrEmpty();
 
             foreach (var locate in locations)
@@ -83,8 +86,7 @@ namespace Mongo.Migration.Migrations
                 var databaseName = GetDatabaseOrDefault(information);
                 var collectionVersion = _versionService.GetCollectionVersion(type);
 
-                var collection = _client.GetDatabase(databaseName)
-                    .GetCollection<BsonDocument>(information.Collection);
+                var collection = _db.GetCollection<BsonDocument>(information.Collection);
 
                 var bulk = new List<WriteModel<BsonDocument>>();
 
@@ -105,6 +107,7 @@ namespace Mongo.Migration.Migrations
                             );
 
                             bulk.Add(update);
+                            //migrationshistory.InsertOne(new BsonDocument {{"migrationId", nameof(type)}, {"productVersion", _runningVersion}});
                         }
                     }
                 }
