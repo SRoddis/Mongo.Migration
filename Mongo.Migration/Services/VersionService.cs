@@ -59,7 +59,7 @@ namespace Mongo.Migration.Services
             BsonValue value;
             document.TryGetValue(GetVersionFieldName(), out value);
 
-            if (value != null)
+            if (value != null && !value.IsBsonNull)
                 return value.AsString;
 
             return DocumentVersion.Default();
