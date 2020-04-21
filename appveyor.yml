@@ -4,7 +4,7 @@ version: 3.0.{build}
 
 environment:
   COVERALLS_REPO_TOKEN:
-    secure: dg8AiWqsrscbQOQFsrUUmS3cFFnTQQkoMEgIr5miMnRHKZYMbXjvpJYKgeJjemtV
+    secure: AmJZHWTJfwEEBOHZst4b9O1gDslXA0nLmuhvTsA/jqyubFm951cUwfJ0zJ/QXWoL
 
 assembly_info:
   patch: true
