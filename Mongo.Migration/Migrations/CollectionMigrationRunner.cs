@@ -78,11 +78,12 @@ namespace Mongo.Migration.Migrations
 
             foreach (var locate in locations)
             {
-                foreach (var dbName in _databaseNames)
+                var information = locate.Value;
+                var type = locate.Key;
+                var databaseNames = GetDatabaseOrDefault(information);
+
+                foreach (var databaseName in databaseNames)
                 {
-                    var information = locate.Value;
-                    var type = locate.Key;
-                    var databaseName = GetDatabaseOrDefault(information, dbName);
                     var collectionVersion = _versionService.GetCollectionVersion(type);
 
                     var collection = _client.GetDatabase(databaseName)
@@ -116,12 +117,12 @@ namespace Mongo.Migration.Migrations
             }
         }
 
-        private string GetDatabaseOrDefault(CollectionLocationInformation information, string dbName)
+        private string[] GetDatabaseOrDefault(CollectionLocationInformation information)
         {
-            if (string.IsNullOrEmpty(dbName) && string.IsNullOrEmpty(information.Database))
+            if (_databaseNames == null && string.IsNullOrEmpty(information.Database))
                 throw new NoDatabaseNameFoundException();
 
-            return string.IsNullOrEmpty(information.Database) ? dbName : information.Database;
+            return string.IsNullOrEmpty(information.Database) ? _databaseNames : new string[] { information.Database };
         }
 
         private FilterDefinition<BsonDocument> CreateQueryForRelevantDocuments(
