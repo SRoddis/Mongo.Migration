@@ -4,7 +4,7 @@ version: 3.0.{build}
 
 environment:
   COVERALLS_REPO_TOKEN:
-    secure: w1QgTKjQb/SRT5RvjLDGRniq5S6HV+otG5MywPqt6J3DwZYcddT+/H4SA/YZx/8y
+    secure: dg8AiWqsrscbQOQFsrUUmS3cFFnTQQkoMEgIr5miMnRHKZYMbXjvpJYKgeJjemtV
 
 assembly_info:
   patch: true
@@ -12,37 +12,37 @@ assembly_info:
   assembly_version: "{version}"
   assembly_file_version: "{version}"
   assembly_informational_version: "{version}"
-  
+
 dotnet_csproj:
   patch: true
   file: '**\*.csproj;**\*.props;**\*.fsproj;**\*.xml'
-  version: '{version}'
-  package_version: '{version}'
-  assembly_version: '{version}'
-  file_version: '{version}'
-  informational_version: '{version}'
+  version: "{version}"
+  package_version: "{version}"
+  assembly_version: "{version}"
+  file_version: "{version}"
+  informational_version: "{version}"
 
 configuration: Release
 
 build:
-  parallel: true  
+  parallel: true
   project: Mongo.Migration.sln
-  publish_wap: true               
-  publish_wap_xcopy: true         
-  publish_azure: true             
-  publish_nuget: true             
-  publish_nuget_symbols: true     
+  publish_wap: true
+  publish_wap_xcopy: true
+  publish_azure: true
+  publish_nuget: true
+  publish_nuget_symbols: true
   include_nuget_references: true
   verbosity: quiet
-  
+
 cache:
   - packages -> **\packages.config
 
 before_build:
   - nuget restore
 
-after_test: 
-   - cmd: .\post_build.cmd
+after_test:
+  - cmd: .\post_build.cmd
 
 artifacts:
   - path: Mongo.Migration\bin\Release\net47\Mongo.Migration.dll
