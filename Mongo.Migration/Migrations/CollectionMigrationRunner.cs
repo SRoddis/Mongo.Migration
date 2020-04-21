@@ -16,7 +16,7 @@ namespace Mongo.Migration.Migrations
 
         private readonly ICollectionLocator _collectionLocator;
 
-        private readonly string _databaseName;
+        private readonly string[] _databaseNames;
 
         private readonly IMigrationRunner _migrationRunner;
 
@@ -32,7 +32,7 @@ namespace Mongo.Migration.Migrations
                 versionService,
                 migrationRunner)
         {
-            if (settings.ConnectionString == null && settings.Database == null || settings.ClientSettings == null)
+            if (settings.ConnectionString == null && settings.Databases == null || settings.ClientSettings == null)
                 throw new MongoMigrationNoMongoClientException();
 
             if (settings.ClientSettings != null)
@@ -40,7 +40,7 @@ namespace Mongo.Migration.Migrations
             else
                 _client = new MongoClient(settings.ConnectionString);
 
-            _databaseName = settings.Database;
+            _databaseNames = settings.Databases;
         }
 
         public CollectionMigrationRunner(
@@ -56,10 +56,10 @@ namespace Mongo.Migration.Migrations
         {
             _client = client;
 
-            if (settings.ConnectionString == null && settings.Database == null) return;
+            if (settings.ConnectionString == null && settings.Databases == null) return;
 
             _client = new MongoClient(settings.ConnectionString);
-            _databaseName = settings.Database;
+            _databaseNames = settings.Databases;
         }
 
         private CollectionMigrationRunner(
@@ -78,47 +78,50 @@ namespace Mongo.Migration.Migrations
 
             foreach (var locate in locations)
             {
-                var information = locate.Value;
-                var type = locate.Key;
-                var databaseName = GetDatabaseOrDefault(information);
-                var collectionVersion = _versionService.GetCollectionVersion(type);
-
-                var collection = _client.GetDatabase(databaseName)
-                    .GetCollection<BsonDocument>(information.Collection);
-
-                var bulk = new List<WriteModel<BsonDocument>>();
-
-                var query = CreateQueryForRelevantDocuments(type);
-
-                using (var cursor = collection.FindSync(query))
+                foreach (var dbName in _databaseNames)
                 {
-                    while (cursor.MoveNext())
+                    var information = locate.Value;
+                    var type = locate.Key;
+                    var databaseName = GetDatabaseOrDefault(information, dbName);
+                    var collectionVersion = _versionService.GetCollectionVersion(type);
+
+                    var collection = _client.GetDatabase(databaseName)
+                        .GetCollection<BsonDocument>(information.Collection);
+
+                    var bulk = new List<WriteModel<BsonDocument>>();
+
+                    var query = CreateQueryForRelevantDocuments(type);
+
+                    using (var cursor = collection.FindSync(query))
                     {
-                        var batch = cursor.Current;
-                        foreach (var document in batch)
+                        while (cursor.MoveNext())
                         {
-                            _migrationRunner.Run(type, document, collectionVersion);
+                            var batch = cursor.Current;
+                            foreach (var document in batch)
+                            {
+                                _migrationRunner.Run(type, document, collectionVersion);
 
-                            var update = new ReplaceOneModel<BsonDocument>(
-                                new BsonDocument {{"_id", document["_id"]}},
-                                document
-                            );
+                                var update = new ReplaceOneModel<BsonDocument>(
+                                    new BsonDocument { { "_id", document["_id"] } },
+                                    document
+                                );
 
-                            bulk.Add(update);
+                                bulk.Add(update);
+                            }
                         }
                     }
-                }
 
-                if (bulk.Count > 0) collection.BulkWrite(bulk);
+                    if (bulk.Count > 0) collection.BulkWrite(bulk);
+                }
             }
         }
 
-        private string GetDatabaseOrDefault(CollectionLocationInformation information)
+        private string GetDatabaseOrDefault(CollectionLocationInformation information, string dbName)
         {
-            if (string.IsNullOrEmpty(_databaseName) && string.IsNullOrEmpty(information.Database))
+            if (string.IsNullOrEmpty(dbName) && string.IsNullOrEmpty(information.Database))
                 throw new NoDatabaseNameFoundException();
 
-            return string.IsNullOrEmpty(information.Database) ? _databaseName : information.Database;
+            return string.IsNullOrEmpty(information.Database) ? dbName : information.Database;
         }
 
         private FilterDefinition<BsonDocument> CreateQueryForRelevantDocuments(

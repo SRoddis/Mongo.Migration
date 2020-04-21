@@ -4,9 +4,9 @@ namespace Mongo.Migration.Startup
 {
     public interface IMongoMigrationSettings
     {
-        string ConnectionString { get; set; }
-        string Database { get; set; }
-        string VersionFieldName { get; set; }
-        MongoClientSettings ClientSettings { get; set; }
+        string ConnectionString { get; }
+        string[] Databases { get; }
+        string VersionFieldName { get; }
+        MongoClientSettings ClientSettings { get; }
     }
 }
