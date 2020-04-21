@@ -57,7 +57,7 @@ namespace Mongo.Migration.Startup.Static
 
             _containerAdapter.Register<ICollectionMigrationRunner, CollectionMigrationRunner>();
             _containerAdapter.Register<IMigrationRunner, MigrationRunner>();
-            _containerAdapter.Register<MigrationInterceptorProvider, MigrationInterceptorProvider>();
+            _containerAdapter.Register<IMigrationInterceptorProvider, MigrationInterceptorProvider>();
 
             _containerAdapter.Register<IMongoMigration, MongoMigration>();
         }
