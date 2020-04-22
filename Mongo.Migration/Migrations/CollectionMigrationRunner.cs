@@ -126,12 +126,21 @@ namespace Mongo.Migration.Migrations
         {
             var currentVersion = _versionService.GetCurrentOrLatestMigrationVersion(type);
 
-            var existFilter = Builders<BsonDocument>.Filter.Exists(_versionService.GetVersionFieldName(), false);
-            var notEqualFilter = Builders<BsonDocument>.Filter.Ne(
+            var versionExistFilter = Builders<BsonDocument>.Filter.Exists(_versionService.GetVersionFieldName(), false);
+
+            var versionNotEqualFilter = Builders<BsonDocument>.Filter.Ne(
                 _versionService.GetVersionFieldName(),
                 currentVersion);
 
-            return Builders<BsonDocument>.Filter.Or(existFilter, notEqualFilter);
+            var versionExistsOrDoesntMatchFilter = Builders<BsonDocument>.Filter.Or(versionExistFilter, versionNotEqualFilter);
+
+            var typeExistFilter = Builders<BsonDocument>.Filter.Exists("_t", false);
+            var typeEqualsFilter = Builders<BsonDocument>.Filter.AnyEq(
+                "_t", type.Name);
+
+            var typeExistsOrMatchsFilter = Builders<BsonDocument>.Filter.Or(typeExistFilter, typeEqualsFilter);
+
+            return Builders<BsonDocument>.Filter.And(versionExistsOrDoesntMatchFilter, typeExistsOrMatchsFilter);
         }
     }
 }
