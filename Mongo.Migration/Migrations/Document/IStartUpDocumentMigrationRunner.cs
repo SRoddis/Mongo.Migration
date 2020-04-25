@@ -1,8 +1,6 @@
-using MongoDB.Driver;
-
-namespace Mongo.Migration.Migrations
+namespace Mongo.Migration.Migrations.Document
 {
-    internal interface ICollectionMigrationRunner
+    internal interface IStartUpDocumentMigrationRunner
     {
         void RunAll();
     }

@@ -1,5 +1,5 @@
 ﻿using Mongo.Migration.Documents;
-using Mongo.Migration.Migrations;
+using Mongo.Migration.Migrations.Document;
 using MongoDB.Bson.IO;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
@@ -8,10 +8,10 @@ namespace Mongo.Migration.Services.Interceptors
 {
     internal class MigrationInterceptor<TDocument> : BsonClassMapSerializer<TDocument> where TDocument : class, IDocument
     {
-        private readonly IMigrationRunner _migrationRunner;
+        private readonly IDocumentMigrationRunner _migrationRunner;
         private readonly IVersionService _versionService;
 
-        public MigrationInterceptor(IMigrationRunner migrationRunner, IVersionService versionService)
+        public MigrationInterceptor(IDocumentMigrationRunner migrationRunner, IVersionService versionService)
             : base(BsonClassMap.LookupClassMap(typeof(TDocument)))
         {
             _migrationRunner = migrationRunner;

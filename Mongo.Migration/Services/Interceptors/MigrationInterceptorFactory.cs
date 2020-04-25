@@ -1,15 +1,15 @@
 ﻿using System;
-using Mongo.Migration.Migrations;
+using Mongo.Migration.Migrations.Document;
 using MongoDB.Bson.Serialization;
 
 namespace Mongo.Migration.Services.Interceptors
 {
     internal class MigrationInterceptorFactory : IMigrationInterceptorFactory
     {
-        private readonly IMigrationRunner _migrationRunner;
+        private readonly IDocumentMigrationRunner _migrationRunner;
         private readonly IVersionService _versionService;
 
-        public MigrationInterceptorFactory(IMigrationRunner migrationRunner, IVersionService versionService)
+        public MigrationInterceptorFactory(IDocumentMigrationRunner migrationRunner, IVersionService versionService)
         {
             _migrationRunner = migrationRunner;
             _versionService = versionService;

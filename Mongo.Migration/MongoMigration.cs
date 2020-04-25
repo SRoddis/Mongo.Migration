@@ -1,5 +1,5 @@
 ﻿using Mongo.Migration.Documents.Locators;
-using Mongo.Migration.Migrations;
+using Mongo.Migration.Migrations.Document;
 using Mongo.Migration.Migrations.Locators;
 using Mongo.Migration.Services;
 

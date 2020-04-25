@@ -1,5 +1,5 @@
 ﻿using System;
-using Mongo.Migration.Migrations;
+using Mongo.Migration.Migrations.Document;
 using MongoDB.Bson;
 
 namespace Mongo.Migration.Test.TestDoubles

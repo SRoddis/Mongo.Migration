@@ -4,7 +4,7 @@ using System.Linq;
 using Mongo.Migration.Documents;
 using Mongo.Migration.Documents.Locators;
 using Mongo.Migration.Exceptions;
-using Mongo.Migration.Migrations;
+using Mongo.Migration.Migrations.Document;
 using Mongo.Migration.Migrations.Locators;
 using Mongo.Migration.Startup;
 using MongoDB.Bson;

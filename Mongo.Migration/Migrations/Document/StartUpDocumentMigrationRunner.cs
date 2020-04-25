@@ -8,9 +8,9 @@ using Mongo.Migration.Startup;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
-namespace Mongo.Migration.Migrations
+namespace Mongo.Migration.Migrations.Document
 {
-    internal class CollectionMigrationRunner : ICollectionMigrationRunner
+    internal class StartUpDocumentMigrationRunner : IStartUpDocumentMigrationRunner
     {
         private readonly IMongoClient _client;
 
@@ -18,15 +18,15 @@ namespace Mongo.Migration.Migrations
 
         private readonly string _databaseName;
 
-        private readonly IMigrationRunner _migrationRunner;
+        private readonly IDocumentMigrationRunner _migrationRunner;
 
         private readonly IVersionService _versionService;
 
-        public CollectionMigrationRunner(
+        public StartUpDocumentMigrationRunner(
             IMongoMigrationSettings settings,
             ICollectionLocator collectionLocator,
             IVersionService versionService,
-            IMigrationRunner migrationRunner)
+            IDocumentMigrationRunner migrationRunner)
             : this(
                 collectionLocator,
                 versionService,
@@ -43,12 +43,12 @@ namespace Mongo.Migration.Migrations
             _databaseName = settings.Database;
         }
 
-        public CollectionMigrationRunner(
+        public StartUpDocumentMigrationRunner(
             IMongoClient client,
             IMongoMigrationSettings settings,
             ICollectionLocator collectionLocator,
             IVersionService versionService,
-            IMigrationRunner migrationRunner)
+            IDocumentMigrationRunner migrationRunner)
             : this(
                 collectionLocator,
                 versionService,
@@ -62,10 +62,10 @@ namespace Mongo.Migration.Migrations
             _databaseName = settings.Database;
         }
 
-        private CollectionMigrationRunner(
+        private StartUpDocumentMigrationRunner(
             ICollectionLocator collectionLocator,
             IVersionService versionService,
-            IMigrationRunner migrationRunner)
+            IDocumentMigrationRunner migrationRunner)
         {
             _collectionLocator = collectionLocator;
             _versionService = versionService;

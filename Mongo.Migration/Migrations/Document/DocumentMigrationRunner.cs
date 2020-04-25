@@ -5,15 +5,15 @@ using Mongo.Migration.Migrations.Locators;
 using Mongo.Migration.Services;
 using MongoDB.Bson;
 
-namespace Mongo.Migration.Migrations
+namespace Mongo.Migration.Migrations.Document
 {
-    internal class MigrationRunner : IMigrationRunner
+    internal class DocumentMigrationRunner : IDocumentMigrationRunner
     {
         private readonly IMigrationLocator<IDocumentMigration> _migrationLocator;
 
         private readonly IVersionService _versionService;
 
-        public MigrationRunner(IMigrationLocator<IDocumentMigration> migrationLocator, IVersionService versionService)
+        public DocumentMigrationRunner(IMigrationLocator<IDocumentMigration> migrationLocator, IVersionService versionService)
         {
             _migrationLocator = migrationLocator;
             _versionService = versionService;

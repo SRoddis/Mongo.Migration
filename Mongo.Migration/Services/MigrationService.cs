@@ -2,6 +2,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Mongo.Migration.Documents.Serializers;
 using Mongo.Migration.Migrations;
+using Mongo.Migration.Migrations.Document;
 using Mongo.Migration.Services.Interceptors;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
@@ -11,13 +12,13 @@ namespace Mongo.Migration.Services
     internal class MigrationService : IMigrationService
     {
         private readonly ILogger<MigrationService> _logger;
-        private readonly ICollectionMigrationRunner _migrationRunner;
+        private readonly IStartUpDocumentMigrationRunner _migrationRunner;
         private readonly IDatabaseMigrationRunner _dbMigrationRunner;
         private readonly IMigrationInterceptorProvider _provider;
         private readonly DocumentVersionSerializer _serializer;
 
         public MigrationService(DocumentVersionSerializer serializer, IMigrationInterceptorProvider provider,
-            ICollectionMigrationRunner migrationRunner, IDatabaseMigrationRunner dbMigrationRunner)
+            IStartUpDocumentMigrationRunner migrationRunner, IDatabaseMigrationRunner dbMigrationRunner)
             : this(serializer, provider, NullLoggerFactory.Instance)
         {
             _migrationRunner = migrationRunner;

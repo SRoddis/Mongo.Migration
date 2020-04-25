@@ -1,6 +1,6 @@
 ﻿using System;
 using Mongo.Migration.Demo.Model;
-using Mongo.Migration.Migrations;
+using Mongo.Migration.Migrations.Document;
 using Mongo.Migration.Services;
 using MongoDB.Bson;
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using FluentAssertions;
-using Mongo.Migration.Migrations;
+using Mongo.Migration.Migrations.Document;
 using Mongo.Migration.Test.TestDoubles;
 using MongoDB.Bson;
 using NUnit.Framework;
@@ -11,14 +11,14 @@ namespace Mongo.Migration.Test.Migrations
     [TestFixture]
     internal class MigrationRunner_when_migrating_down : IntegrationTest
     {
-        private IMigrationRunner _runner;
+        private IDocumentMigrationRunner _runner;
 
         [SetUp]
         public void SetUp()
         {
             base.OnSetUp();
             
-            _runner = _components.Get<IMigrationRunner>();
+            _runner = _components.Get<IDocumentMigrationRunner>();
         }
 
         [TearDown]

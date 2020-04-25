@@ -1,6 +1,6 @@
 ﻿using System;
 using Mongo.Migration.Demo.Model;
-using Mongo.Migration.Migrations;
+using Mongo.Migration.Migrations.Document;
 using MongoDB.Bson;
 
 namespace Mongo.Migration.Demo.MongoMigrations.Cars.M01

@@ -4,6 +4,7 @@ using Mongo.Migration.Documents.Locators;
 using Mongo.Migration.Documents.Serializers;
 using Mongo.Migration.Migrations;
 using Mongo.Migration.Migrations.Adapters;
+using Mongo.Migration.Migrations.Document;
 using Mongo.Migration.Migrations.Locators;
 using Mongo.Migration.Services;
 using Mongo.Migration.Services.Interceptors;
@@ -35,8 +36,8 @@ namespace Mongo.Migration.Startup.DotNetCore
             services.AddTransient<IMigrationInterceptorFactory, MigrationInterceptorFactory>();
             services.AddTransient<DocumentVersionSerializer, DocumentVersionSerializer>();
 
-            services.AddTransient<ICollectionMigrationRunner, CollectionMigrationRunner>();
-            services.AddTransient<IMigrationRunner, MigrationRunner>();
+            services.AddTransient<IStartUpDocumentMigrationRunner, StartUpDocumentMigrationRunner>();
+            services.AddTransient<IDocumentMigrationRunner, DocumentMigrationRunner>();
 
             services.AddTransient<IDatabaseMigrationRunner, DatabaseMigrationRunner>();
             services.AddTransient<IAdvancedMigrationRunner, AdvancedMigrationRunner>();

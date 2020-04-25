@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Mongo.Migration.Extensions;
+using Mongo.Migration.Migrations.Document;
 
 namespace Mongo.Migration.Migrations.Locators
 {

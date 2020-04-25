@@ -2,9 +2,9 @@
 using Mongo.Migration.Documents;
 using MongoDB.Bson;
 
-namespace Mongo.Migration.Migrations
+namespace Mongo.Migration.Migrations.Document
 {
-    internal interface IMigrationRunner
+    internal interface IDocumentMigrationRunner
     {
         void Run(Type type, BsonDocument document, DocumentVersion to);
         
