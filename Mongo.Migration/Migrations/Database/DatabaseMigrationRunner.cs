@@ -8,25 +8,25 @@ using Mongo.Migration.Migrations.Locators;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
-namespace Mongo.Migration.Migrations
+namespace Mongo.Migration.Migrations.Database
 {
-    internal class AdvancedMigrationRunner : IAdvancedMigrationRunner
+    internal class DatabaseMigrationRunner : IDatabaseMigrationRunner
     {
         private ILogger _logger;
         private IMigrationLocator<IDatabaseMigration> _migrationLocator { get; }
 
-        public AdvancedMigrationRunner(IMigrationLocator<IDatabaseMigration> migrationLocator)
+        public DatabaseMigrationRunner(IMigrationLocator<IDatabaseMigration> migrationLocator)
             : this(migrationLocator, NullLoggerFactory.Instance)
         {
             _migrationLocator = migrationLocator;
         }
 
-        private AdvancedMigrationRunner(
+        private DatabaseMigrationRunner(
             IMigrationLocator<IDatabaseMigration> migrationLocator,
             ILoggerFactory loggerFactory)
         {
             _migrationLocator = migrationLocator;
-            _logger = loggerFactory.CreateLogger<AdvancedMigrationRunner>();
+            _logger = loggerFactory.CreateLogger<DatabaseMigrationRunner>();
         }
 
         public void Run(IMongoDatabase db, DocumentVersion runningVersion)

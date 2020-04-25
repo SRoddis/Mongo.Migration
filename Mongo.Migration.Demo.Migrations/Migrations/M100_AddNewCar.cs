@@ -1,5 +1,5 @@
 ﻿using Mongo.Migration.Demo.Model;
-using Mongo.Migration.Migrations;
+using Mongo.Migration.Migrations.Database;
 using MongoDB.Driver;
 
 namespace Mongo.Migration.Demo.MongoMigrations.Cars.M00

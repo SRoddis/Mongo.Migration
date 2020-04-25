@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Mongo.Migration.Documents.Serializers;
-using Mongo.Migration.Migrations;
+using Mongo.Migration.Migrations.Database;
 using Mongo.Migration.Migrations.Document;
 using Mongo.Migration.Services.Interceptors;
 using MongoDB.Bson;
@@ -12,17 +12,17 @@ namespace Mongo.Migration.Services
     internal class MigrationService : IMigrationService
     {
         private readonly ILogger<MigrationService> _logger;
-        private readonly IStartUpDocumentMigrationRunner _migrationRunner;
-        private readonly IDatabaseMigrationRunner _dbMigrationRunner;
+        private readonly IStartUpDocumentMigrationRunner _startUpDocumentMigrationRunner;
+        private readonly IStartUpDatabaseMigrationRunner _startUpDatabaseMigrationRunner;
         private readonly IMigrationInterceptorProvider _provider;
         private readonly DocumentVersionSerializer _serializer;
 
         public MigrationService(DocumentVersionSerializer serializer, IMigrationInterceptorProvider provider,
-            IStartUpDocumentMigrationRunner migrationRunner, IDatabaseMigrationRunner dbMigrationRunner)
+            IStartUpDocumentMigrationRunner startUpDocumentMigrationRunner, IStartUpDatabaseMigrationRunner startUpDatabaseMigrationRunner)
             : this(serializer, provider, NullLoggerFactory.Instance)
         {
-            _migrationRunner = migrationRunner;
-            _dbMigrationRunner = dbMigrationRunner;
+            _startUpDocumentMigrationRunner = startUpDocumentMigrationRunner;
+            _startUpDatabaseMigrationRunner = startUpDatabaseMigrationRunner;
         }
 
         private MigrationService(
@@ -45,8 +45,8 @@ namespace Mongo.Migration.Services
 
         private void OnStartup()
         {
-            _migrationRunner.RunAll();
-            _dbMigrationRunner.RunAll();
+            _startUpDocumentMigrationRunner.RunAll();
+            _startUpDatabaseMigrationRunner.RunAll();
         }
 
         private void RegisterSerializer()

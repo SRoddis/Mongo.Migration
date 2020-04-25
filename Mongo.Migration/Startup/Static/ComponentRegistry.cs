@@ -1,8 +1,8 @@
 ﻿using LightInject;
 using Mongo.Migration.Documents.Locators;
 using Mongo.Migration.Documents.Serializers;
-using Mongo.Migration.Migrations;
 using Mongo.Migration.Migrations.Adapters;
+using Mongo.Migration.Migrations.Database;
 using Mongo.Migration.Migrations.Document;
 using Mongo.Migration.Migrations.Locators;
 using Mongo.Migration.Services;
@@ -60,8 +60,8 @@ namespace Mongo.Migration.Startup.Static
             _containerAdapter.Register<IDocumentMigrationRunner, DocumentMigrationRunner>();
             _containerAdapter.Register<IMigrationInterceptorProvider, MigrationInterceptorProvider>();
 
+            _containerAdapter.Register<IStartUpDatabaseMigrationRunner, StartUpDatabaseMigrationRunner>();
             _containerAdapter.Register<IDatabaseMigrationRunner, DatabaseMigrationRunner>();
-            _containerAdapter.Register<IAdvancedMigrationRunner, AdvancedMigrationRunner>();
 
             _containerAdapter.Register<IMongoMigration, MongoMigration>();
         }

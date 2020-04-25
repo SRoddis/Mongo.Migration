@@ -2,7 +2,7 @@
 using Mongo.Migration.Documents;
 using MongoDB.Driver;
 
-namespace Mongo.Migration.Migrations
+namespace Mongo.Migration.Migrations.Database
 {
     public abstract class DatabaseMigration : IDatabaseMigration
     {

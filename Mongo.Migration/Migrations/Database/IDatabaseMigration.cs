@@ -1,6 +1,6 @@
 ﻿using MongoDB.Driver;
 
-namespace Mongo.Migration.Migrations
+namespace Mongo.Migration.Migrations.Database
 {
     public interface IDatabaseMigration : IMigration
     {

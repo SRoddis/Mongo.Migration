@@ -1,21 +1,21 @@
 using Mongo.Migration.Startup;
 using MongoDB.Driver;
 
-namespace Mongo.Migration.Migrations
+namespace Mongo.Migration.Migrations.Database
 {
-    internal class DatabaseMigrationRunner : IDatabaseMigrationRunner
+    internal class StartUpDatabaseMigrationRunner : IStartUpDatabaseMigrationRunner
     {
         private readonly IMongoClient _client;
 
-        private readonly IAdvancedMigrationRunner _migrationRunner;
+        private readonly IDatabaseMigrationRunner _migrationRunner;
 
         private readonly string _databaseName;
 
         private readonly string _runningVersion;
 
-        public DatabaseMigrationRunner(
+        public StartUpDatabaseMigrationRunner(
             IMongoMigrationSettings settings,
-            IAdvancedMigrationRunner migrationRunner)
+            IDatabaseMigrationRunner migrationRunner)
             : this(
                 new MongoClient(settings.ConnectionString),
                 migrationRunner,
@@ -24,9 +24,9 @@ namespace Mongo.Migration.Migrations
             _databaseName = settings.Database;
         }
 
-        public DatabaseMigrationRunner(
+        public StartUpDatabaseMigrationRunner(
             IMongoClient client,
-            IAdvancedMigrationRunner migrationRunner,
+            IDatabaseMigrationRunner migrationRunner,
             string runningVersion)
         {
             _runningVersion = runningVersion;

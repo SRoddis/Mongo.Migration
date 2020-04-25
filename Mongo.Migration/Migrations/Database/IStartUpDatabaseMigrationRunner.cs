@@ -1,6 +1,6 @@
-namespace Mongo.Migration.Migrations
+namespace Mongo.Migration.Migrations.Database
 {
-    internal interface IDatabaseMigrationRunner
+    internal interface IStartUpDatabaseMigrationRunner
     {
         void RunAll();
     }
