@@ -22,7 +22,12 @@ namespace Mongo.Migration.Migrations.Adapters
         {
             _container.Register<TInterface, TImplementation>();
         }
-        
+
+        public void Register(Type serviceType, Type implementingType)
+        {
+            _container.Register(serviceType, implementingType);
+        }
+
         public void RegisterInstance<TInterface>(object instance)
         {
             _container.RegisterInstance(typeof(TInterface), instance);

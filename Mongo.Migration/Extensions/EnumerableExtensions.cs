@@ -13,7 +13,8 @@ namespace Mongo.Migration.Extensions
             return list == null || !list.Any();
         }
 
-        internal static IEnumerable<IMigration> CheckForDuplicates(this IEnumerable<IMigration> list)
+        internal static IEnumerable<TMigrationType> CheckForDuplicates<TMigrationType>(this IEnumerable<TMigrationType> list)
+            where TMigrationType : class, IMigration
         {
             var uniqueHashes = new HashSet<string>();
             foreach (var element in list)
@@ -29,10 +30,11 @@ namespace Mongo.Migration.Extensions
             return list;
         }
         
-        internal static IDictionary<Type, IReadOnlyCollection<IMigration>> ToMigrationDictionary(
-            this IEnumerable<IMigration> migrations)
+        internal static IDictionary<Type, IReadOnlyCollection<TMigrationType>> ToMigrationDictionary<TMigrationType>(
+            this IEnumerable<TMigrationType> migrations)
+            where TMigrationType : class, IMigration
         {
-            var dictonary = new Dictionary<Type, IReadOnlyCollection<IMigration>>();
+            var dictonary = new Dictionary<Type, IReadOnlyCollection<TMigrationType>>();
             var list = migrations.ToList();
             var types = (from m in list select m.Type).Distinct();
 

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Mongo.Migration.Documents;
 using Mongo.Migration.Migrations.Locators;
@@ -10,11 +9,11 @@ namespace Mongo.Migration.Migrations
 {
     internal class MigrationRunner : IMigrationRunner
     {
-        private readonly IMigrationLocator _migrationLocator;
+        private readonly IMigrationLocator<IDocumentMigration> _migrationLocator;
 
         private readonly IVersionService _versionService;
 
-        public MigrationRunner(IMigrationLocator migrationLocator, IVersionService versionService)
+        public MigrationRunner(IMigrationLocator<IDocumentMigration> migrationLocator, IVersionService versionService)
         {
             _migrationLocator = migrationLocator;
             _versionService = versionService;

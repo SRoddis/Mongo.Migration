@@ -9,9 +9,5 @@ namespace Mongo.Migration.Migrations
         DocumentVersion Version { get; }
 
         Type Type { get; }
-
-        void Up(BsonDocument document);
-
-        void Down(BsonDocument document);
     }
 }

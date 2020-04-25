@@ -22,7 +22,7 @@ namespace Mongo.Migration.Services
 
         DocumentVersion DetermineLastVersion(
             DocumentVersion version,
-            List<IMigration> migrations,
+            List<IDocumentMigration> migrations,
             int currentMigration);
     }
 }

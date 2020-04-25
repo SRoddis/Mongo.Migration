@@ -88,10 +88,10 @@ public class Car : IDocument
     public DocumentVersion Version { get; set; }
 }
 ```
-3. Create a migration by extending the abstract class `Migration<TDocument>`. Best practice for the version is to use [Semantic Versioning](http://semver.org/) but ultimately it is up to you. You could simply use the patch version to count the number of migrations. If there is a duplicate for a specific type an exception is thrown on initialization.
+3. Create a migration by extending the abstract class `DocumentMigration<TDocument>`. Best practice for the version is to use [Semantic Versioning](http://semver.org/) but ultimately it is up to you. You could simply use the patch version to count the number of migrations. If there is a duplicate for a specific type an exception is thrown on initialization.
 
 ```csharp
-public class M001_RenameDorsToDoors : Migration<Car>
+public class M001_RenameDorsToDoors : DocumentMigration<Car>
 {
     public M001_RenameDorsToDoors()
         : base("0.0.1")
@@ -252,7 +252,7 @@ When that is done, you can pass the Adapter as a parameter to initialize `Mongo.
 ```
 
 ```csharp
-    public class M001_RenameDorsToDoors : Migration<Car>
+    public class M001_RenameDorsToDoors : DocumentMigration<Car>
     {
         private readonly IYourDependency _service;
 

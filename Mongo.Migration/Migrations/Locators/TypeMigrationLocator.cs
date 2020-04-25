@@ -4,17 +4,17 @@ using Mongo.Migration.Extensions;
 
 namespace Mongo.Migration.Migrations.Locators
 {
-    internal class TypeMigrationLocator : MigrationLocator
+    internal class TypeMigrationLocator : MigrationLocator<IDocumentMigration>
     {
         public override void Locate()
         {
             var migrationTypes =
                 (from assembly in Assemblies
                 from type in assembly.GetTypes()
-                where typeof(IMigration).IsAssignableFrom(type) && !type.IsAbstract
+                where typeof(IDocumentMigration).IsAssignableFrom(type) && !type.IsAbstract
                 select type).Distinct();
 
-            Migrations = migrationTypes.Select(t => (IMigration) Activator.CreateInstance(t)).ToMigrationDictionary();
+            Migrations = migrationTypes.Select(t => (IDocumentMigration) Activator.CreateInstance(t)).ToMigrationDictionary();
         }
     }
 }

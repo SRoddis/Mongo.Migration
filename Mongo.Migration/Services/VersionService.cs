@@ -15,7 +15,7 @@ namespace Mongo.Migration.Services
     {
         private static readonly string VERSION_FIELD_NAME = "Version";
 
-        private readonly IMigrationLocator _migrationLocator;
+        private readonly IMigrationLocator<IDocumentMigration> _migrationLocator;
 
         private readonly IRuntimeVersionLocator _runtimeVersionLocator;
 
@@ -24,7 +24,7 @@ namespace Mongo.Migration.Services
         private readonly string _versionFieldName;
 
         public VersionService(
-            IMigrationLocator migrationLocator,
+            IMigrationLocator<IDocumentMigration> migrationLocator,
             IRuntimeVersionLocator runtimeVersionLocator,
             IStartUpVersionLocator startUpVersionLocator,
             IMongoMigrationSettings mongoMigrationSettings)
@@ -92,7 +92,7 @@ namespace Mongo.Migration.Services
             throw new VersionViolationException(currentVersion.ToString(), documentVersion, latestVersion);
         }
 
-        public DocumentVersion DetermineLastVersion(DocumentVersion version, List<IMigration> migrations,
+        public DocumentVersion DetermineLastVersion(DocumentVersion version, List<IDocumentMigration> migrations,
             int currentMigration)
         {
             if (migrations.Last() != migrations[currentMigration])

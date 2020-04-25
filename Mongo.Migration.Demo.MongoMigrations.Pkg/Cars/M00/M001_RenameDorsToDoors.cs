@@ -4,7 +4,7 @@ using MongoDB.Bson;
 
 namespace Mongo.Migration.Demo.MongoMigrations.Pkg.Cars.M00
 {
-    public class M001_RenameDorsToDoors : Migration<Car>
+    public class M001_RenameDorsToDoors : DocumentMigration<Car>
     {
         public M001_RenameDorsToDoors()
             : base("0.0.1")

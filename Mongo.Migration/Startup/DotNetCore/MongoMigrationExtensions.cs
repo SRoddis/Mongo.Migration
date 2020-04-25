@@ -24,9 +24,9 @@ namespace Mongo.Migration.Startup.DotNetCore
         private static void RegisterDefaults(IServiceCollection services, IMongoMigrationSettings settings)
         {
             services.AddSingleton(settings);
-            
+
             services.AddSingleton<IContainerProvider, ServiceProvider>();
-            services.AddSingleton<IMigrationLocator, TypeMigrationDependencyLocator>();
+            services.AddSingleton(typeof(IMigrationLocator<>), typeof(TypeMigrationDependencyLocator<>));
             services.AddSingleton<ICollectionLocator, CollectionLocator>();
             services.AddSingleton<IRuntimeVersionLocator, RuntimeVersionLocator>();
             services.AddSingleton<IStartUpVersionLocator, StartUpVersionLocator>();
@@ -37,7 +37,10 @@ namespace Mongo.Migration.Startup.DotNetCore
 
             services.AddTransient<ICollectionMigrationRunner, CollectionMigrationRunner>();
             services.AddTransient<IMigrationRunner, MigrationRunner>();
-            
+
+            services.AddTransient<IDatabaseMigrationRunner, DatabaseMigrationRunner>();
+            services.AddTransient<IAdvancedMigrationRunner, AdvancedMigrationRunner>();
+
             services.AddTransient<IMigrationInterceptorProvider, MigrationInterceptorProvider>();
 
             services.AddTransient<IMongoMigration, MongoMigration>();

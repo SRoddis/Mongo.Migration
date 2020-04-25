@@ -6,7 +6,7 @@ using MongoDB.Bson;
 
 namespace Mongo.Migration.Demo.MongoMigrations.Cars.M00
 {
-    public class M001_RenameDorsToDoors : Migration<Car>
+    public class M001_RenameDorsToDoors : DocumentMigration<Car>
     {
         private readonly IVersionService _service;
 

@@ -1,4 +1,5 @@
 ﻿using Mongo.Migration.Documents.Locators;
+using Mongo.Migration.Migrations;
 using Mongo.Migration.Migrations.Locators;
 using Mongo.Migration.Services;
 
@@ -8,11 +9,11 @@ namespace Mongo.Migration
     {
         private readonly ICollectionLocator _collectionLocator;
         private readonly IStartUpVersionLocator _startUpVersionLocator;
-        private readonly IMigrationLocator _migrationLocator;
+        private readonly IMigrationLocator<IDocumentMigration> _migrationLocator;
         private readonly IMigrationService _migrationService;
         private readonly IRuntimeVersionLocator _runtimeVersionLocator;
 
-        public MongoMigration(IMigrationLocator migrationLocator, IRuntimeVersionLocator runtimeVersionLocator,
+        public MongoMigration(IMigrationLocator<IDocumentMigration> migrationLocator, IRuntimeVersionLocator runtimeVersionLocator,
             ICollectionLocator collectionLocator, IStartUpVersionLocator startUpVersionLocator, IMigrationService migrationService)
         {
             _migrationLocator = migrationLocator;

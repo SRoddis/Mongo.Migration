@@ -12,14 +12,16 @@ namespace Mongo.Migration.Services
     {
         private readonly ILogger<MigrationService> _logger;
         private readonly ICollectionMigrationRunner _migrationRunner;
+        private readonly IDatabaseMigrationRunner _dbMigrationRunner;
         private readonly IMigrationInterceptorProvider _provider;
         private readonly DocumentVersionSerializer _serializer;
 
         public MigrationService(DocumentVersionSerializer serializer, IMigrationInterceptorProvider provider,
-            ICollectionMigrationRunner migrationRunner)
+            ICollectionMigrationRunner migrationRunner, IDatabaseMigrationRunner dbMigrationRunner)
             : this(serializer, provider, NullLoggerFactory.Instance)
         {
             _migrationRunner = migrationRunner;
+            _dbMigrationRunner = dbMigrationRunner;
         }
 
         private MigrationService(
@@ -43,6 +45,7 @@ namespace Mongo.Migration.Services
         private void OnStartup()
         {
             _migrationRunner.RunAll();
+            _dbMigrationRunner.RunAll();
         }
 
         private void RegisterSerializer()

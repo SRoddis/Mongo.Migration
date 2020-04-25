@@ -18,10 +18,10 @@ namespace Mongo.Migration.Startup.Static
         public ComponentRegistry(IMongoMigrationSettings settings, IContainerAdapter containerAdapter = null)
         {
             _settings = settings;
-            
+
             if(containerAdapter == null)
                 containerAdapter = new LightInjectAdapter(new ServiceContainer());
-            
+
             _containerAdapter = containerAdapter;
         }
 
@@ -30,7 +30,7 @@ namespace Mongo.Migration.Startup.Static
             RegisterDefaults();
 
             _containerAdapter.RegisterInstance<IMongoClient>(client);
-            
+
             _containerAdapter.Register<IMigrationService, MigrationService>();
         }
 
@@ -42,11 +42,11 @@ namespace Mongo.Migration.Startup.Static
         private void RegisterDefaults()
         {
             _containerAdapter.RegisterInstance<IContainerProvider>(_containerAdapter);
-            
-            _containerAdapter.RegisterSingleton<IMigrationLocator, TypeMigrationDependencyLocator>();
-            
+
+            _containerAdapter.Register(typeof(IMigrationLocator<>), typeof( TypeMigrationDependencyLocator<>));
+
             _containerAdapter.RegisterInstance<IMongoMigrationSettings>(_settings);
-            
+
             _containerAdapter.RegisterSingleton<ICollectionLocator, CollectionLocator>();
             _containerAdapter.RegisterSingleton<IRuntimeVersionLocator, RuntimeVersionLocator>();
             _containerAdapter.RegisterSingleton<IStartUpVersionLocator, StartUpVersionLocator>();
@@ -58,6 +58,9 @@ namespace Mongo.Migration.Startup.Static
             _containerAdapter.Register<ICollectionMigrationRunner, CollectionMigrationRunner>();
             _containerAdapter.Register<IMigrationRunner, MigrationRunner>();
             _containerAdapter.Register<IMigrationInterceptorProvider, MigrationInterceptorProvider>();
+
+            _containerAdapter.Register<IDatabaseMigrationRunner, DatabaseMigrationRunner>();
+            _containerAdapter.Register<IAdvancedMigrationRunner, AdvancedMigrationRunner>();
 
             _containerAdapter.Register<IMongoMigration, MongoMigration>();
         }

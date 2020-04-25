@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Design;
 using Mongo.Migration.Demo.Model;
 using Mongo.Migration.Migrations.Adapters;
+using Mongo.Migration.Startup;
 using Mongo.Migration.Startup.Static;
 using Mongo2Go;
 using MongoDB.Bson;
@@ -33,10 +34,18 @@ namespace Mongo.Migration.Demo
                 client.GetDatabase("TestCars").GetCollection<BsonDocument>("Car");
 
             bsonCollection.InsertManyAsync(cars).Wait();
-            
-            
+
+
             // Init MongoMigration
-            MongoMigrationClient.Initialize(client, new LightInjectAdapter(new LightInject.ServiceContainer()));
+            MongoMigrationClient.Initialize(
+                client,
+                new MongoMigrationSettings()
+                {
+                    ConnectionString = runner.ConnectionString,
+                    Database = "TestCars",
+                    RunningVersion = "1.0.0"
+                },
+                new LightInjectAdapter(new LightInject.ServiceContainer()));
 
             Console.WriteLine("Migrate from:");
             cars.ForEach(c => Console.WriteLine(c.ToBsonDocument() + "\n"));
@@ -51,23 +60,32 @@ namespace Mongo.Migration.Demo
             // Create new car and add it with current version number into MongoDB
             var id = ObjectId.GenerateNewId();
             var type = "Test" + id;
-            var car = new Car {Doors = 2, Type = type};
+            var car = new Car { Doors = 2, Type = type };
 
             typedCollection.InsertOne(car);
             var test = typedCollection.FindAsync(Builders<Car>.Filter.Eq(c => c.Type, type)).Result.Single();
 
             var aggregate = typedCollection.Aggregate()
-                .Match(new BsonDocument {{"Dors", 3}});
+                .Match(new BsonDocument { { "Dors", 3 } });
             var results = aggregate.ToListAsync().Result;
 
             Console.WriteLine("New Car was created with version: " + test.Version);
             Console.WriteLine("\n");
+
+            var migrationsCollection = client.GetDatabase("TestCars").GetCollection<BsonDocument>("_migrationshistory");
+            var migrations = migrationsCollection.FindAsync(_ => true).Result.ToListAsync().Result;
+            migrations.ForEach(r => Console.WriteLine(r + "\n"));
+
+            var addedInMigration = typedCollection.FindAsync(Builders<Car>.Filter.Eq(c => c.Type, "AddedInMigration")).Result.FirstOrDefault();
+
+            Console.WriteLine("New Car was added in migration with type: " + addedInMigration?.Type);
 
             Console.WriteLine("\n");
             Console.WriteLine("Press any Key to exit...");
             Console.Read();
 
             client.GetDatabase("TestCars").DropCollection("Car");
+            client.GetDatabase("TestCars").DropCollection("_migrationshistory");
         }
     }
 }
