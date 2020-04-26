@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26430.15
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Git", "Git", "{CB26356F-6A6A-4B13-BD95-672A8AF24518}"
 	ProjectSection(SolutionItems) = preProject
@@ -27,10 +27,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mongo.Migration.Demo.MongoM
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{47979B8A-45B3-41C4-803A-98FE92A9A405}"
 	ProjectSection(SolutionItems) = preProject
+		NuGet\Mongo.Migration.nuspec = NuGet\Mongo.Migration.nuspec
 		NuGet\NuGet.exe = NuGet\NuGet.exe
 		NuGet\nuget.jpg = NuGet\nuget.jpg
 		NuGet\pack.ps1 = NuGet\pack.ps1
-		NuGet\Mongo.Migration.nuspec = NuGet\Mongo.Migration.nuspec
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mongo.Migration", "Mongo.Migration\Mongo.Migration.csproj", "{8DFFD615-1E1A-4BED-8A96-CAF4C3637E81}"
@@ -39,25 +39,27 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mongo.Migration.Demo.Core",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mongo.Migration.Demo.Model", "Mongo.Migration.Demo.Model\Mongo.Migration.Demo.Model.csproj", "{18AFB639-8FC0-4C78-8552-A8355A80454B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mongo.Migration.Demo.Performance.Console.Core", "Mongo.Migration.Demo.Performance.Console.Core\Mongo.Migration.Demo.Performance.Console.Core.csproj", "{C374130F-B6C5-4A08-BE93-7148EA453D37}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mongo.Migration.Demo.Performance.Console.Core", "Mongo.Migration.Demo.Performance.Console.Core\Mongo.Migration.Demo.Performance.Console.Core.csproj", "{C374130F-B6C5-4A08-BE93-7148EA453D37}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mongo.Migration.Test.Core", "Mongo.Migration.Test.Core\Mongo.Migration.Test.Core.csproj", "{1EEC8464-61D1-4FA3-97D4-21A35A45F3FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mongo.Migration.Test.Core", "Mongo.Migration.Test.Core\Mongo.Migration.Test.Core.csproj", "{1EEC8464-61D1-4FA3-97D4-21A35A45F3FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mongo.Migration.Demo.Core.Pkg", "Mongo.Migration.Demo.Core.Pkg\Mongo.Migration.Demo.Core.Pkg.csproj", "{DD04BE10-B6A0-49A8-937C-47A06968C270}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mongo.Migration.Demo.Core.Pkg", "Mongo.Migration.Demo.Core.Pkg\Mongo.Migration.Demo.Core.Pkg.csproj", "{DD04BE10-B6A0-49A8-937C-47A06968C270}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pkg", "Pkg", "{5AD796F1-D82B-4816-B4A9-5415C8F68FF3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mongo.Migration.Demo.Model.Pkg", "Mongo.Migration.Demo.Model.Pkg\Mongo.Migration.Demo.Model.Pkg.csproj", "{79EF2D4A-8F99-47B2-96F1-B40040B8AE64}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mongo.Migration.Demo.Model.Pkg", "Mongo.Migration.Demo.Model.Pkg\Mongo.Migration.Demo.Model.Pkg.csproj", "{79EF2D4A-8F99-47B2-96F1-B40040B8AE64}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mongo.Migration.Demo.MongoMigrations.Pkg", "Mongo.Migration.Demo.MongoMigrations.Pkg\Mongo.Migration.Demo.MongoMigrations.Pkg.csproj", "{668385C6-5FE3-4336-B9EA-52EC03F47100}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mongo.Migration.Demo.MongoMigrations.Pkg", "Mongo.Migration.Demo.MongoMigrations.Pkg\Mongo.Migration.Demo.MongoMigrations.Pkg.csproj", "{668385C6-5FE3-4336-B9EA-52EC03F47100}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mongo.Migration.Demo.WebCore", "Mongo.Migration.Demo.WebCore\Mongo.Migration.Demo.WebCore.csproj", "{492CBBD7-91B7-4BE6-B660-7542AE004FFE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mongo.Migration.Demo.WebCore", "Mongo.Migration.Demo.WebCore\Mongo.Migration.Demo.WebCore.csproj", "{492CBBD7-91B7-4BE6-B660-7542AE004FFE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mongo.Migration.Test", "Mongo.Migration.Test\Mongo.Migration.Test.csproj", "{8EDF4429-251A-416D-BB68-93F227191BCF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mongo.Migration.Demo", "Mongo.Migration.Demo\Mongo.Migration.Demo.csproj", "{4EEB72CC-4663-460F-A93B-58400E6898C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mongo.Migration.Demo.WebCore.Pgk", "Mongo.Migration.Demo.WebCore.Pgk\Mongo.Migration.Demo.WebCore.Pgk.csproj", "{FA802E68-DCCE-40B8-90D4-E3C534A99301}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mongo.Migration.Demo.WebCore.Pgk", "Mongo.Migration.Demo.WebCore.Pgk\Mongo.Migration.Demo.WebCore.Pgk.csproj", "{FA802E68-DCCE-40B8-90D4-E3C534A99301}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mongo.Migration.Database.Demo", "Mongo.Migration.Database.Demo\Mongo.Migration.Database.Demo.csproj", "{51655B29-4A0C-4AF3-82E7-8F8332E6BE94}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -117,6 +119,10 @@ Global
 		{FA802E68-DCCE-40B8-90D4-E3C534A99301}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA802E68-DCCE-40B8-90D4-E3C534A99301}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA802E68-DCCE-40B8-90D4-E3C534A99301}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51655B29-4A0C-4AF3-82E7-8F8332E6BE94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51655B29-4A0C-4AF3-82E7-8F8332E6BE94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51655B29-4A0C-4AF3-82E7-8F8332E6BE94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51655B29-4A0C-4AF3-82E7-8F8332E6BE94}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -126,13 +132,14 @@ Global
 		{A9AB73EC-2302-47F0-9EFB-496F0FFDF367} = {DB219944-127E-489A-9C06-1121DB9C17AD}
 		{18AFB639-8FC0-4C78-8552-A8355A80454B} = {DB219944-127E-489A-9C06-1121DB9C17AD}
 		{C374130F-B6C5-4A08-BE93-7148EA453D37} = {DB219944-127E-489A-9C06-1121DB9C17AD}
-		{5AD796F1-D82B-4816-B4A9-5415C8F68FF3} = {DB219944-127E-489A-9C06-1121DB9C17AD}
 		{DD04BE10-B6A0-49A8-937C-47A06968C270} = {5AD796F1-D82B-4816-B4A9-5415C8F68FF3}
+		{5AD796F1-D82B-4816-B4A9-5415C8F68FF3} = {DB219944-127E-489A-9C06-1121DB9C17AD}
 		{79EF2D4A-8F99-47B2-96F1-B40040B8AE64} = {5AD796F1-D82B-4816-B4A9-5415C8F68FF3}
 		{668385C6-5FE3-4336-B9EA-52EC03F47100} = {5AD796F1-D82B-4816-B4A9-5415C8F68FF3}
 		{492CBBD7-91B7-4BE6-B660-7542AE004FFE} = {DB219944-127E-489A-9C06-1121DB9C17AD}
 		{4EEB72CC-4663-460F-A93B-58400E6898C9} = {DB219944-127E-489A-9C06-1121DB9C17AD}
 		{FA802E68-DCCE-40B8-90D4-E3C534A99301} = {5AD796F1-D82B-4816-B4A9-5415C8F68FF3}
+		{51655B29-4A0C-4AF3-82E7-8F8332E6BE94} = {DB219944-127E-489A-9C06-1121DB9C17AD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {141CC212-9A27-4082-94E7-A80340DFDF4C}

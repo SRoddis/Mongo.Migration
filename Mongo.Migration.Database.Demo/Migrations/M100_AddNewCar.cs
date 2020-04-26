@@ -1,8 +1,7 @@
-﻿using Mongo.Migration.Demo.Model;
-using Mongo.Migration.Migrations.Database;
+﻿using Mongo.Migration.Migrations.Database;
 using MongoDB.Driver;
 
-namespace Mongo.Migration.Demo.MongoMigrations.Migrations
+namespace Mongo.Migration.Database.Demo.Migrations
 {
     public class M100_AddNewCar : DatabaseMigration
     {
@@ -17,8 +16,7 @@ namespace Mongo.Migration.Demo.MongoMigrations.Migrations
             collection.InsertOne(new Car
             {
                 Doors = 123,
-                Type = "AddedInMigration",
-                Version = "0.1.1"
+                Type = "AddedInMigration"
             });
         }
 

@@ -1,8 +1,7 @@
-﻿using Mongo.Migration.Demo.Model;
-using Mongo.Migration.Migrations.Database;
+﻿using Mongo.Migration.Migrations.Database;
 using MongoDB.Driver;
 
-namespace Mongo.Migration.Demo.MongoMigrations.Migrations
+namespace Mongo.Migration.Database.Demo.Migrations
 {
     public class M200_UpdateNewCar : DatabaseMigration
     {
