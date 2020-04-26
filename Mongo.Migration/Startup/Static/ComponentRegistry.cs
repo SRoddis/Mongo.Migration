@@ -44,11 +44,12 @@ namespace Mongo.Migration.Startup.Static
         {
             _containerAdapter.RegisterInstance<IContainerProvider>(_containerAdapter);
 
-            _containerAdapter.Register(typeof(IMigrationLocator<>), typeof( TypeMigrationDependencyLocator<>));
+            _containerAdapter.Register(typeof(IMigrationLocator<>), typeof(TypeMigrationDependencyLocator<>));
 
             _containerAdapter.RegisterInstance<IMongoMigrationSettings>(_settings);
 
             _containerAdapter.RegisterSingleton<ICollectionLocator, CollectionLocator>();
+            _containerAdapter.RegisterSingleton<IDatabaseTypeMigrationDependencyLocator, DatabaseTypeMigrationDependencyLocator>();
             _containerAdapter.RegisterSingleton<IRuntimeVersionLocator, RuntimeVersionLocator>();
             _containerAdapter.RegisterSingleton<IStartUpVersionLocator, StartUpVersionLocator>();
 

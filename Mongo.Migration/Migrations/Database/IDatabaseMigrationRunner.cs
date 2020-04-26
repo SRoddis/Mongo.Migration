@@ -5,6 +5,6 @@ namespace Mongo.Migration.Migrations.Database
 {
     internal interface IDatabaseMigrationRunner
     {
-        void Run(IMongoDatabase db, DocumentVersion runnigVersion);
+        void Run(IMongoDatabase db, DocumentVersion databaseMigrationVersion);
     }
 }

@@ -18,7 +18,7 @@ namespace Mongo.Migration.Migrations.Locators
 
         private IDictionary<Type, IReadOnlyCollection<TMigrationType>> _migrations;
 
-        protected IDictionary<Type, IReadOnlyCollection<TMigrationType>> Migrations
+        protected virtual IDictionary<Type, IReadOnlyCollection<TMigrationType>> Migrations
         {
             get
             {
@@ -38,7 +38,7 @@ namespace Mongo.Migration.Migrations.Locators
             IReadOnlyCollection<TMigrationType> migrations;
             Migrations.TryGetValue(type, out migrations);
 
-            return migrations;
+            return migrations ?? Enumerable.Empty<TMigrationType>();
         }
         
         public IEnumerable<TMigrationType> GetMigrationsFromTo(Type type, DocumentVersion version, DocumentVersion otherVersion)
@@ -76,7 +76,12 @@ namespace Mongo.Migration.Migrations.Locators
         {         
             var migrations = GetMigrations(type);
 
-            return migrations?.Max(m => m.Version) ?? DocumentVersion.Default();
+            if (migrations == null || !migrations.Any())
+            {
+                return DocumentVersion.Default();
+            }
+
+            return migrations.Max(m => m.Version);
         }
 
         public abstract void Locate();

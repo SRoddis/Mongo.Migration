@@ -9,9 +9,9 @@ namespace Mongo.Migration.Startup
 
         public string Database { get; set; }
 
-        public string VersionFieldName { get; set; }
+        public DocumentVersion DatabaseMigrationVersion { get; set; }
 
-        public DocumentVersion RunningVersion { get; set; }
+        public string VersionFieldName { get; set; }
 
         public MongoClientSettings ClientSettings { get; set; }
     }

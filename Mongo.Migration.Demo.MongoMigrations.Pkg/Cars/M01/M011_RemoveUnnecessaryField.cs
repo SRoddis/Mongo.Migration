@@ -4,7 +4,7 @@ using MongoDB.Bson;
 
 namespace Mongo.Migration.Demo.MongoMigrations.Pkg.Cars.M01
 {
-    public class M011_RemoveUnnecessaryField : DocumentMigration<Car>
+    public class M011_RemoveUnnecessaryField : Migration<Car>
     {
         public M011_RemoveUnnecessaryField()
             : base("0.1.1")

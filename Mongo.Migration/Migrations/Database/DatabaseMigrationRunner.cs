@@ -5,102 +5,119 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Mongo.Migration.Documents;
 using Mongo.Migration.Migrations.Locators;
-using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace Mongo.Migration.Migrations.Database
 {
     internal class DatabaseMigrationRunner : IDatabaseMigrationRunner
     {
+        private const string MigrationsCollectionName = "_migrations";
+        private readonly Type DatabaseMigrationType = typeof(DatabaseMigration);
         private ILogger _logger;
-        private IMigrationLocator<IDatabaseMigration> _migrationLocator { get; }
+        private IDatabaseTypeMigrationDependencyLocator _migrationLocator { get; }
 
-        public DatabaseMigrationRunner(IMigrationLocator<IDatabaseMigration> migrationLocator)
+        public DatabaseMigrationRunner(IDatabaseTypeMigrationDependencyLocator migrationLocator)
             : this(migrationLocator, NullLoggerFactory.Instance)
         {
             _migrationLocator = migrationLocator;
         }
 
         private DatabaseMigrationRunner(
-            IMigrationLocator<IDatabaseMigration> migrationLocator,
+            IDatabaseTypeMigrationDependencyLocator migrationLocator,
             ILoggerFactory loggerFactory)
         {
             _migrationLocator = migrationLocator;
             _logger = loggerFactory.CreateLogger<DatabaseMigrationRunner>();
         }
 
-        public void Run(IMongoDatabase db, DocumentVersion runningVersion)
+        public void Run(IMongoDatabase db, DocumentVersion databaseMigrationVersion)
         {
             _logger.LogInformation($"Database migration started.");
+            var migrationsCollection = GetMigrationsCollection(db);
+            var currentVersion = GetLatestOrDefaultVersion(migrationsCollection.Find(m => true).ToList());
 
-            IMongoCollection<BsonDocument> migrationshistory  = db.GetCollection<BsonDocument>("_migrationshistory");
+            var currentOrLatest = _migrationLocator.GetLatestVersion(typeof(DatabaseMigration));
 
-            var migrations = _migrationLocator.GetMigrations(typeof(DatabaseMigration)) ?? Enumerable.Empty<IDatabaseMigration>();
-            var migrationsToDowngrade = new List<IDatabaseMigration>();
+            if (currentVersion == currentOrLatest)
+            {
+                return;
+            }
+
+            MigrateUpOrDown(db, currentVersion, currentOrLatest);
+        }
+
+        private static IMongoCollection<MigrationHistory> GetMigrationsCollection(IMongoDatabase db)
+        {
+            return db.GetCollection<MigrationHistory>(MigrationsCollectionName);
+        }
+
+        private void MigrateUpOrDown(
+            IMongoDatabase db,
+            DocumentVersion currentVersion,
+            DocumentVersion to)
+        {
+            if (currentVersion > to)
+            {
+
+                MigrateDown(db, to);
+                return;
+            }
+
+            MigrateUp(db, currentVersion, to);
+
+        }
+
+        private void MigrateUp(IMongoDatabase db, DocumentVersion currentVersion, DocumentVersion toVersion)
+        {
+            var migrations = _migrationLocator.GetMigrationsFromTo(DatabaseMigrationType, currentVersion, toVersion).ToList();
 
             foreach (var migration in migrations)
             {
+                _logger.LogInformation("Database Migration Up: {0}:{1} ", currentVersion.GetType().ToString(), migration.Version);
 
-                var migrationsInDb = migrationshistory.FindSync(CreateQueryForMigration(migration.GetType().ToString())).ToList();
-
-                if (migrationsInDb.Count() > 0)
+                migration.Up(db);
+                GetMigrationsCollection(db).InsertOne(new MigrationHistory
                 {
-                    foreach (var document in migrationsInDb)
-                    {
-                        if (document["productVersion"].AsString < runningVersion || document["productVersion"].AsString == runningVersion)
-                            continue;
-                        else if (document["productVersion"].AsString > runningVersion)
-                        {
-                            migrationsToDowngrade.Add(migration);
-                        }
-                    }
-                }
-                else
-                {
-                    if (runningVersion > migration.Version || runningVersion == migration.Version)
-                    {
-                        try
-                        {
-                            _logger.LogInformation("Database Migration Up: {0}:{1} ", migration.GetType().ToString(), migration.Version);
+                    MigrationId = migration.GetType().ToString(),
+                    Version = migration.Version
+                });
 
-                            migration.Up(db);
-                            migrationshistory.InsertOne(new BsonDocument { { "migrationId", migration.GetType().ToString() }, { "productVersion", migration.Version.ToString() } });
-
-                            _logger.LogInformation("Database Migration Up finished successful: {0}:{1} ", migration.GetType().ToString(), migration.Version);
-                        }
-                        catch (Exception e)
-                        {
-                            _logger.LogError(e, "Error durring migration Up execution {0}:{1} ", migration.GetType().ToString(), migration.Version);
-                        }
-                    }
-                }
+                _logger.LogInformation("Database Migration Up finished successful: {0}:{1} ", migration.GetType().ToString(), migration.Version);
             }
-
-            migrationsToDowngrade.Reverse();
-            foreach (var migration in migrationsToDowngrade)
-            {
-                try
-                {
-                    _logger.LogInformation("Database Migration Down: {0}:{1} ", migration.GetType().ToString(), migration.Version);
-
-                    migration.Down(db);
-                    migrationshistory.DeleteOne(Builders<BsonDocument>.Filter.Eq("migrationId", migration.GetType().ToString()));
-
-                    _logger.LogInformation("Database Migration Down finished successful: {0}:{1} ", migration.GetType().ToString(), migration.Version);
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError(e, "Error durring migration Down execution {0}:{1} ", migration.GetType().ToString(), migration.Version);
-                }
-            }
-
-            _logger.LogInformation($"Database migration finished.");
         }
 
-        private FilterDefinition<BsonDocument> CreateQueryForMigration(
-            string type)
+        private void MigrateDown(IMongoDatabase db, DocumentVersion version)
         {
-            return Builders<BsonDocument>.Filter.Eq("migrationId", type);
+            var migrations = _migrationLocator
+                .GetMigrationsGtEq(DatabaseMigrationType, version)
+                .OrderByDescending(m => m.Version)
+                .ToList();
+
+            for (var m = 0; m < migrations.Count; m++)
+            {
+                var migration = migrations[m];
+                if (version == migration.Version)
+                {
+                    break;
+                }
+
+                _logger.LogInformation("Database Migration Down: {0}:{1} ", migration.GetType().ToString(), migration.Version);
+
+                migration.Down(db);
+                GetMigrationsCollection(db).DeleteOne(Builders<MigrationHistory>.Filter.Eq(mh => mh.MigrationId, migration.GetType().ToString()));
+
+                _logger.LogInformation("Database Migration Down finished successful: {0}:{1} ", migration.GetType().ToString(), migration.Version);
+            }
+        }
+
+        public DocumentVersion GetLatestOrDefaultVersion(IEnumerable<MigrationHistory> migrations)
+        {
+            if (migrations == null || !migrations.Any())
+            {
+                return DocumentVersion.Default();
+            }
+
+            return migrations.Max(m => m.Version);
         }
     }
 }

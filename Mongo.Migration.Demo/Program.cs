@@ -42,8 +42,7 @@ namespace Mongo.Migration.Demo
                 new MongoMigrationSettings()
                 {
                     ConnectionString = runner.ConnectionString,
-                    Database = "TestCars",
-                    RunningVersion = "1.0.0"
+                    Database = "TestCars"
                 },
                 new LightInjectAdapter(new LightInject.ServiceContainer()));
 
@@ -72,20 +71,23 @@ namespace Mongo.Migration.Demo
             Console.WriteLine("New Car was created with version: " + test.Version);
             Console.WriteLine("\n");
 
-            var migrationsCollection = client.GetDatabase("TestCars").GetCollection<BsonDocument>("_migrationshistory");
+            Console.WriteLine("Apply database migrations: ");
+            Console.WriteLine("\n");
+            var migrationsCollection = client.GetDatabase("TestCars").GetCollection<BsonDocument>("_migrations");
             var migrations = migrationsCollection.FindAsync(_ => true).Result.ToListAsync().Result;
             migrations.ForEach(r => Console.WriteLine(r + "\n"));
 
             var addedInMigration = typedCollection.FindAsync(Builders<Car>.Filter.Eq(c => c.Type, "AddedInMigration")).Result.FirstOrDefault();
 
-            Console.WriteLine("New Car was added in migration with type: " + addedInMigration?.Type);
+            Console.WriteLine("New Car was added and updated in database migrations: ");
+            Console.WriteLine(addedInMigration?.ToBsonDocument() + "\n");
 
             Console.WriteLine("\n");
             Console.WriteLine("Press any Key to exit...");
             Console.Read();
 
             client.GetDatabase("TestCars").DropCollection("Car");
-            client.GetDatabase("TestCars").DropCollection("_migrationshistory");
+            client.GetDatabase("TestCars").DropCollection("_migrations");
         }
     }
 }

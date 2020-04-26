@@ -17,12 +17,15 @@ namespace Mongo.Migration.Demo.MongoMigrations.Cars.M00
             collection.InsertOne(new Car
             {
                 Doors = 123,
-                Type = "AddedInMigration"
+                Type = "AddedInMigration",
+                Version = "0.1.1"
             });
         }
 
         public override void Down(IMongoDatabase db)
         {
+            var collection = db.GetCollection<Car>("Car");
+            collection.DeleteOne(Builders<Car>.Filter.Eq(c => c.Type, "AddedInMigration"));
         }
     }
 }
