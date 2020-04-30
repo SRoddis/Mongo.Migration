@@ -33,6 +33,7 @@ namespace Mongo.Migration.Startup.DotNetCore
             services.AddSingleton<IRuntimeVersionLocator, RuntimeVersionLocator>();
             services.AddSingleton<IStartUpVersionLocator, StartUpVersionLocator>();
 
+            services.AddTransient<IDatabaseVersionService, DatabaseVersionService>();
             services.AddTransient<IVersionService, VersionService>();
             services.AddTransient<IMigrationInterceptorFactory, MigrationInterceptorFactory>();
             services.AddTransient<DocumentVersionSerializer, DocumentVersionSerializer>();

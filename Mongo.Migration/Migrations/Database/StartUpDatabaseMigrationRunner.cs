@@ -1,4 +1,3 @@
-using Mongo.Migration.Documents;
 using Mongo.Migration.Documents.Attributes;
 using Mongo.Migration.Documents.Locators;
 using Mongo.Migration.Exceptions;
@@ -18,16 +17,13 @@ namespace Mongo.Migration.Migrations.Database
 
         private readonly string _databaseName;
 
-        private readonly string _databaseMigrationVersion;
-
         public StartUpDatabaseMigrationRunner(
             IMongoMigrationSettings settings,
-             ICollectionLocator collectionLocator,
+            ICollectionLocator collectionLocator,
             IDatabaseMigrationRunner migrationRunner)
             : this(
                 collectionLocator,
-                migrationRunner,
-                settings.DatabaseMigrationVersion)
+                migrationRunner)
         {
             if (settings.ConnectionString == null && settings.Database == null || settings.ClientSettings == null)
                 throw new MongoMigrationNoMongoClientException();
@@ -47,8 +43,7 @@ namespace Mongo.Migration.Migrations.Database
             IDatabaseMigrationRunner migrationRunner)
             : this(
                   collectionLocator,
-                  migrationRunner,
-                  settings.DatabaseMigrationVersion)
+                  migrationRunner)
         {
             _client = client;
             if (settings.ConnectionString == null && settings.Database == null) return;
@@ -59,10 +54,8 @@ namespace Mongo.Migration.Migrations.Database
 
         private StartUpDatabaseMigrationRunner(
             ICollectionLocator collectionLocator,
-            IDatabaseMigrationRunner migrationRunner,
-            DocumentVersion databaseMigrationVersion)
+            IDatabaseMigrationRunner migrationRunner)
         {
-            _databaseMigrationVersion = databaseMigrationVersion;
             _collectionLocator = collectionLocator;
             _migrationRunner = migrationRunner;
         }
@@ -73,7 +66,7 @@ namespace Mongo.Migration.Migrations.Database
             var information = locations.FirstOrDefault().Value;
             var databaseName = GetDatabaseOrDefault(information);
 
-            _migrationRunner.Run(_client.GetDatabase(databaseName), _databaseMigrationVersion);
+            _migrationRunner.Run(_client.GetDatabase(databaseName));
         }
 
         private string GetDatabaseOrDefault(CollectionLocationInformation information)

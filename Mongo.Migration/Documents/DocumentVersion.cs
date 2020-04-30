@@ -43,6 +43,11 @@ namespace Mongo.Migration.Documents
             return default(DocumentVersion);
         }
 
+        public static DocumentVersion Empty()
+        {
+            return new DocumentVersion(-1, 0, 0);
+        }
+
         public static implicit operator DocumentVersion(string version)
         {
             return new DocumentVersion(version);
@@ -114,12 +119,12 @@ namespace Mongo.Migration.Documents
                 return false;
             }
 
-            if (obj.GetType() != typeof (DocumentVersion))
+            if (obj.GetType() != typeof(DocumentVersion))
             {
                 return false;
             }
 
-            return Equals((DocumentVersion) obj);
+            return Equals((DocumentVersion)obj);
         }
 
         public override int GetHashCode()
@@ -127,8 +132,8 @@ namespace Mongo.Migration.Documents
             unchecked
             {
                 int result = Major;
-                result = (result*397) ^ Minor;
-                result = (result*397) ^ Revision;
+                result = (result * 397) ^ Minor;
+                result = (result * 397) ^ Revision;
                 return result;
             }
         }

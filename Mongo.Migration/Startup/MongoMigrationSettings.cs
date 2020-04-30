@@ -9,7 +9,7 @@ namespace Mongo.Migration.Startup
 
         public string Database { get; set; }
 
-        public DocumentVersion DatabaseMigrationVersion { get; set; }
+        public DocumentVersion DatabaseMigrationVersion { get; set; } = DocumentVersion.Empty();
 
         public string VersionFieldName { get; set; }
 
