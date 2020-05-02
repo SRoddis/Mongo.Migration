@@ -118,7 +118,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Interceptors\MigrationInterceptorFactory_when_creating.cs" />
     <Compile Include="Services\Interceptors\MigrationInterceptorProvider_when_get_serializer.cs" />
-    <Compile Include="Services\VersionService_when_determine_version.cs" />
+    <Compile Include="Services\DocumentVersionService_when_determine_version.cs" />
     <Compile Include="Migrations\Database\DatabaseMigrationRunnerSetup.cs" />
     <Compile Include="TestDoubles\Database\TestDatabaseMigration_0_0_3.cs" />
     <Compile Include="TestDoubles\Database\TestDatabaseMigration_0_0_2.cs" />
