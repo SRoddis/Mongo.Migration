@@ -27,7 +27,7 @@ Install via nuget https://www.nuget.org/packages/Mongo.Migration
 PM> Install-Package Mongo.Migration
 ```
 
-# Quick Start 
+# Document mingrations quick Start 
 
 #### .Net Framework
 1. Initialize `MongoMigration` behind the `MongoClient`. ([Mongo2Go](https://github.com/Mongo2Go/Mongo2Go))
@@ -118,17 +118,17 @@ add the suffix `".MongoMigrations"` to the name and make sure it is referenced i
     
 Compile, run and enjoy!
 
-## How to use
+## How to use document migration
 
 With version 3.0.0 of Mongo.Migration I added the possibility to run migrations on StartUp. 
 In order to keep the core of Mongo.Migration in focus, it is still possible to run migrations at runtime (on-the-fly). 
 In addition, there is now the option of executing migrations at the start of the application.
 
-#### At runtime
+#### Document migration at runtime
 
 See `Quick Start ` 
 
-#### On startup
+#### Document migration on startup
 
 If you want to run migrations on StartUp, the only thing you have to do is add the attribute `CollectionLocation`. 
 Now all migrations you add for a `IDocument` will be executed at StartUp.
@@ -168,7 +168,7 @@ Additionally you can fix the version of the document with  `StartUpVersion`
 Mongo.Migration uses the IStartUpFilter for .net core. 
 Maybe you want to read this [article](https://andrewlock.net/running-async-tasks-on-app-startup-in-asp-net-core-part-1/), to check if there is a better option to migrate with Mongo.Migration at StartUp.
 
-#### On startup and at runtime
+#### Document migration on startup and at runtime
 
 This is an example how you can use both.
 At startup the version will be 0.0.1 and at runtime, when a document will be deserialized the version will be migrated to 0.1.1
@@ -190,7 +190,7 @@ At startup the version will be 0.0.1 and at runtime, when a document will be des
 ```
 
 
-## Annotations
+### Annotations
 
 #### RuntimeVersion
 Add `RuntimeVersion` attribute to mark the current version of the document. So you have the possibility to downgrade in case of a rollback.
@@ -217,6 +217,108 @@ Add `StartUpVersion` attribute to set the version you want to migrate to at star
 public class Car : IDocument
 ...
 ```
+
+# Database migrations quick start
+With version 4.0.0 of Mongo.Migration was added the possibility to run database migrations on StartUp. 
+Now exist additional option of executing migrations which can manipulate the Mongo Database, insert documents, rename collections and other operations that you need. It's more generic operations than only manipulate document when exists.
+
+#### .Net Framework
+1. Initialize `MongoMigration` behind the `MongoClient`. ([Mongo2Go](https://github.com/Mongo2Go/Mongo2Go))
+
+```csharp
+// Init MongoDB
+var runner = MongoDbRunner.Start(); // Mongo2Go
+var client = new MongoClient(runner.ConnectionString);
+
+// Init MongoMigration
+ MongoMigrationClient.Initialize(
+                client,
+                new MongoMigrationSettings()
+                {
+                    ConnectionString = runner.ConnectionString,
+                    Database = "TestCars"
+                },
+                new LightInjectAdapter(new LightInject.ServiceContainer()))
+```
+    
+#### .Net Core
+
+1.1 Add `MongoMigration` with the StartupFilter (`IMongoClient` has to be registered at the DI-container before)
+
+```csharp
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddMvc();
+
+    _client = new MongoClient( _configuration.GetSection("MongoDb:ConnectionString").Value);
+    
+    services.AddSingleton<IMongoClient>(_client);
+                
+    services.AddMigration(new MongoMigrationSettings()
+                         {
+                             ConnectionString = runner.ConnectionString,
+                             Database = "TestCars"
+                         });
+}
+
+```
+1.2 Add `MongoMigration` with the StartupFilter add connection setting to use separate client
+```csharp
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddMvc();
+                
+    services.AddMigration(new MongoMigrationSettings
+    {
+        ConnectionString = _configuration.GetSection("MongoDb:ConnectionString").Value,
+        Database = _configuration.GetSection("MongoDb:Database").Value, 
+        DatabaseMigrationVersion = new DocumentVersion(2,0,0) // Optional
+    });
+}
+```
+
+    
+2. Create a migration by extending the abstract class `DatabaseMigration`. Best practice for the version is to use [Semantic Versioning](http://semver.org/) but ultimately it is up to you. You could simply use the patch version to count the number of migrations. All database migrations you add for a database will be executed at StartUp.
+
+```csharp
+    public class M100_AddNewCar : DatabaseMigration
+    {
+        public M100_AddNewCar()
+            : base("1.0.0")
+        {
+        }
+
+        public override void Up(IMongoDatabase db)
+        {
+            var collection = db.GetCollection<Car>("Car");
+            collection.InsertOne(new Car
+            {
+                Doors = 123,
+                Type = "AddedInMigration"
+            });
+        }
+
+        public override void Down(IMongoDatabase db)
+        {
+            var collection = db.GetCollection<Car>("Car");
+            collection.DeleteOne(Builders<Car>.Filter.Eq(c => c.Type, "AddedInMigration"));
+        }
+    }
+```
+
+### Annotations
+#### CollectionLocation
+`CollectionLocation` attribute if you not specify database in MongoMigrationSettings then database from attribure will be use at startup.
+
+#### Setup current database version
+Database will downgrade to current version using database migrations
+```csharp
+new MongoMigrationSettings()
+{
+    ...
+    DatabaseMigrationVersion = new DocumentVersion(2,0,0)
+}
+``` 
 
 ## Dependency injection
 With the latest update (3.0.94) I added a requested feature to `Mongo.Migration`. `Migration` can be injected with dependencies from now on.
@@ -265,7 +367,7 @@ When that is done, you can pass the Adapter as a parameter to initialize `Mongo.
     ...
 ```
 
-## Demo
+## Document migrations demo
 
 Inside of the repository you can find a [Mongo.Migration.Demo]( https://github.com/SRoddis/Mongo.Migration/tree/master/Mongo.Migration.Demo) which is a simple demo to show how to use Mongo.Migration. 
 
@@ -297,6 +399,35 @@ Inside of the repository you can find a [Mongo.Migration.Demo]( https://github.c
 ```
 
 3. `(Optional)` Run [Mongo.Migration.Demo.Performance.Console]( https://github.com/SRoddis/Mongo.Migration/tree/master/Mongo.Migration.Demo.Performance.Console)
+
+
+## Database migrations demo
+
+Inside of the repository you can find a [Mongo.Migration.Database.Demo]( https://github.com/SRoddis/Mongo.Migration/tree/master/Mongo.Migration.Database.Demo) which is a simple demo to show how to use database Mongo.Migration. 
+
+1. Compile and run the demo application.
+2. Now you should see the following output in the console.
+
+```bash
+Apply database migrations:
+
+
+{ "_id" : ObjectId("5ead80b68f9c4c402c35ebb9"), "MigrationId" : "Mongo.Migration.Database.Demo.Migrations.M100_AddNewCar", "Version" : "1.0.0" }
+
+{ "_id" : ObjectId("5ead80b68f9c4c402c35ebba"), "MigrationId" : "Mongo.Migration.Database.Demo.Migrations.M200_UpdateNewCar", "Version" : "2.0.0" }
+
+{ "_id" : ObjectId("5ead80b78f9c4c402c35ebbb"), "MigrationId" : "Mongo.Migration.Database.Demo.Migrations.M300_AddSparePartsCollection", "Version" : "3.0.0" }
+
+New Car was added and updated in database migrations:
+{ "_id" : ObjectId("5ead80b68f9c4c402c35ebb8"), "Type" : "AddedInMigration", "Doors" : 222 }
+
+New collection was added in database:
+SparePart
+
+
+
+Press any Key to exit...
+```
 
 
 ## Suggestions

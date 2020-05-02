@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel.Design;
 using Mongo.Migration.Demo.Model;
 using Mongo.Migration.Migrations.Adapters;
-using Mongo.Migration.Startup;
 using Mongo.Migration.Startup.Static;
 using Mongo2Go;
 using MongoDB.Bson;
@@ -37,14 +36,7 @@ namespace Mongo.Migration.Demo
 
 
             // Init MongoMigration
-            MongoMigrationClient.Initialize(
-                client,
-                new MongoMigrationSettings()
-                {
-                    ConnectionString = runner.ConnectionString,
-                    Database = "TestCars"
-                },
-                new LightInjectAdapter(new LightInject.ServiceContainer()));
+            MongoMigrationClient.Initialize(client, new LightInjectAdapter(new LightInject.ServiceContainer()));
 
             Console.WriteLine("Migrate from:");
             cars.ForEach(c => Console.WriteLine(c.ToBsonDocument() + "\n"));
@@ -71,23 +63,11 @@ namespace Mongo.Migration.Demo
             Console.WriteLine("New Car was created with version: " + test.Version);
             Console.WriteLine("\n");
 
-            Console.WriteLine("Apply database migrations: ");
-            Console.WriteLine("\n");
-            var migrationsCollection = client.GetDatabase("TestCars").GetCollection<BsonDocument>("_migrations");
-            var migrations = migrationsCollection.FindAsync(_ => true).Result.ToListAsync().Result;
-            migrations.ForEach(r => Console.WriteLine(r + "\n"));
-
-            var addedInMigration = typedCollection.FindAsync(Builders<Car>.Filter.Eq(c => c.Type, "AddedInMigration")).Result.FirstOrDefault();
-
-            Console.WriteLine("New Car was added and updated in database migrations: ");
-            Console.WriteLine(addedInMigration?.ToBsonDocument() + "\n");
-
             Console.WriteLine("\n");
             Console.WriteLine("Press any Key to exit...");
             Console.Read();
 
             client.GetDatabase("TestCars").DropCollection("Car");
-            client.GetDatabase("TestCars").DropCollection("_migrations");
         }
     }
 }
