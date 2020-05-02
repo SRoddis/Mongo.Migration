@@ -19,6 +19,9 @@ With version 3.0.0 of Mongo.Migration I added the possibility to run migrations 
 
 `**PLEASE NOTE**` If you use on-the-fly migration updates, aggregation pipeline and projections are not handled, because they don’t use serialization. You have to handle them yourself.
 
+With version 4.0.0 of Mongo.Migration was added the possibility to run database migrations on StartUp. 
+Now exist additional option of executing migrations which can manipulate the mongo database insert documents, rename collections and other operations that you need. It's more generic operations than only manipulate document when exists.
+
 # Installation
 
 Install via nuget https://www.nuget.org/packages/Mongo.Migration
@@ -27,7 +30,7 @@ Install via nuget https://www.nuget.org/packages/Mongo.Migration
 PM> Install-Package Mongo.Migration
 ```
 
-# Document mingrations quick Start 
+# Document migrations quick Start 
 
 #### .Net Framework
 1. Initialize `MongoMigration` behind the `MongoClient`. ([Mongo2Go](https://github.com/Mongo2Go/Mongo2Go))
@@ -219,8 +222,6 @@ public class Car : IDocument
 ```
 
 # Database migrations quick start
-With version 4.0.0 of Mongo.Migration was added the possibility to run database migrations on StartUp. 
-Now exist additional option of executing migrations which can manipulate the Mongo Database, insert documents, rename collections and other operations that you need. It's more generic operations than only manipulate document when exists.
 
 #### .Net Framework
 1. Initialize `MongoMigration` behind the `MongoClient`. ([Mongo2Go](https://github.com/Mongo2Go/Mongo2Go))
