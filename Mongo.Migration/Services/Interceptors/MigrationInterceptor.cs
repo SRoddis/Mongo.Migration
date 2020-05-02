@@ -9,18 +9,18 @@ namespace Mongo.Migration.Services.Interceptors
     internal class MigrationInterceptor<TDocument> : BsonClassMapSerializer<TDocument> where TDocument : class, IDocument
     {
         private readonly IDocumentMigrationRunner _migrationRunner;
-        private readonly IVersionService _versionService;
+        private readonly IDocumentVersionService _documentVersionService;
 
-        public MigrationInterceptor(IDocumentMigrationRunner migrationRunner, IVersionService versionService)
+        public MigrationInterceptor(IDocumentMigrationRunner migrationRunner, IDocumentVersionService documentVersionService)
             : base(BsonClassMap.LookupClassMap(typeof(TDocument)))
         {
             _migrationRunner = migrationRunner;
-            _versionService = versionService;
+            _documentVersionService = documentVersionService;
         }
 
         public override void Serialize(BsonSerializationContext context, BsonSerializationArgs args, TDocument value)
         {
-            _versionService.DetermineVersion(value);
+            _documentVersionService.DetermineVersion(value);
 
             base.Serialize(context, args, value);
         }

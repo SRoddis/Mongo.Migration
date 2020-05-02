@@ -6,7 +6,7 @@ using MongoDB.Bson;
 
 namespace Mongo.Migration.Services
 {
-    public interface IVersionService
+    public interface IDocumentVersionService
     {
         string GetVersionFieldName();
 

@@ -11,18 +11,18 @@ namespace Mongo.Migration.Migrations.Document
     {
         private readonly IMigrationLocator<IDocumentMigration> _migrationLocator;
 
-        private readonly IVersionService _versionService;
+        private readonly IDocumentVersionService _documentVersionService;
 
-        public DocumentMigrationRunner(IMigrationLocator<IDocumentMigration> migrationLocator, IVersionService versionService)
+        public DocumentMigrationRunner(IMigrationLocator<IDocumentMigration> migrationLocator, IDocumentVersionService documentVersionService)
         {
             _migrationLocator = migrationLocator;
-            _versionService = versionService;
+            _documentVersionService = documentVersionService;
         }
         
         public void Run(Type type, BsonDocument document)
         {
-            var documentVersion = _versionService.GetVersionOrDefault(document);
-            var currentOrLatest = _versionService.GetCurrentOrLatestMigrationVersion(type);
+            var documentVersion = _documentVersionService.GetVersionOrDefault(document);
+            var currentOrLatest = _documentVersionService.GetCurrentOrLatestMigrationVersion(type);
 
             if (documentVersion == currentOrLatest)
                 return;
@@ -32,8 +32,8 @@ namespace Mongo.Migration.Migrations.Document
         
         public void Run(Type type, BsonDocument document, DocumentVersion to)
         {
-            var documentVersion = _versionService.GetVersionOrDefault(document);
-            var currentOrLatest = _versionService.GetCurrentOrLatestMigrationVersion(type);
+            var documentVersion = _documentVersionService.GetVersionOrDefault(document);
+            var currentOrLatest = _documentVersionService.GetCurrentOrLatestMigrationVersion(type);
 
             if (documentVersion == to || documentVersion == currentOrLatest)
                 return;
@@ -63,7 +63,7 @@ namespace Mongo.Migration.Migrations.Document
             foreach (var migration in migrations)
             {
                 migration.Up(document);
-                _versionService.SetVersion(document, migration.Version);
+                _documentVersionService.SetVersion(document, migration.Version);
             }
         }
 
@@ -81,8 +81,8 @@ namespace Mongo.Migration.Migrations.Document
 
                 migrations[m].Down(document);
 
-                var docVersion = _versionService.DetermineLastVersion(version, migrations, m);
-                _versionService.SetVersion(document, docVersion);
+                var docVersion = _documentVersionService.DetermineLastVersion(version, migrations, m);
+                _documentVersionService.SetVersion(document, docVersion);
             }
         }
     }

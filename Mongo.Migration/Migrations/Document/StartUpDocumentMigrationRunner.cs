@@ -20,16 +20,16 @@ namespace Mongo.Migration.Migrations.Document
 
         private readonly IDocumentMigrationRunner _migrationRunner;
 
-        private readonly IVersionService _versionService;
+        private readonly IDocumentVersionService _documentVersionService;
 
         public StartUpDocumentMigrationRunner(
             IMongoMigrationSettings settings,
             ICollectionLocator collectionLocator,
-            IVersionService versionService,
+            IDocumentVersionService documentVersionService,
             IDocumentMigrationRunner migrationRunner)
             : this(
                 collectionLocator,
-                versionService,
+                documentVersionService,
                 migrationRunner)
         {
             if (settings.ConnectionString == null && settings.Database == null || settings.ClientSettings == null)
@@ -47,11 +47,11 @@ namespace Mongo.Migration.Migrations.Document
             IMongoClient client,
             IMongoMigrationSettings settings,
             ICollectionLocator collectionLocator,
-            IVersionService versionService,
+            IDocumentVersionService documentVersionService,
             IDocumentMigrationRunner migrationRunner)
             : this(
                 collectionLocator,
-                versionService,
+                documentVersionService,
                 migrationRunner)
         {
             _client = client;
@@ -64,11 +64,11 @@ namespace Mongo.Migration.Migrations.Document
 
         private StartUpDocumentMigrationRunner(
             ICollectionLocator collectionLocator,
-            IVersionService versionService,
+            IDocumentVersionService documentVersionService,
             IDocumentMigrationRunner migrationRunner)
         {
             _collectionLocator = collectionLocator;
-            _versionService = versionService;
+            _documentVersionService = documentVersionService;
             _migrationRunner = migrationRunner;
         }
 
@@ -81,7 +81,7 @@ namespace Mongo.Migration.Migrations.Document
                 var information = locate.Value;
                 var type = locate.Key;
                 var databaseName = GetDatabaseOrDefault(information);
-                var collectionVersion = _versionService.GetCollectionVersion(type);
+                var collectionVersion = _documentVersionService.GetCollectionVersion(type);
 
                 var collection = _client.GetDatabase(databaseName)
                     .GetCollection<BsonDocument>(information.Collection);
@@ -124,11 +124,11 @@ namespace Mongo.Migration.Migrations.Document
         private FilterDefinition<BsonDocument> CreateQueryForRelevantDocuments(
             Type type)
         {
-            var currentVersion = _versionService.GetCurrentOrLatestMigrationVersion(type);
+            var currentVersion = _documentVersionService.GetCurrentOrLatestMigrationVersion(type);
 
-            var existFilter = Builders<BsonDocument>.Filter.Exists(_versionService.GetVersionFieldName(), false);
+            var existFilter = Builders<BsonDocument>.Filter.Exists(_documentVersionService.GetVersionFieldName(), false);
             var notEqualFilter = Builders<BsonDocument>.Filter.Ne(
-                _versionService.GetVersionFieldName(),
+                _documentVersionService.GetVersionFieldName(),
                 currentVersion);
 
             return Builders<BsonDocument>.Filter.Or(existFilter, notEqualFilter);

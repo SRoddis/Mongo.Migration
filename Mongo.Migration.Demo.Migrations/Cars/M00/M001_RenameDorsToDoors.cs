@@ -8,9 +8,9 @@ namespace Mongo.Migration.Demo.MongoMigrations.Cars.M00
 {
     public class M001_RenameDorsToDoors : DocumentMigration<Car>
     {
-        private readonly IVersionService _service;
+        private readonly IDocumentVersionService _service;
 
-        public M001_RenameDorsToDoors(IVersionService service)
+        public M001_RenameDorsToDoors(IDocumentVersionService service)
             : base("0.0.1")
         {
             _service = service;

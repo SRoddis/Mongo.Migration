@@ -11,7 +11,7 @@ using MongoDB.Bson;
 
 namespace Mongo.Migration.Services
 {
-    internal class VersionService : IVersionService
+    internal class DocumentVersionService : IDocumentVersionService
     {
         private static readonly string VERSION_FIELD_NAME = "Version";
 
@@ -23,7 +23,7 @@ namespace Mongo.Migration.Services
 
         private readonly string _versionFieldName;
 
-        public VersionService(
+        public DocumentVersionService(
             IMigrationLocator<IDocumentMigration> migrationLocator,
             IRuntimeVersionLocator runtimeVersionLocator,
             IStartUpVersionLocator startUpVersionLocator,

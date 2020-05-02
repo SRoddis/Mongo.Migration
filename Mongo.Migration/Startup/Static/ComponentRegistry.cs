@@ -53,7 +53,7 @@ namespace Mongo.Migration.Startup.Static
             _containerAdapter.RegisterSingleton<IRuntimeVersionLocator, RuntimeVersionLocator>();
             _containerAdapter.RegisterSingleton<IStartUpVersionLocator, StartUpVersionLocator>();
 
-            _containerAdapter.Register<IVersionService, VersionService>();
+            _containerAdapter.Register<IDocumentVersionService, DocumentVersionService>();
             _containerAdapter.Register<IDatabaseVersionService, DatabaseVersionService>();
             _containerAdapter.Register<IMigrationInterceptorFactory, MigrationInterceptorFactory>();
             _containerAdapter.Register<DocumentVersionSerializer, DocumentVersionSerializer>();
