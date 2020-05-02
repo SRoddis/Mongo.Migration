@@ -45,8 +45,8 @@ namespace Mongo.Migration.Services
 
         private void OnStartup()
         {
-            _startUpDocumentMigrationRunner.RunAll();
             _startUpDatabaseMigrationRunner.RunAll();
+            _startUpDocumentMigrationRunner.RunAll();
         }
 
         private void RegisterSerializer()
