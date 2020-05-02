@@ -4,10 +4,10 @@ using Mongo.Migration.Test.TestDoubles;
 using MongoDB.Bson;
 using NUnit.Framework;
 
-namespace Mongo.Migration.Test.Migrations
+namespace Mongo.Migration.Test.Migrations.Document
 {
     [TestFixture]
-    public class Migration_when_migrating
+    public class DocumentMigration_when_migrating
     {
         [Test]
         public void When_migrating_down_Then_document_changes()

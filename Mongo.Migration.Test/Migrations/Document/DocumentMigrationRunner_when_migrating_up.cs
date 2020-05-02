@@ -6,10 +6,10 @@ using Mongo.Migration.Test.TestDoubles;
 using MongoDB.Bson;
 using NUnit.Framework;
 
-namespace Mongo.Migration.Test.Migrations
+namespace Mongo.Migration.Test.Migrations.Document
 {
     [TestFixture]
-    internal class MigrationRunner_when_migrating_up : IntegrationTest
+    internal class DocumentMigrationRunner_when_migrating_up : IntegrationTest
     {
         private IDocumentMigrationRunner _runner;
 
