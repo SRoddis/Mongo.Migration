@@ -11,7 +11,7 @@ using MongoDB.Driver;
 
 namespace Mongo.Migration.Test.Migrations.Database
 {
-    public class DatabaseIntegrationTest : IDisposable
+    internal class DatabaseIntegrationTest : IDisposable
     {
         private const string MigrationsCollectionName = "_migrations";
 

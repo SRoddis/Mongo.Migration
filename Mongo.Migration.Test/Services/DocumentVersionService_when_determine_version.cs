@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace Mongo.Migration.Test.Services
 {
     [TestFixture]
-    internal class VersionService_when_determine_version : IntegrationTest
+    internal class DocumentVersionService_when_determine_version : IntegrationTest
     {
         private IDocumentVersionService _service;
         
