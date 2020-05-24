@@ -1,10 +1,10 @@
 ﻿using System;
-using Mongo.Migration.Migrations;
+using Mongo.Migration.Migrations.Document;
 using MongoDB.Bson;
 
 namespace Mongo.Migration.Test.TestDoubles
 {
-    internal class TestDocumentWithOneMigration_0_0_1 : Migration<TestDocumentWithOneMigration>
+    internal class TestDocumentWithOneMigration_0_0_1 : DocumentMigration<TestDocumentWithOneMigration>
     {
         public TestDocumentWithOneMigration_0_0_1() : base("0.0.1")
         {

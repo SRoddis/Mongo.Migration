@@ -2,8 +2,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Mongo.Migration.Documents.Locators;
 using Mongo.Migration.Documents.Serializers;
-using Mongo.Migration.Migrations;
 using Mongo.Migration.Migrations.Adapters;
+using Mongo.Migration.Migrations.Database;
+using Mongo.Migration.Migrations.Document;
 using Mongo.Migration.Migrations.Locators;
 using Mongo.Migration.Services;
 using Mongo.Migration.Services.Interceptors;
@@ -24,20 +25,25 @@ namespace Mongo.Migration.Startup.DotNetCore
         private static void RegisterDefaults(IServiceCollection services, IMongoMigrationSettings settings)
         {
             services.AddSingleton(settings);
-            
+
             services.AddSingleton<IContainerProvider, ServiceProvider>();
-            services.AddSingleton<IMigrationLocator, TypeMigrationDependencyLocator>();
+            services.AddSingleton(typeof(IMigrationLocator<>), typeof(TypeMigrationDependencyLocator<>));
+            services.AddSingleton<IDatabaseTypeMigrationDependencyLocator, DatabaseTypeMigrationDependencyLocator>();
             services.AddSingleton<ICollectionLocator, CollectionLocator>();
             services.AddSingleton<IRuntimeVersionLocator, RuntimeVersionLocator>();
             services.AddSingleton<IStartUpVersionLocator, StartUpVersionLocator>();
 
-            services.AddTransient<IVersionService, VersionService>();
+            services.AddTransient<IDatabaseVersionService, DatabaseVersionService>();
+            services.AddTransient<IDocumentVersionService, DocumentVersionService>();
             services.AddTransient<IMigrationInterceptorFactory, MigrationInterceptorFactory>();
             services.AddTransient<DocumentVersionSerializer, DocumentVersionSerializer>();
 
-            services.AddTransient<ICollectionMigrationRunner, CollectionMigrationRunner>();
-            services.AddTransient<IMigrationRunner, MigrationRunner>();
-            
+            services.AddTransient<IStartUpDocumentMigrationRunner, StartUpDocumentMigrationRunner>();
+            services.AddTransient<IDocumentMigrationRunner, DocumentMigrationRunner>();
+
+            services.AddTransient<IStartUpDatabaseMigrationRunner, StartUpDatabaseMigrationRunner>();
+            services.AddTransient<IDatabaseMigrationRunner, DatabaseMigrationRunner>();
+
             services.AddTransient<IMigrationInterceptorProvider, MigrationInterceptorProvider>();
 
             services.AddTransient<IMongoMigration, MongoMigration>();

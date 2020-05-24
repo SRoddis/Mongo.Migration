@@ -4,15 +4,15 @@ using Mongo.Migration.Documents;
 
 namespace Mongo.Migration.Migrations.Locators
 {
-    public interface IMigrationLocator
+    public interface IMigrationLocator<TMigrationType> where TMigrationType : class, IMigration
     {
-        IEnumerable<IMigration> GetMigrations(Type type);
+        IEnumerable<TMigrationType> GetMigrations(Type type);
 
-        IEnumerable<IMigration> GetMigrationsGt(Type type, DocumentVersion version);
+        IEnumerable<TMigrationType> GetMigrationsGt(Type type, DocumentVersion version);
 
-        IEnumerable<IMigration> GetMigrationsGtEq(Type type, DocumentVersion version);
+        IEnumerable<TMigrationType> GetMigrationsGtEq(Type type, DocumentVersion version);
 
-        IEnumerable<IMigration> GetMigrationsFromTo(Type type, DocumentVersion version, DocumentVersion otherVersion);
+        IEnumerable<TMigrationType> GetMigrationsFromTo(Type type, DocumentVersion version, DocumentVersion otherVersion);
 
         DocumentVersion GetLatestVersion(Type type);
 

@@ -3,10 +3,10 @@ using FluentAssertions;
 using Mongo.Migration.Test.TestDoubles;
 using NUnit.Framework;
 
-namespace Mongo.Migration.Test.Migrations
+namespace Mongo.Migration.Test.Migrations.Document
 {
     [TestFixture]
-    public class Migration_when_creating
+    public class DocumentMigration_when_creating
     {
         [Test]
         public void Then_migration_has_type_testClass()

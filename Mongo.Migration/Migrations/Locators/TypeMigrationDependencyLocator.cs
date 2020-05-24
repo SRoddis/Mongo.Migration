@@ -6,7 +6,8 @@ using Mongo.Migration.Migrations.Adapters;
 
 namespace Mongo.Migration.Migrations.Locators
 {
-    internal class TypeMigrationDependencyLocator : MigrationLocator
+    internal class TypeMigrationDependencyLocator<TMigrationType> : MigrationLocator<TMigrationType>
+        where TMigrationType: class, IMigration
     {
         private readonly IContainerProvider _containerProvider;
 
@@ -20,13 +21,13 @@ namespace Mongo.Migration.Migrations.Locators
             var migrationTypes =
                 (from assembly in Assemblies
                 from type in assembly.GetTypes()
-                where typeof(IMigration).IsAssignableFrom(type) && !type.IsAbstract
+                where typeof(TMigrationType).IsAssignableFrom(type) && !type.IsAbstract
                 select type).Distinct();
 
             Migrations = migrationTypes.Select(GetMigrationInstance).ToMigrationDictionary();
         }
 
-        private IMigration GetMigrationInstance(Type type)
+        private TMigrationType GetMigrationInstance(Type type)
         {
             ConstructorInfo constructor = type.GetConstructors()[0];
 
@@ -38,10 +39,10 @@ namespace Mongo.Migration.Migrations.Locators
                     .Select(o =>  _containerProvider.GetInstance(o))
                     .ToArray();
 
-                return Activator.CreateInstance(type, args) as IMigration;
+                return Activator.CreateInstance(type, args) as TMigrationType;
             }
 
-            return  Activator.CreateInstance(type) as IMigration;
+            return  Activator.CreateInstance(type) as TMigrationType;
         }
     }
 }

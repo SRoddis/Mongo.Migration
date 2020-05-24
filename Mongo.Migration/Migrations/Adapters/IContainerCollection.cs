@@ -1,3 +1,5 @@
+using System;
+
 namespace Mongo.Migration.Migrations.Adapters
 {
     public interface IContainerCollection
@@ -8,5 +10,7 @@ namespace Mongo.Migration.Migrations.Adapters
 
         void RegisterSingleton<TInterface, TImplementation>() where TInterface : class
             where TImplementation : class, TInterface;
+
+        void Register(Type serviceType, Type implementingType);
     }
 }

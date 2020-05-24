@@ -1,4 +1,5 @@
 ﻿using Mongo.Migration.Documents.Locators;
+using Mongo.Migration.Migrations.Document;
 using Mongo.Migration.Migrations.Locators;
 using Mongo.Migration.Services;
 
@@ -8,14 +9,21 @@ namespace Mongo.Migration
     {
         private readonly ICollectionLocator _collectionLocator;
         private readonly IStartUpVersionLocator _startUpVersionLocator;
-        private readonly IMigrationLocator _migrationLocator;
+        private readonly IMigrationLocator<IDocumentMigration> _documentMigrationLocator;
+        private readonly IDatabaseTypeMigrationDependencyLocator _databaseMigrationLocator;
         private readonly IMigrationService _migrationService;
         private readonly IRuntimeVersionLocator _runtimeVersionLocator;
 
-        public MongoMigration(IMigrationLocator migrationLocator, IRuntimeVersionLocator runtimeVersionLocator,
-            ICollectionLocator collectionLocator, IStartUpVersionLocator startUpVersionLocator, IMigrationService migrationService)
+        public MongoMigration(
+            IMigrationLocator<IDocumentMigration> documentMigrationLocator,
+            IDatabaseTypeMigrationDependencyLocator databaseMigrationLocator,
+            IRuntimeVersionLocator runtimeVersionLocator,
+            ICollectionLocator collectionLocator,
+            IStartUpVersionLocator startUpVersionLocator,
+            IMigrationService migrationService)
         {
-            _migrationLocator = migrationLocator;
+            _documentMigrationLocator = documentMigrationLocator;
+            _databaseMigrationLocator = databaseMigrationLocator;
             _runtimeVersionLocator = runtimeVersionLocator;
             _collectionLocator = collectionLocator;
             _startUpVersionLocator = startUpVersionLocator;
@@ -24,7 +32,8 @@ namespace Mongo.Migration
 
         public void Run()
         {
-            _migrationLocator.Locate();
+            _documentMigrationLocator.Locate();
+            _databaseMigrationLocator.Locate();
             _runtimeVersionLocator.Locate();
             _collectionLocator.Locate();
             _startUpVersionLocator.Locate();

@@ -1,25 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using Mongo.Migration.Documents;
 using Mongo.Migration.Exceptions;
 using Mongo.Migration.Extensions;
-using MongoDB.Bson.Serialization.Serializers;
 
 namespace Mongo.Migration.Migrations.Locators
 {
-    public abstract class MigrationLocator : IMigrationLocator
+    public abstract class MigrationLocator<TMigrationType> : IMigrationLocator<TMigrationType>
+        where TMigrationType: class, IMigration
     {
         private IEnumerable<Assembly> _assemblies;
         
         protected IEnumerable<Assembly> Assemblies => _assemblies ?? (_assemblies = GetAssemblies());
 
-        private IDictionary<Type, IReadOnlyCollection<IMigration>> _migrations;
+        private IDictionary<Type, IReadOnlyCollection<TMigrationType>> _migrations;
 
-        protected IDictionary<Type, IReadOnlyCollection<IMigration>> Migrations
+        protected virtual IDictionary<Type, IReadOnlyCollection<TMigrationType>> Migrations
         {
             get
             {
@@ -34,15 +33,15 @@ namespace Mongo.Migration.Migrations.Locators
             set { _migrations = value; }
         }
 
-        public IEnumerable<IMigration> GetMigrations(Type type)
+        public IEnumerable<TMigrationType> GetMigrations(Type type)
         {
-            IReadOnlyCollection<IMigration> migrations;
+            IReadOnlyCollection<TMigrationType> migrations;
             Migrations.TryGetValue(type, out migrations);
 
-            return migrations;
+            return migrations ?? Enumerable.Empty<TMigrationType>();
         }
         
-        public IEnumerable<IMigration> GetMigrationsFromTo(Type type, DocumentVersion version, DocumentVersion otherVersion)
+        public IEnumerable<TMigrationType> GetMigrationsFromTo(Type type, DocumentVersion version, DocumentVersion otherVersion)
         {
             var migrations = GetMigrations(type);
 
@@ -53,7 +52,7 @@ namespace Mongo.Migration.Migrations.Locators
                     .ToList();
         }
 
-        public IEnumerable<IMigration> GetMigrationsGt(Type type, DocumentVersion version)
+        public IEnumerable<TMigrationType> GetMigrationsGt(Type type, DocumentVersion version)
         {
             var migrations = GetMigrations(type);
 
@@ -63,7 +62,7 @@ namespace Mongo.Migration.Migrations.Locators
                     .ToList();
         }
 
-        public IEnumerable<IMigration> GetMigrationsGtEq(Type type, DocumentVersion version)
+        public IEnumerable<TMigrationType> GetMigrationsGtEq(Type type, DocumentVersion version)
         {
             var migrations = GetMigrations(type);
 
@@ -77,7 +76,12 @@ namespace Mongo.Migration.Migrations.Locators
         {         
             var migrations = GetMigrations(type);
 
-            return migrations?.Max(m => m.Version) ?? DocumentVersion.Default();
+            if (migrations == null || !migrations.Any())
+            {
+                return DocumentVersion.Default();
+            }
+
+            return migrations.Max(m => m.Version);
         }
 
         public abstract void Locate();

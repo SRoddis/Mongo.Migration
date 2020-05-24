@@ -1,22 +1,14 @@
-﻿using System;
-using Mongo.Migration.Documents;
-using MongoDB.Bson;
+﻿using Mongo.Migration.Documents;
+using Mongo.Migration.Migrations.Document;
+using System;
 
 namespace Mongo.Migration.Migrations
 {
-    public abstract class Migration<TClass> : IMigration where TClass : class, IDocument
+    [Obsolete]
+    public abstract class Migration<TClass> : DocumentMigration<TClass> where TClass : class, IDocument
     {
-        protected Migration(string version)
+        protected Migration(string version): base(version)
         {
-            Version = version;
         }
-
-        public DocumentVersion Version { get; }
-
-        public Type Type => typeof(TClass);
-
-        public abstract void Up(BsonDocument document);
-
-        public abstract void Down(BsonDocument document);
     }
 }

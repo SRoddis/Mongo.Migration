@@ -8,9 +8,9 @@ using Mongo.Migration.Startup;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
-namespace Mongo.Migration.Migrations
+namespace Mongo.Migration.Migrations.Document
 {
-    internal class CollectionMigrationRunner : ICollectionMigrationRunner
+    internal class StartUpDocumentMigrationRunner : IStartUpDocumentMigrationRunner
     {
         private readonly IMongoClient _client;
 
@@ -18,18 +18,18 @@ namespace Mongo.Migration.Migrations
 
         private readonly string _databaseName;
 
-        private readonly IMigrationRunner _migrationRunner;
+        private readonly IDocumentMigrationRunner _migrationRunner;
 
-        private readonly IVersionService _versionService;
+        private readonly IDocumentVersionService _documentVersionService;
 
-        public CollectionMigrationRunner(
+        public StartUpDocumentMigrationRunner(
             IMongoMigrationSettings settings,
             ICollectionLocator collectionLocator,
-            IVersionService versionService,
-            IMigrationRunner migrationRunner)
+            IDocumentVersionService documentVersionService,
+            IDocumentMigrationRunner migrationRunner)
             : this(
                 collectionLocator,
-                versionService,
+                documentVersionService,
                 migrationRunner)
         {
             if (settings.ConnectionString == null && settings.Database == null || settings.ClientSettings == null)
@@ -43,15 +43,15 @@ namespace Mongo.Migration.Migrations
             _databaseName = settings.Database;
         }
 
-        public CollectionMigrationRunner(
+        public StartUpDocumentMigrationRunner(
             IMongoClient client,
             IMongoMigrationSettings settings,
             ICollectionLocator collectionLocator,
-            IVersionService versionService,
-            IMigrationRunner migrationRunner)
+            IDocumentVersionService documentVersionService,
+            IDocumentMigrationRunner migrationRunner)
             : this(
                 collectionLocator,
-                versionService,
+                documentVersionService,
                 migrationRunner)
         {
             _client = client;
@@ -62,13 +62,13 @@ namespace Mongo.Migration.Migrations
             _databaseName = settings.Database;
         }
 
-        private CollectionMigrationRunner(
+        private StartUpDocumentMigrationRunner(
             ICollectionLocator collectionLocator,
-            IVersionService versionService,
-            IMigrationRunner migrationRunner)
+            IDocumentVersionService documentVersionService,
+            IDocumentMigrationRunner migrationRunner)
         {
             _collectionLocator = collectionLocator;
-            _versionService = versionService;
+            _documentVersionService = documentVersionService;
             _migrationRunner = migrationRunner;
         }
 
@@ -81,7 +81,7 @@ namespace Mongo.Migration.Migrations
                 var information = locate.Value;
                 var type = locate.Key;
                 var databaseName = GetDatabaseOrDefault(information);
-                var collectionVersion = _versionService.GetCollectionVersion(type);
+                var collectionVersion = _documentVersionService.GetCollectionVersion(type);
 
                 var collection = _client.GetDatabase(databaseName)
                     .GetCollection<BsonDocument>(information.Collection);
@@ -124,11 +124,11 @@ namespace Mongo.Migration.Migrations
         private FilterDefinition<BsonDocument> CreateQueryForRelevantDocuments(
             Type type)
         {
-            var currentVersion = _versionService.GetCurrentOrLatestMigrationVersion(type);
+            var currentVersion = _documentVersionService.GetCurrentOrLatestMigrationVersion(type);
 
-            var existFilter = Builders<BsonDocument>.Filter.Exists(_versionService.GetVersionFieldName(), false);
+            var existFilter = Builders<BsonDocument>.Filter.Exists(_documentVersionService.GetVersionFieldName(), false);
             var notEqualFilter = Builders<BsonDocument>.Filter.Ne(
-                _versionService.GetVersionFieldName(),
+                _documentVersionService.GetVersionFieldName(),
                 currentVersion);
 
             return Builders<BsonDocument>.Filter.Or(existFilter, notEqualFilter);

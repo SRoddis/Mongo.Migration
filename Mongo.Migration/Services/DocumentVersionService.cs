@@ -4,18 +4,18 @@ using System.Linq;
 using Mongo.Migration.Documents;
 using Mongo.Migration.Documents.Locators;
 using Mongo.Migration.Exceptions;
-using Mongo.Migration.Migrations;
+using Mongo.Migration.Migrations.Document;
 using Mongo.Migration.Migrations.Locators;
 using Mongo.Migration.Startup;
 using MongoDB.Bson;
 
 namespace Mongo.Migration.Services
 {
-    internal class VersionService : IVersionService
+    internal class DocumentVersionService : IDocumentVersionService
     {
         private static readonly string VERSION_FIELD_NAME = "Version";
 
-        private readonly IMigrationLocator _migrationLocator;
+        private readonly IMigrationLocator<IDocumentMigration> _migrationLocator;
 
         private readonly IRuntimeVersionLocator _runtimeVersionLocator;
 
@@ -23,8 +23,8 @@ namespace Mongo.Migration.Services
 
         private readonly string _versionFieldName;
 
-        public VersionService(
-            IMigrationLocator migrationLocator,
+        public DocumentVersionService(
+            IMigrationLocator<IDocumentMigration> migrationLocator,
             IRuntimeVersionLocator runtimeVersionLocator,
             IStartUpVersionLocator startUpVersionLocator,
             IMongoMigrationSettings mongoMigrationSettings)
@@ -92,7 +92,7 @@ namespace Mongo.Migration.Services
             throw new VersionViolationException(currentVersion.ToString(), documentVersion, latestVersion);
         }
 
-        public DocumentVersion DetermineLastVersion(DocumentVersion version, List<IMigration> migrations,
+        public DocumentVersion DetermineLastVersion(DocumentVersion version, List<IDocumentMigration> migrations,
             int currentMigration)
         {
             if (migrations.Last() != migrations[currentMigration])
