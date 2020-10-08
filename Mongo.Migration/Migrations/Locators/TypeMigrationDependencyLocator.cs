@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Mongo.Migration.Extensions;
@@ -9,6 +10,19 @@ namespace Mongo.Migration.Migrations.Locators
     internal class TypeMigrationDependencyLocator<TMigrationType> : MigrationLocator<TMigrationType>
         where TMigrationType: class, IMigration
     {
+        private class TypeComparer : IEqualityComparer<Type>
+        {
+            public bool Equals(Type x, Type y)
+            {
+                return x.AssemblyQualifiedName == y.AssemblyQualifiedName;
+            }
+
+            public int GetHashCode(Type obj)
+            {
+                return obj.AssemblyQualifiedName.GetHashCode();
+            }
+        }
+
         private readonly IContainerProvider _containerProvider;
 
         public TypeMigrationDependencyLocator(IContainerProvider containerProvider)
@@ -22,7 +36,7 @@ namespace Mongo.Migration.Migrations.Locators
                 (from assembly in Assemblies
                 from type in assembly.GetTypes()
                 where typeof(TMigrationType).IsAssignableFrom(type) && !type.IsAbstract
-                select type).Distinct();
+                select type).Distinct(new TypeComparer());
 
             Migrations = migrationTypes.Select(GetMigrationInstance).ToMigrationDictionary();
         }
