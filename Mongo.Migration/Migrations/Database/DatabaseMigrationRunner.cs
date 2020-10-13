@@ -55,8 +55,7 @@ namespace Mongo.Migration.Migrations.Database
         {
             if (databaseVersion > to)
             {
-
-                MigrateDown(db, to);
+                MigrateDown(db, databaseVersion, to);
                 return;
             }
 
@@ -78,17 +77,17 @@ namespace Mongo.Migration.Migrations.Database
             }
         }
 
-        private void MigrateDown(IMongoDatabase db, DocumentVersion currentVersion)
+        private void MigrateDown(IMongoDatabase db, DocumentVersion currentVersion, DocumentVersion toVersion)
         {
             var migrations = _migrationLocator
-                .GetMigrationsGtEq(DatabaseMigrationType, currentVersion)
+                .GetMigrationsGtEq(DatabaseMigrationType, toVersion)
                 .OrderByDescending(m => m.Version)
                 .ToList();
 
             for (var m = 0; m < migrations.Count; m++)
             {
                 var migration = migrations[m];
-                if (currentVersion == migration.Version)
+                if (migration.Version >= currentVersion)
                 {
                     break;
                 }
