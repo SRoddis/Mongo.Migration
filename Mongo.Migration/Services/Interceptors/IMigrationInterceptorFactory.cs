@@ -3,7 +3,7 @@ using MongoDB.Bson.Serialization;
 
 namespace Mongo.Migration.Services.Interceptors
 {
-    internal interface IMigrationInterceptorFactory
+    public interface IMigrationInterceptorFactory
     {
         IBsonSerializer Create(Type type);
     }

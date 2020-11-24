@@ -37,7 +37,7 @@ namespace Mongo.Migration.Startup.DotNetCore
 
             services.AddTransient<ICollectionMigrationRunner, CollectionMigrationRunner>();
             services.AddTransient<IMigrationRunner, MigrationRunner>();
-            services.AddTransient<MigrationInterceptorProvider, MigrationInterceptorProvider>();
+            services.AddTransient<IMigrationInterceptorProvider, MigrationInterceptorProvider>();
 
             services.AddTransient<IMongoMigration, MongoMigration>();
             services.AddTransient<IStartupFilter, MongoMigrationStartupFilter>();

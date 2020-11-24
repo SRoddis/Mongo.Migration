@@ -4,7 +4,7 @@ using Mongo.Migration.Services;
 
 namespace Mongo.Migration
 {
-    internal class MongoMigration : IMongoMigration
+    public class MongoMigration : IMongoMigration
     {
         private readonly ICollectionLocator _collectionLocator;
         private readonly IStartUpVersionLocator _startUpVersionLocator;

@@ -8,14 +8,14 @@ using MongoDB.Bson.Serialization;
 
 namespace Mongo.Migration.Services
 {
-    internal class MigrationService : IMigrationService
+    public class MigrationService : IMigrationService
     {
         private readonly ILogger<MigrationService> _logger;
         private readonly ICollectionMigrationRunner _migrationRunner;
-        private readonly MigrationInterceptorProvider _provider;
+        private readonly IMigrationInterceptorProvider _provider;
         private readonly DocumentVersionSerializer _serializer;
 
-        public MigrationService(DocumentVersionSerializer serializer, MigrationInterceptorProvider provider,
+        public MigrationService(DocumentVersionSerializer serializer, IMigrationInterceptorProvider provider,
             ICollectionMigrationRunner migrationRunner)
             : this(serializer, provider, NullLoggerFactory.Instance)
         {
@@ -24,7 +24,7 @@ namespace Mongo.Migration.Services
 
         private MigrationService(
             DocumentVersionSerializer serializer,
-            MigrationInterceptorProvider provider,
+            IMigrationInterceptorProvider provider,
             ILoggerFactory loggerFactory)
         {
             _serializer = serializer;

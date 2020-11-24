@@ -10,7 +10,7 @@ using MongoDB.Driver;
 
 namespace Mongo.Migration.Migrations
 {
-    internal class CollectionMigrationRunner : ICollectionMigrationRunner
+    public class CollectionMigrationRunner : ICollectionMigrationRunner
     {
         private readonly IMongoClient _client;
 

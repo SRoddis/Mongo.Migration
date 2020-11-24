@@ -6,7 +6,7 @@ using Mongo.Migration.Migrations.Adapters;
 
 namespace Mongo.Migration.Migrations.Locators
 {
-    internal class TypeMigrationDependencyLocator : MigrationLocator
+    public class TypeMigrationDependencyLocator : MigrationLocator
     {
         private readonly IContainerProvider _containerProvider;
 

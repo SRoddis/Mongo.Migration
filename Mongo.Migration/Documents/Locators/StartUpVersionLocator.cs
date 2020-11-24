@@ -6,7 +6,7 @@ using Mongo.Migration.Documents.Attributes;
 
 namespace Mongo.Migration.Documents.Locators
 {
-    internal class StartUpVersionLocator : AbstractLocator<DocumentVersion, Type>, IStartUpVersionLocator
+    public class StartUpVersionLocator : AbstractLocator<DocumentVersion, Type>, IStartUpVersionLocator
     {
         public override DocumentVersion? GetLocateOrNull(Type identifier)
         {

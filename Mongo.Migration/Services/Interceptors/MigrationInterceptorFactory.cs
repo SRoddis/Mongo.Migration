@@ -4,7 +4,7 @@ using MongoDB.Bson.Serialization;
 
 namespace Mongo.Migration.Services.Interceptors
 {
-    internal class MigrationInterceptorFactory : IMigrationInterceptorFactory
+    public class MigrationInterceptorFactory : IMigrationInterceptorFactory
     {
         private readonly IMigrationRunner _migrationRunner;
         private readonly IVersionService _versionService;

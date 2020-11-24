@@ -8,7 +8,7 @@ using MongoDB.Bson;
 
 namespace Mongo.Migration.Migrations
 {
-    internal class MigrationRunner : IMigrationRunner
+    public class MigrationRunner : IMigrationRunner
     {
         private readonly IMigrationLocator _migrationLocator;
 
