@@ -17,5 +17,9 @@ namespace Mongo.Migration.Migrations.Locators
         DocumentVersion GetLatestVersion(Type type);
 
         void Locate();
+
+        void LocateAndInitialiseMigrations();
+
+        void InitialiseMigrations();
     }
 }

@@ -24,7 +24,7 @@ namespace Mongo.Migration.Migrations.Locators
             get
             {
                 if (_migrations == null)
-                    Locate();
+                    LocateAndInitialiseMigrations();
                 
                 if (_migrations.NullOrEmpty())
                     throw new NoMigrationsFoundException();
@@ -81,7 +81,14 @@ namespace Mongo.Migration.Migrations.Locators
         }
 
         public abstract void Locate();
-        
+
+        public void LocateAndInitialiseMigrations()
+        {
+            Locate();
+            InitialiseMigrations();
+        }
+
+
         private static IEnumerable<Assembly> GetAssemblies()
         {
             var location = AppDomain.CurrentDomain.BaseDirectory;
@@ -96,6 +103,18 @@ namespace Mongo.Migration.Migrations.Locators
             assemblies.AddRange(migrationAssemblies);
 
             return assemblies;
+        }
+
+
+        public void InitialiseMigrations()
+        {
+            foreach (var migrationType in Migrations)
+            {
+                foreach (var migration in migrationType.Value)
+                {
+                    migration?.Initialise(); 
+                }
+            }
         }
     }
 }

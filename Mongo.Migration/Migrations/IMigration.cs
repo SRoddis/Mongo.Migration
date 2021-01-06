@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Mongo.Migration.Documents;
 using MongoDB.Bson;
 
@@ -13,5 +14,8 @@ namespace Mongo.Migration.Migrations
         void Up(BsonDocument document);
 
         void Down(BsonDocument document);
+
+        void Initialise();
+        
     }
 }

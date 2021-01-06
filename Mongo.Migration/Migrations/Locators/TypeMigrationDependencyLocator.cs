@@ -24,6 +24,8 @@ namespace Mongo.Migration.Migrations.Locators
                 select type).Distinct();
 
             Migrations = migrationTypes.Select(GetMigrationInstance).ToMigrationDictionary();
+
+        
         }
 
         private IMigration GetMigrationInstance(Type type)

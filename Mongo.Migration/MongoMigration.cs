@@ -24,7 +24,7 @@ namespace Mongo.Migration
 
         public void Run()
         {
-            _migrationLocator.Locate();
+            _migrationLocator.LocateAndInitialiseMigrations();
             _runtimeVersionLocator.Locate();
             _collectionLocator.Locate();
             _startUpVersionLocator.Locate();
