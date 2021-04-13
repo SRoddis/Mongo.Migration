@@ -29,7 +29,7 @@ namespace Mongo.Migration.Migrations
 
         public void Run(IMongoDatabase db, string runningVersion)
         {
-            _logger.LogInformation($"Iniciando a execução das Migrações ...");
+            _logger.LogInformation($"Starting the migrations ...");
 
             _db = db;
             _migrationshistory = db.GetCollection<BsonDocument>("_migrationshistory");
@@ -60,16 +60,16 @@ namespace Mongo.Migration.Migrations
                     {
                         try
                         {
-                            _logger.LogInformation("Iniciando a execução da Migração Up: {0}:{1} ", migration.GetType().ToString(), migration.Version);
+                            _logger.LogInformation("Starting the migration Up: {0}:{1} ", migration.GetType().ToString(), migration.Version);
 
                             migration.Up(_db);
                             _migrationshistory.InsertOne(new BsonDocument { { "migrationId", migration.GetType().ToString() }, { "productVersion", migration.Version } });
 
-                            _logger.LogInformation("Migração Up executada com sucesso: {0}:{1} ", migration.GetType().ToString(), migration.Version);
+                            _logger.LogInformation("Successful migration Up: {0}:{1} ", migration.GetType().ToString(), migration.Version);
                         }
                         catch (Exception e)
                         {
-                            _logger.LogError(e, "Erro ao executar upgrade da migração {0}:{1} ", migration.GetType().ToString(), migration.Version);
+                            _logger.LogError(e, "Error on migration Up {0}:{1} ", migration.GetType().ToString(), migration.Version);
                         }
                     }
                 }
@@ -80,20 +80,20 @@ namespace Mongo.Migration.Migrations
             {
                 try
                 {
-                    _logger.LogInformation("Iniciando a execução da Migração Down: {0}:{1} ", migration.GetType().ToString(), migration.Version);
+                    _logger.LogInformation("Starting the migration Down: {0}:{1} ", migration.GetType().ToString(), migration.Version);
 
                     migration.Down(_db);
                     _migrationshistory.DeleteOne(Builders<BsonDocument>.Filter.Eq("migrationId", migration.GetType().ToString()));
 
-                    _logger.LogInformation("Migração Down executada com sucesso: {0}:{1} ", migration.GetType().ToString(), migration.Version);
+                    _logger.LogInformation("Successful migration Down: {0}:{1} ", migration.GetType().ToString(), migration.Version);
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError(e, "Erro ao executar downgrade da migração {0}:{1} ", migration.GetType().ToString(), migration.Version);
+                    _logger.LogError(e, "Error on migration Down {0}:{1} ", migration.GetType().ToString(), migration.Version);
                 }
             }
 
-            _logger.LogInformation($"Migrações finalizadas.");
+            _logger.LogInformation($"Migrations has been done.");
         }
 
         private FilterDefinition<BsonDocument> CreateQueryForMigration(

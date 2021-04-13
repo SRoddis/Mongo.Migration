@@ -28,7 +28,6 @@ namespace Mongo.Migration
             _runtimeVersionLocator.Locate();
             _collectionLocator.Locate();
             _startUpVersionLocator.Locate();
-
             _migrationService.Migrate();
         }
     }

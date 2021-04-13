@@ -41,14 +41,6 @@ namespace Mongo.Migration.Utils
             return result.ModifiedCount;
         }
 
-        public static BsonArray GetTranslatableFieldArray(string nameEn, string namePt)
-        {
-            return new BsonArray {
-                new BsonDocument { { "lang", "en" }, { "value", nameEn } },
-                new BsonDocument { { "lang", "pt" }, { "value", namePt } }
-            };
-        }
-
         public static BsonValue TryGetValue(BsonDocument document, string attr, ILogger logger)
         {
             try
