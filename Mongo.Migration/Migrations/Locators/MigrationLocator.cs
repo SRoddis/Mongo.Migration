@@ -6,15 +6,18 @@ using System.Reflection;
 using Mongo.Migration.Documents;
 using Mongo.Migration.Exceptions;
 using Mongo.Migration.Extensions;
+using NLog;
 
 namespace Mongo.Migration.Migrations.Locators
 {
     public abstract class MigrationLocator<TMigrationType> : IMigrationLocator<TMigrationType>
         where TMigrationType: class, IMigration
     {
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        
         private IEnumerable<Assembly> _assemblies;
         
-        protected IEnumerable<Assembly> Assemblies => _assemblies ?? (_assemblies = GetAssemblies());
+        protected IEnumerable<Assembly> Assemblies => _assemblies ??= GetAssemblies();
 
         private IDictionary<Type, IReadOnlyCollection<TMigrationType>> _migrations;
 
@@ -26,11 +29,11 @@ namespace Mongo.Migration.Migrations.Locators
                     Locate();
                 
                 if (_migrations.NullOrEmpty())
-                    throw new NoMigrationsFoundException();
-
+                    _logger.Warn(new NoMigrationsFoundException());
+                
                 return _migrations;
             }
-            set { _migrations = value; }
+            set => _migrations = value;
         }
 
         public IEnumerable<TMigrationType> GetMigrations(Type type)
