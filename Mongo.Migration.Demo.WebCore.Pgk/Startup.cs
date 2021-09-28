@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Mongo.Migration.Demo.Model.Pkg;
+using Mongo.Migration.Startup;
 using Mongo.Migration.Startup.DotNetCore;
 using Mongo2Go;
 using MongoDB.Bson;
