@@ -54,8 +54,8 @@ artifacts:
   - path: '**\Mongo.Migration.*.nupkg'
 
 #uncomment to publish to NuGet
-deploy:
-  provider: NuGet
-  api_key:
-    secure: S+419hmbzF40jZCZcT9cZ8utMJTufhjX8t/VeCrO0dRhRKsHcBTixGU5aGXVHUHp
-  artifact: /.*\.nupkg/
+#deploy:
+#  provider: NuGet
+#  api_key:
+#    secure: S+419hmbzF40jZCZcT9cZ8utMJTufhjX8t/VeCrO0dRhRKsHcBTixGU5aGXVHUHp
+#  artifact: /.*\.nupkg/
