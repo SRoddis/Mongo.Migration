@@ -65,6 +65,10 @@ public void ConfigureServices(IServiceCollection services)
 public void ConfigureServices(IServiceCollection services)
 {
     services.AddMvc();
+
+    _client = new MongoClient( _configuration.GetSection("MongoDb:ConnectionString").Value);
+    
+    services.AddSingleton<IMongoClient>(_client);
                 
     services.AddMigration(new MongoMigrationSettings
     {
