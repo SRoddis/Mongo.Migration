@@ -87,7 +87,7 @@ namespace Mongo.Migration.Migrations.Database
             for (var m = 0; m < migrations.Count; m++)
             {
                 var migration = migrations[m];
-                if (migration.Version >= currentVersion)
+                if (migration.Version <= toVersion)
                 {
                     break;
                 }
