@@ -13,6 +13,8 @@ assembly_info:
   assembly_file_version: "{version}"
   assembly_informational_version: "{version}"
 
+platform: Any CPU
+
 dotnet_csproj:
   patch: true
   file: '**\*.csproj;**\*.props;**\*.fsproj;**\*.xml'
