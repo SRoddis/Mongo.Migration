@@ -10,12 +10,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Git", "Git", "{CB26356F-6A6
 		Readme.md = Readme.md
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AppVeyor", "AppVeyor", "{7238F7C1-C649-4E65-9F76-F27AF2C620CF}"
-	ProjectSection(SolutionItems) = preProject
-		appveyor.yml = appveyor.yml
-		post_build.cmd = post_build.cmd
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Information", "Information", "{11D545C6-1ED2-428C-94FA-B9DA0758F7DA}"
 	ProjectSection(SolutionItems) = preProject
 		Todo.txt = Todo.txt
