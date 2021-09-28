@@ -1,10 +1,11 @@
 using Mongo.Migration.Demo.Model.Pkg;
 using Mongo.Migration.Migrations;
+using Mongo.Migration.Migrations.Document;
 using MongoDB.Bson;
 
 namespace Mongo.Migration.Demo.MongoMigrations.Pkg.Cars.M01
 {
-    public class M011_RemoveUnnecessaryField : Migration<Car>
+    public class M011_RemoveUnnecessaryField : DocumentMigration<Car>
     {
         public M011_RemoveUnnecessaryField()
             : base("0.1.1")
