@@ -26,5 +26,5 @@ jobs:
         with:
           PROJECT_FILE_PATH: Mongo.Migration/Mongo.Migration.csproj
           PACKAGE_NAME: Mongo.Migration
-          VERSION_STATIC: ${{secrets.VERSION_MAJOR}}.${{secrets.VERSION_MINOR}}.${{github.run_number}}
+          VERSION_REGEX: '^\s*<PackageVersion>(.*)<\/PackageVersion>\s*$'
           NUGET_KEY: ${{secrets.NUGET_API_KEY}}

@@ -2,7 +2,8 @@
   <PropertyGroup>
     <AssemblyName>Mongo.Migration</AssemblyName>
     <RootNamespace>Mongo.Migration</RootNamespace>
-    <Version>1.1.1</Version>
+    <Version>3.1.4</Version>
+    <PackageVersion>3.1.4</PackageVersion>
     <TargetFrameworks>net5.0;netcoreapp3.1</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
@@ -18,7 +19,7 @@
     <PackageReference Include="NLog" Version="4.7.11" />
     <PackageReference Include="Serilog" Version="2.8.0" />
     <PackageReference Include="Serilog.Extensions.Logging" Version="2.0.4" />
-    <PackageReference Include="Serilog.Extensions.Logging.File" Version="2.0.0-dev-00032" />
+    <PackageReference Include="Serilog.Extensions.Logging.File" Version="2.0.0" />
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
 </Project>
