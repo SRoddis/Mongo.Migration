@@ -1,4 +1,4 @@
-name: Mongo.Migration build
+name: build
 
 on:
   push:

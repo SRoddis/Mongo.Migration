@@ -1,7 +1,7 @@
-name: Mongo.Migration publish nuget pkg
+name: publish nuget pkg
 on:
   workflow_run:
-    workflows: ["Mongo.Migration build"]
+    workflows: ["build"]
     branches: [ master ]
     types:
       - completed
@@ -26,5 +26,5 @@ jobs:
         with:
           PROJECT_FILE_PATH: Mongo.Migration/Mongo.Migration.csproj
           PACKAGE_NAME: Mongo.Migration
-          VERSION_STATIC: ${{secrets.VERSION_MAJOR}}.${{secrets.VERSION_MINOR}}.${{ github.run_number }}
+          VERSION_STATIC: ${{secrets.VERSION_MAJOR}}.${{secrets.VERSION_MINOR}}.${{github.run_number}}
           NUGET_KEY: ${{secrets.NUGET_API_KEY}}
