@@ -1,0 +1,30 @@
+name: Mongo.Migration publish nuget pkg
+on:
+  workflow_run:
+    workflows: ["Mongo.Migration build"]
+    branches: [ master ]
+    types:
+      - completed
+jobs:
+  publish:
+    name: build, pack & publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core 3.1	
+        uses: actions/setup-dotnet@v1	
+        with:	
+          dotnet-version: 3.1.x
+      - name: Setup .NET Core 5.0
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 5.0.x
+
+      - name: publish on version change
+        id: publish_nuget
+        uses: rohith/publish-nuget@v2
+        with:
+          PROJECT_FILE_PATH: Mongo.Migration/Mongo.Migration.csproj
+          PACKAGE_NAME: Mongo.Migration
+          VERSION_STATIC: ${{secrets.VERSION_MAJOR}}.${{secrets.VERSION_MINOR}}.${{ github.run_number }}
+          NUGET_KEY: ${{secrets.NUGET_API_KEY}}
