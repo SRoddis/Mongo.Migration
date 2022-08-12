@@ -9,11 +9,11 @@ namespace Mongo.Migration.Documents
 
         private const int MAX_LENGTH = 3;
 
-        public int Major { get; set; }
+        public int Major { get; init; }
 
-        public int Minor { get; set; }
+        public int Minor { get; init; }
 
-        public int Revision { get; set; }
+        public int Revision { get; init; }
 
         public DocumentVersion(string version)
         {
