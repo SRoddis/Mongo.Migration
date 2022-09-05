@@ -9,11 +9,11 @@ namespace Mongo.Migration.Documents
 
         private const int MAX_LENGTH = 3;
 
-        public readonly int Major;
+        public int Major { get; init; }
 
-        public readonly int Minor;
+        public int Minor { get; init; }
 
-        public readonly int Revision;
+        public int Revision { get; init; }
 
         public DocumentVersion(string version)
         {
@@ -24,11 +24,11 @@ namespace Mongo.Migration.Documents
                 throw new VersionStringToLongException(version);
             }
 
-            ParseVersionPart(versionParts[0], out Major);
+            Major = ParseVersionPart(versionParts[0]);
 
-            ParseVersionPart(versionParts[1], out Minor);
+            Minor = ParseVersionPart(versionParts[1]);
 
-            ParseVersionPart(versionParts[2], out Revision);
+            Revision = ParseVersionPart(versionParts[2]);
         }
 
         public DocumentVersion(int major, int minor, int revision)
@@ -142,13 +142,14 @@ namespace Mongo.Migration.Documents
 
         #region parse operations
 
-        private static void ParseVersionPart(string value, out int target)
+        private static int ParseVersionPart(string value)
         {
             string revisionString = value;
-            if (!int.TryParse(revisionString, out target))
+            if (!int.TryParse(revisionString, out var target))
             {
                 throw new InvalidVersionValueException(revisionString);
             }
+            return target;
         }
 
         #endregion
