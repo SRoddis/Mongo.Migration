@@ -55,7 +55,7 @@ namespace Mongo.Migration.Migrations.Database
         {
             if (databaseVersion > to)
             {
-                MigrateDown(db, databaseVersion, to);
+                MigrateDown(db, to);
                 return;
             }
 
@@ -77,7 +77,7 @@ namespace Mongo.Migration.Migrations.Database
             }
         }
 
-        private void MigrateDown(IMongoDatabase db, DocumentVersion currentVersion, DocumentVersion toVersion)
+        private void MigrateDown(IMongoDatabase db, DocumentVersion toVersion)
         {
             var migrations = _migrationLocator
                 .GetMigrationsGtEq(DatabaseMigrationType, toVersion)
