@@ -4,6 +4,7 @@ using Mongo.Migration.Documents.Serializers;
 using Mongo.Migration.Migrations.Database;
 using Mongo.Migration.Migrations.Document;
 using Mongo.Migration.Services.Interceptors;
+using Mongo.Migration.Startup;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 
@@ -16,10 +17,11 @@ namespace Mongo.Migration.Services
         private readonly IStartUpDatabaseMigrationRunner _startUpDatabaseMigrationRunner;
         private readonly IMigrationInterceptorProvider _provider;
         private readonly DocumentVersionSerializer _serializer;
+        private readonly IMongoMigrationSettings _settings;
 
         public MigrationService(DocumentVersionSerializer serializer, IMigrationInterceptorProvider provider,
-            IStartUpDocumentMigrationRunner startUpDocumentMigrationRunner, IStartUpDatabaseMigrationRunner startUpDatabaseMigrationRunner)
-            : this(serializer, provider, NullLoggerFactory.Instance)
+            IStartUpDocumentMigrationRunner startUpDocumentMigrationRunner, IStartUpDatabaseMigrationRunner startUpDatabaseMigrationRunner, IMongoMigrationSettings settings)
+            : this(serializer, provider, NullLoggerFactory.Instance, settings)
         {
             _startUpDocumentMigrationRunner = startUpDocumentMigrationRunner;
             _startUpDatabaseMigrationRunner = startUpDatabaseMigrationRunner;
@@ -28,11 +30,13 @@ namespace Mongo.Migration.Services
         private MigrationService(
             DocumentVersionSerializer serializer,
             IMigrationInterceptorProvider provider,
-            ILoggerFactory loggerFactory)
+            ILoggerFactory loggerFactory,
+            IMongoMigrationSettings settings)
         {
             _serializer = serializer;
             _provider = provider;
             _logger = loggerFactory.CreateLogger<MigrationService>();
+            _settings = settings;
         }
 
         public void Migrate()
@@ -46,7 +50,10 @@ namespace Mongo.Migration.Services
         private void OnStartup()
         {
             _startUpDatabaseMigrationRunner.RunAll();
-            _startUpDocumentMigrationRunner.RunAll();
+            if (!_settings.SkipDocumentMigration)
+            {
+                _startUpDocumentMigrationRunner.RunAll();
+            }
         }
 
         private void RegisterSerializer()
