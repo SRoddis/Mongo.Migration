@@ -14,5 +14,7 @@ namespace Mongo.Migration.Startup
         public string VersionFieldName { get; set; }
 
         public MongoClientSettings ClientSettings { get; set; }
+
+        public bool SkipDocumentMigration { get; set; } = true;
     }
 }

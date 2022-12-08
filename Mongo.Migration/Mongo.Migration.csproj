@@ -1,10 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AssemblyName>Mongo.Migration</AssemblyName>
     <RootNamespace>Mongo.Migration</RootNamespace>
     <Version>3.1.4</Version>
     <PackageVersion>3.1.4</PackageVersion>
-    <TargetFrameworks>net5.0;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>net6.0</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="LightInject" Version="6.6.1" />

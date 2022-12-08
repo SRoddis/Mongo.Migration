@@ -2,7 +2,7 @@
   <PropertyGroup>
     <IsPackable>false</IsPackable>
     <OutputType>Library</OutputType>
-    <TargetFrameworks>net5.0;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>net6.0</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\Mongo.Migration.Test\**\*.cs" />
