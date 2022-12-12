@@ -6,7 +6,7 @@
     <Authors>Sherweb</Authors>
     <Product>Office Protect</Product>
     <PackageId>OfficeProtect.Mongo.Migration</PackageId>
-    <Description>Forked from Mongo.Migration is designed for MongoDB C# Driver to migrate your documents easily on-the-fly.</Description>
+    <Description>Forked from Mongo.Migration which is designed for MongoDB C# Driver to migrate your documents easily on-the-fly.</Description>
     <RepositoryUrl>https://github.com/sherweb/Mongo.Migration.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageIcon>op-icon.png</PackageIcon>
