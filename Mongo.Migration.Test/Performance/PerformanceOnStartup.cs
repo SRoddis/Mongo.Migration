@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+
 using FluentAssertions;
-using Mongo.Migration.Startup;
+
 using Mongo.Migration.Startup.Static;
 using Mongo.Migration.Test.TestDoubles;
+
 using Mongo2Go;
+
 using MongoDB.Bson;
 using MongoDB.Driver;
+
 using NUnit.Framework;
 
 namespace Mongo.Migration.Test.Performance
@@ -19,15 +23,52 @@ namespace Mongo.Migration.Test.Performance
         public void TearDown()
         {
             MongoMigrationClient.Reset();
-            _client = null;
-            _runner.Dispose();
+            this._client = null;
+            this._runner.Dispose();
         }
 
         [SetUp]
         public void SetUp()
         {
-            _runner = MongoDbRunner.Start();
-            _client = new MongoClient(_runner.ConnectionString);
+            this._runner = MongoDbRunner.Start();
+            this._client = new MongoClient(this._runner.ConnectionString);
+        }
+
+        [Test]
+        public void When_migrating_number_of_documents()
+        {
+            // Arrange
+            // Worm up MongoCache
+            this.ClearCollection();
+            this.AddDocumentsToCache();
+            this.ClearCollection();
+
+            // Act
+            // Measure time of MongoDb processing without Mongo.Migration
+            this.InsertMany(DOCUMENT_COUNT, false);
+            var sw = new Stopwatch();
+            sw.Start();
+            this.MigrateAll(false);
+            sw.Stop();
+
+            this.ClearCollection();
+
+            // Measure time of MongoDb processing without Mongo.Migration
+            this.InsertMany(DOCUMENT_COUNT, true);
+            var swWithMigration = new Stopwatch();
+            swWithMigration.Start();
+            MongoMigrationClient.Initialize(this._client);
+            swWithMigration.Stop();
+
+            this.ClearCollection();
+
+            var result = swWithMigration.ElapsedMilliseconds - sw.ElapsedMilliseconds;
+
+            Console.WriteLine(
+                $"MongoDB: {sw.ElapsedMilliseconds}ms, Mongo.Migration: {swWithMigration.ElapsedMilliseconds}ms, Diff: {result}ms (Tolerance: {TOLERANCE_MS}ms), Documents: {DOCUMENT_COUNT}, Migrations per Document: 2");
+
+            // Assert
+            result.Should().BeLessThan(TOLERANCE_MS);
         }
 
         #region PRIVATE
@@ -41,6 +82,7 @@ namespace Mongo.Migration.Test.Performance
         private const int TOLERANCE_MS = 2800;
 
         private MongoClient _client;
+
         private MongoDbRunner _runner;
 
         private void InsertMany(int number, bool withVersion)
@@ -50,14 +92,17 @@ namespace Mongo.Migration.Test.Performance
             {
                 var document = new BsonDocument
                 {
-                    {"Dors", 3}
+                    { "Dors", 3 }
                 };
                 if (withVersion)
+                {
                     document.Add("Version", "0.0.0");
+                }
+
                 documents.Add(document);
             }
 
-            _client.GetDatabase(DATABASE_NAME).GetCollection<BsonDocument>(COLLECTION_NAME).InsertManyAsync(documents)
+            this._client.GetDatabase(DATABASE_NAME).GetCollection<BsonDocument>(COLLECTION_NAME).InsertManyAsync(documents)
                 .Wait();
         }
 
@@ -65,65 +110,28 @@ namespace Mongo.Migration.Test.Performance
         {
             if (withVersion)
             {
-                var versionedCollectin = _client.GetDatabase(DATABASE_NAME)
+                var versionedCollectin = this._client.GetDatabase(DATABASE_NAME)
                     .GetCollection<TestDocumentWithTwoMigrationHighestVersion>(COLLECTION_NAME);
                 var versionedResult = versionedCollectin.FindAsync(_ => true).Result.ToListAsync().Result;
                 return;
             }
 
-            var collection = _client.GetDatabase(DATABASE_NAME)
+            var collection = this._client.GetDatabase(DATABASE_NAME)
                 .GetCollection<TestClass>(COLLECTION_NAME);
             var result = collection.FindAsync(_ => true).Result.ToListAsync().Result;
         }
 
         private void AddDocumentsToCache()
         {
-            InsertMany(DOCUMENT_COUNT, false);
-            MigrateAll(false);
+            this.InsertMany(DOCUMENT_COUNT, false);
+            this.MigrateAll(false);
         }
 
         private void ClearCollection()
         {
-            _client.GetDatabase(DATABASE_NAME).DropCollection(COLLECTION_NAME);
+            this._client.GetDatabase(DATABASE_NAME).DropCollection(COLLECTION_NAME);
         }
 
         #endregion
-
-        [Test]
-        public void When_migrating_number_of_documents()
-        {
-            // Arrange
-            // Worm up MongoCache
-            ClearCollection();
-            AddDocumentsToCache();
-            ClearCollection();
-
-            // Act
-            // Measure time of MongoDb processing without Mongo.Migration
-            InsertMany(DOCUMENT_COUNT, false);
-            var sw = new Stopwatch();
-            sw.Start();
-            MigrateAll(false);
-            sw.Stop();
-
-            ClearCollection();
-
-            // Measure time of MongoDb processing without Mongo.Migration
-            InsertMany(DOCUMENT_COUNT, true);
-            var swWithMigration = new Stopwatch();
-            swWithMigration.Start();
-            MongoMigrationClient.Initialize(_client);
-            swWithMigration.Stop();
-
-            ClearCollection();
-
-            var result = swWithMigration.ElapsedMilliseconds - sw.ElapsedMilliseconds;
-
-            Console.WriteLine(
-              $"MongoDB: {sw.ElapsedMilliseconds}ms, Mongo.Migration: {swWithMigration.ElapsedMilliseconds}ms, Diff: {result}ms (Tolerance: {TOLERANCE_MS}ms), Documents: {DOCUMENT_COUNT}, Migrations per Document: 2");
-
-            // Assert
-            result.Should().BeLessThan(TOLERANCE_MS);
-        }
     }
 }

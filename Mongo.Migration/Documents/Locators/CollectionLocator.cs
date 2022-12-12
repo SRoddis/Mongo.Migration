@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Mongo.Migration.Documents.Attributes;
 
 namespace Mongo.Migration.Documents.Locators
@@ -9,10 +10,12 @@ namespace Mongo.Migration.Documents.Locators
     {
         public override CollectionLocationInformation? GetLocateOrNull(Type identifier)
         {
-            if (!LocatesDictionary.ContainsKey(identifier))
+            if (!this.LocatesDictionary.ContainsKey(identifier))
+            {
                 return null;
+            }
 
-            LocatesDictionary.TryGetValue(identifier, out var value);
+            this.LocatesDictionary.TryGetValue(identifier, out var value);
             return value;
         }
 
@@ -23,7 +26,7 @@ namespace Mongo.Migration.Documents.Locators
                 from t in a.GetTypes()
                 let attributes = t.GetCustomAttributes(typeof(CollectionLocation), true)
                 where attributes != null && attributes.Length > 0
-                select new {Type = t, Attributes = attributes.Cast<CollectionLocation>()};
+                select new { Type = t, Attributes = attributes.Cast<CollectionLocation>() };
 
             var versions = new Dictionary<Type, CollectionLocationInformation>();
 
@@ -33,12 +36,12 @@ namespace Mongo.Migration.Documents.Locators
                 versions.Add(type.Type, version);
             }
 
-            LocatesDictionary = versions;
+            this.LocatesDictionary = versions;
         }
 
         public IDictionary<Type, CollectionLocationInformation> GetLocatesOrEmpty()
         {
-            return LocatesDictionary;
+            return this.LocatesDictionary;
         }
     }
 }

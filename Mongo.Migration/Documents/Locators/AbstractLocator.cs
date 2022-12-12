@@ -12,12 +12,15 @@ namespace Mongo.Migration.Documents.Locators
         {
             get
             {
-                if (_locatesDictionary == null)
-                    Locate();
-                return _locatesDictionary;
+                if (this._locatesDictionary == null)
+                {
+                    this.Locate();
+                }
+
+                return this._locatesDictionary;
             }
 
-            set => _locatesDictionary = value;
+            set => this._locatesDictionary = value;
         }
 
         public abstract TReturnType? GetLocateOrNull(TTypeIdentifier identifier);

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+
 using Mongo.Migration.Documents.Locators;
 using Mongo.Migration.Documents.Serializers;
 using Mongo.Migration.Migrations.Adapters;
@@ -8,14 +9,14 @@ using Mongo.Migration.Migrations.Document;
 using Mongo.Migration.Migrations.Locators;
 using Mongo.Migration.Services;
 using Mongo.Migration.Services.Interceptors;
-using ServiceProvider = Mongo.Migration.Migrations.Adapters.ServiceProvider;
 
 namespace Mongo.Migration.Startup.DotNetCore
 {
     public static class MongoMigrationExtensions
     {
         public static void AddMigration(
-            this IServiceCollection services, IMongoMigrationSettings settings = null)
+            this IServiceCollection services,
+            IMongoMigrationSettings settings = null)
         {
             RegisterDefaults(services, settings ?? new MongoMigrationSettings());
 
