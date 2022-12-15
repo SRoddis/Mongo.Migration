@@ -19,6 +19,18 @@ namespace Mongo.Migration.Test.Performance
     [TestFixture]
     public class PerformanceTestOnStartup
     {
+        private const int DOCUMENT_COUNT = 10000;
+
+        private const string DATABASE_NAME = "PerformanceTest";
+
+        private const string COLLECTION_NAME = "Test";
+
+        private const int TOLERANCE_MS = 2800;
+
+        private MongoClient _client;
+
+        private MongoDbRunner _runner;
+
         [TearDown]
         public void TearDown()
         {
@@ -71,20 +83,6 @@ namespace Mongo.Migration.Test.Performance
             result.Should().BeLessThan(TOLERANCE_MS);
         }
 
-        #region PRIVATE
-
-        private const int DOCUMENT_COUNT = 10000;
-
-        private const string DATABASE_NAME = "PerformanceTest";
-
-        private const string COLLECTION_NAME = "Test";
-
-        private const int TOLERANCE_MS = 2800;
-
-        private MongoClient _client;
-
-        private MongoDbRunner _runner;
-
         private void InsertMany(int number, bool withVersion)
         {
             var documents = new List<BsonDocument>();
@@ -131,7 +129,5 @@ namespace Mongo.Migration.Test.Performance
         {
             this._client.GetDatabase(DATABASE_NAME).DropCollection(COLLECTION_NAME);
         }
-
-        #endregion
     }
 }

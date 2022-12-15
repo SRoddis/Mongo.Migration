@@ -64,8 +64,6 @@ namespace Mongo.Migration.Documents
             return $"{this.Major}.{this.Minor}.{this.Revision}";
         }
 
-        #region compare
-
         public int CompareTo(DocumentVersion other)
         {
             if (this.Equals(other))
@@ -139,10 +137,6 @@ namespace Mongo.Migration.Documents
             }
         }
 
-        #endregion
-
-        #region parse operations
-
         private static int ParseVersionPart(string value)
         {
             string revisionString = value;
@@ -153,7 +147,5 @@ namespace Mongo.Migration.Documents
 
             return target;
         }
-
-        #endregion
     }
 }

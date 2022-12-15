@@ -14,6 +14,8 @@ namespace Mongo.Migration.Test.Documents.Serializers
     [TestFixture]
     public class DocumentVersionSerializer_when_serialize_and_deserialize
     {
+        private DocumentVersionSerializer _serializer;
+
         [Test]
         public void Then_version_is_deserialized_correct()
         {
@@ -49,15 +51,11 @@ namespace Mongo.Migration.Test.Documents.Serializers
             document.ToString().Should().Be("{ \"version\" : \"0.0.1\" }");
         }
 
-        #region SetUp
-
         [SetUp]
         public void SetUp()
         {
             this._serializer = new DocumentVersionSerializer();
         }
-
-        private DocumentVersionSerializer _serializer;
 
         private static BsonDocumentReader CreateVersionReader(BsonDocument document)
         {
@@ -74,7 +72,5 @@ namespace Mongo.Migration.Test.Documents.Serializers
             writer.WriteName("version");
             return writer;
         }
-
-        #endregion
     }
 }
