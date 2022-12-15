@@ -1,14 +1,17 @@
 ﻿using System;
+
 using Mongo.Migration.Documents;
+
 using MongoDB.Bson;
 
 namespace Mongo.Migration.Migrations.Document
 {
-    public abstract class DocumentMigration<TClass> : IDocumentMigration where TClass : class, IDocument
+    public abstract class DocumentMigration<TClass> : IDocumentMigration
+        where TClass : class, IDocument
     {
         protected DocumentMigration(string version)
         {
-            Version = version;
+            this.Version = version;
         }
 
         public DocumentVersion Version { get; }

@@ -1,8 +1,0 @@
-NOW:
-1. Refactor AbstractMigrationStrategy -> not needed
-2. Refactor ComponentRegistry -> abstract register components
-2. Tests for StartupFilter
-2. Write Readme
-
-Later:
-Automaticallyupdate on migrated resources if attribute is provided

@@ -1,5 +1,7 @@
 ﻿using FluentAssertions;
+
 using Mongo.Migration.Documents;
+
 using NUnit.Framework;
 
 namespace Mongo.Migration.Test.Documents
@@ -25,7 +27,7 @@ namespace Mongo.Migration.Test.Documents
 
             // Act
             var version = document.Version;
-            
+
             // Assert
             version.Should().Be("0.0.0");
         }

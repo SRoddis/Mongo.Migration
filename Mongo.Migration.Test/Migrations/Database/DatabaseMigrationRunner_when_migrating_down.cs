@@ -1,7 +1,9 @@
 ﻿using FluentAssertions;
+
 using Mongo.Migration.Documents;
 using Mongo.Migration.Migrations.Database;
 using Mongo.Migration.Test.TestDoubles;
+
 using NUnit.Framework;
 
 namespace Mongo.Migration.Test.Migrations.Database
@@ -15,52 +17,56 @@ namespace Mongo.Migration.Test.Migrations.Database
         {
             base.OnSetUp(databaseMigrationVersion);
 
-            _runner = _components.Get<IDatabaseMigrationRunner>();
+            this._runner = this._components.Get<IDatabaseMigrationRunner>();
         }
 
         [TearDown]
         public void TearDown()
         {
-            Dispose();
+            this.Dispose();
         }
 
         [Test]
         public void When_database_has_migrations_Then_down_all_migrations()
         {
-            OnSetUp(DocumentVersion.Default());
+            this.OnSetUp(DocumentVersion.Default());
 
             // Arrange
-            InsertMigrations(new DatabaseMigration[] {
-                new TestDatabaseMigration_0_0_1(),
-                new TestDatabaseMigration_0_0_2(),
-                new TestDatabaseMigration_0_0_3()
-            });
+            this.InsertMigrations(
+                new DatabaseMigration[]
+                {
+                    new TestDatabaseMigration_0_0_1(),
+                    new TestDatabaseMigration_0_0_2(),
+                    new TestDatabaseMigration_0_0_3()
+                });
 
             // Act
-            _runner.Run(_db);
+            this._runner.Run(this._db);
 
             // Assert
-            var migrations = GetMigrationHistory();
+            var migrations = this.GetMigrationHistory();
             migrations.Should().BeEmpty();
         }
 
         [Test]
         public void When_database_has_migrations_Then_down_to_selected_migration()
         {
-            OnSetUp(new DocumentVersion("0.0.1"));
+            this.OnSetUp(new DocumentVersion("0.0.1"));
 
             // Arrange
-            InsertMigrations(new DatabaseMigration[] {
-                new TestDatabaseMigration_0_0_1(),
-                new TestDatabaseMigration_0_0_2(),
-                new TestDatabaseMigration_0_0_3()
-            });
+            this.InsertMigrations(
+                new DatabaseMigration[]
+                {
+                    new TestDatabaseMigration_0_0_1(),
+                    new TestDatabaseMigration_0_0_2(),
+                    new TestDatabaseMigration_0_0_3()
+                });
 
             // Act
-            _runner.Run(_db);
+            this._runner.Run(this._db);
 
             // Assert
-            var migrations = GetMigrationHistory();
+            var migrations = this.GetMigrationHistory();
             migrations.Should().NotBeEmpty();
             migrations.Should().OnlyContain(m => m.Version == "0.0.1");
         }

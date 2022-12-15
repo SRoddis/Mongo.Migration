@@ -1,9 +1,11 @@
+using System.Linq;
+
 using Mongo.Migration.Documents.Attributes;
 using Mongo.Migration.Documents.Locators;
 using Mongo.Migration.Exceptions;
 using Mongo.Migration.Startup;
+
 using MongoDB.Driver;
-using System.Linq;
 
 namespace Mongo.Migration.Migrations.Database
 {
@@ -11,11 +13,11 @@ namespace Mongo.Migration.Migrations.Database
     {
         private readonly IMongoClient _client;
 
-        private readonly IDatabaseMigrationRunner _migrationRunner;
-
         private readonly ICollectionLocator _collectionLocator;
 
         private readonly string _databaseName;
+
+        private readonly IDatabaseMigrationRunner _migrationRunner;
 
         public StartUpDatabaseMigrationRunner(
             IMongoMigrationSettings settings,
@@ -26,14 +28,20 @@ namespace Mongo.Migration.Migrations.Database
                 migrationRunner)
         {
             if (settings.ConnectionString == null && settings.Database == null || settings.ClientSettings == null)
+            {
                 throw new MongoMigrationNoMongoClientException();
+            }
 
             if (settings.ClientSettings != null)
-                _client = new MongoClient(settings.ClientSettings);
+            {
+                this._client = new MongoClient(settings.ClientSettings);
+            }
             else
-                _client = new MongoClient(settings.ConnectionString);
+            {
+                this._client = new MongoClient(settings.ConnectionString);
+            }
 
-            _databaseName = settings.Database;
+            this._databaseName = settings.Database;
         }
 
         public StartUpDatabaseMigrationRunner(
@@ -42,39 +50,44 @@ namespace Mongo.Migration.Migrations.Database
             ICollectionLocator collectionLocator,
             IDatabaseMigrationRunner migrationRunner)
             : this(
-                  collectionLocator,
-                  migrationRunner)
+                collectionLocator,
+                migrationRunner)
         {
-            _client = client;
-            if (settings.ConnectionString == null && settings.Database == null) return;
+            this._client = client;
+            if (settings.ConnectionString == null && settings.Database == null)
+            {
+                return;
+            }
 
-            _client = new MongoClient(settings.ConnectionString);
-            _databaseName = settings.Database;
+            this._client = new MongoClient(settings.ConnectionString);
+            this._databaseName = settings.Database;
         }
 
         private StartUpDatabaseMigrationRunner(
             ICollectionLocator collectionLocator,
             IDatabaseMigrationRunner migrationRunner)
         {
-            _collectionLocator = collectionLocator;
-            _migrationRunner = migrationRunner;
+            this._collectionLocator = collectionLocator;
+            this._migrationRunner = migrationRunner;
         }
 
         public void RunAll()
         {
-            var locations = _collectionLocator.GetLocatesOrEmpty().ToList();
+            var locations = this._collectionLocator.GetLocatesOrEmpty().ToList();
             var information = locations.FirstOrDefault().Value;
-            var databaseName = GetDatabaseOrDefault(information);
+            var databaseName = this.GetDatabaseOrDefault(information);
 
-            _migrationRunner.Run(_client.GetDatabase(databaseName));
+            this._migrationRunner.Run(this._client.GetDatabase(databaseName));
         }
 
         private string GetDatabaseOrDefault(CollectionLocationInformation information)
         {
-            if (string.IsNullOrEmpty(_databaseName) && string.IsNullOrEmpty(information.Database))
+            if (string.IsNullOrEmpty(this._databaseName) && string.IsNullOrEmpty(information.Database))
+            {
                 throw new NoDatabaseNameFoundException();
+            }
 
-            return string.IsNullOrEmpty(information.Database) ? _databaseName : information.Database;
+            return string.IsNullOrEmpty(information.Database) ? this._databaseName : information.Database;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using Mongo.Migration.Migrations.Adapters;
 using Mongo.Migration.Migrations.Database;
 
@@ -9,22 +10,26 @@ namespace Mongo.Migration.Migrations.Locators
     {
         private IDictionary<Type, IReadOnlyCollection<IDatabaseMigration>> _migrations;
 
-        public DatabaseTypeMigrationDependencyLocator(IContainerProvider containerProvider) : base(containerProvider)
-        {
-        }
-
         protected override IDictionary<Type, IReadOnlyCollection<IDatabaseMigration>> Migrations
         {
             get
             {
-                if (_migrations == null)
+                if (this._migrations == null)
                 {
-                    Locate();
+                    this.Locate();
                 }
 
-                return _migrations;
+                return this._migrations;
             }
-            set { _migrations = value; }
+            set
+            {
+                this._migrations = value;
+            }
+        }
+
+        public DatabaseTypeMigrationDependencyLocator(IContainerProvider containerProvider)
+            : base(containerProvider)
+        {
         }
     }
 }
