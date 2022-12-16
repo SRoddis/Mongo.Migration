@@ -1,6 +1,9 @@
 ﻿using System;
 
+using Mongo.Migration.Documents.Serializers;
 using Mongo.Migration.Exceptions;
+
+using MongoDB.Bson.Serialization;
 
 namespace Mongo.Migration.Documents
 {
@@ -15,6 +18,17 @@ namespace Mongo.Migration.Documents
         public int Minor { get; init; }
 
         public int Revision { get; init; }
+
+        static DocumentVersion()
+        {
+            try
+            {
+                BsonSerializer.RegisterSerializer(typeof(DocumentVersion), new DocumentVersionSerializer());
+            }
+            catch (Exception)
+            {
+            }
+        }
 
         public DocumentVersion(string version)
         {
