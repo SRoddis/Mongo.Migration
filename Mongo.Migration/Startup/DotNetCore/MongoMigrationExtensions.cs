@@ -23,6 +23,8 @@ namespace Mongo.Migration.Startup.DotNetCore
 
         public static void AddMigrationStartupFilter(this IServiceCollection services) => services.AddTransient<IStartupFilter, MongoMigrationStartupFilter>();
 
+        public static void AddMongoMigrationHostedService(this IServiceCollection services) => services.AddHostedService<MongoMigrationHostedService>();
+
         private static void RegisterDefaults(IServiceCollection services, IMongoMigrationSettings settings)
         {
             services.AddSingleton(settings);
