@@ -9,16 +9,17 @@ namespace Mongo.Migration.Startup.DotNetCore
 {
     public class MongoMigrationHostedService : IHostedService
     {
+        private readonly IHostApplicationLifetime _applicationLifetime;
+
         private readonly ILogger<MongoMigrationHostedService> _logger;
 
         private readonly IMongoMigration _migration;
 
-        public MongoMigrationHostedService(
-            IMongoMigration migration,
-            ILogger<MongoMigrationHostedService> logger)
+        public MongoMigrationHostedService(IHostApplicationLifetime applicationLifetime, IMongoMigration migration, ILogger<MongoMigrationHostedService> logger)
         {
-            this._migration = migration;
+            this._applicationLifetime = applicationLifetime;
             this._logger = logger;
+            this._migration = migration;
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
@@ -32,6 +33,7 @@ namespace Mongo.Migration.Startup.DotNetCore
             catch (Exception ex)
             {
                 this._logger.LogError(ex, ex.GetType().ToString());
+                this._applicationLifetime.StopApplication();
             }
 
             return Task.CompletedTask;
