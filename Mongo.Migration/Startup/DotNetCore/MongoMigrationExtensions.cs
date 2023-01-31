@@ -14,9 +14,7 @@ namespace Mongo.Migration.Startup.DotNetCore
 {
     public static class MongoMigrationExtensions
     {
-        public static void AddMigration(
-            this IServiceCollection services,
-            IMongoMigrationSettings settings = null)
+        public static void AddMigration(this IServiceCollection services, IMongoMigrationSettings settings = null)
         {
             RegisterDefaults(services, settings ?? new MongoMigrationSettings());
 
@@ -52,7 +50,6 @@ namespace Mongo.Migration.Startup.DotNetCore
             services.AddTransient<IMigrationInterceptorProvider, MigrationInterceptorProvider>();
 
             services.AddTransient<IMongoMigration, MongoMigration>();
-            services.AddTransient<IStartupFilter, MongoMigrationStartupFilter>();
         }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+
 using LightInject;
 
 namespace Mongo.Migration.Migrations.Adapters
@@ -9,34 +10,36 @@ namespace Mongo.Migration.Migrations.Adapters
 
         public LightInjectAdapter(IServiceContainer container)
         {
-            _container = container;
+            this._container = container;
         }
 
         public object GetInstance(Type type)
         {
-            return _container.GetInstance(type);
+            return this._container.GetInstance(type);
         }
 
-        public void Register<TInterface, TImplementation>() where TInterface : class
+        public void Register<TInterface, TImplementation>()
+            where TInterface : class
             where TImplementation : class, TInterface
         {
-            _container.Register<TInterface, TImplementation>();
+            this._container.Register<TInterface, TImplementation>();
         }
 
         public void Register(Type serviceType, Type implementingType)
         {
-            _container.Register(serviceType, implementingType);
+            this._container.Register(serviceType, implementingType);
         }
 
         public void RegisterInstance<TInterface>(object instance)
         {
-            _container.RegisterInstance(typeof(TInterface), instance);
+            this._container.RegisterInstance(typeof(TInterface), instance);
         }
 
-        public void RegisterSingleton<TInterface, TImplementation>() where TInterface : class
+        public void RegisterSingleton<TInterface, TImplementation>()
+            where TInterface : class
             where TImplementation : class, TInterface
         {
-            _container.Register<TInterface, TImplementation>(new PerContainerLifetime());
+            this._container.Register<TInterface, TImplementation>(new PerContainerLifetime());
         }
     }
 }

@@ -1,7 +1,9 @@
-﻿using System;
-using FluentAssertions;
+﻿using FluentAssertions;
+
 using Mongo.Migration.Test.TestDoubles;
+
 using MongoDB.Bson;
+
 using NUnit.Framework;
 
 namespace Mongo.Migration.Test.Migrations.Document
@@ -14,13 +16,13 @@ namespace Mongo.Migration.Test.Migrations.Document
         {
             // Arrange
             var migration = new TestDocumentWithOneMigration_0_0_1();
-            var document = new BsonDocument {{"Doors", 3}};
+            var document = new BsonDocument { { "Doors", 3 } };
 
             // Act
             migration.Down(document);
 
             // Assert
-            document.Should().BeEquivalentTo(new BsonDocument {{"Dors", 3}});
+            document.Should().BeEquivalentTo(new BsonDocument { { "Dors", 3 } });
         }
 
         [Test]
@@ -28,13 +30,13 @@ namespace Mongo.Migration.Test.Migrations.Document
         {
             // Arrange
             var migration = new TestDocumentWithOneMigration_0_0_1();
-            var document = new BsonDocument {{"Dors", 3}};
+            var document = new BsonDocument { { "Dors", 3 } };
 
             // Act
             migration.Up(document);
 
             // Assert
-            document.Should().BeEquivalentTo(new BsonDocument {{"Doors", 3}});
+            document.Should().BeEquivalentTo(new BsonDocument { { "Doors", 3 } });
         }
     }
 }

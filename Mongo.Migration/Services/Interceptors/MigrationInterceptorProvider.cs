@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
+
 using Mongo.Migration.Documents;
+
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 
@@ -12,13 +14,15 @@ namespace Mongo.Migration.Services.Interceptors
 
         public MigrationInterceptorProvider(IMigrationInterceptorFactory migrationInterceptorFactory)
         {
-            _migrationInterceptorFactory = migrationInterceptorFactory;
+            this._migrationInterceptorFactory = migrationInterceptorFactory;
         }
 
         public IBsonSerializer GetSerializer(Type type)
         {
             if (ShouldBeMigrated(type))
-                return _migrationInterceptorFactory.Create(type);
+            {
+                return this._migrationInterceptorFactory.Create(type);
+            }
 
             return null;
         }

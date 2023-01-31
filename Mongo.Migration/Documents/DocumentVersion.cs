@@ -1,5 +1,9 @@
 ﻿using System;
+
+using Mongo.Migration.Documents.Serializers;
 using Mongo.Migration.Exceptions;
+
+using MongoDB.Bson.Serialization;
 
 namespace Mongo.Migration.Documents
 {
@@ -15,6 +19,17 @@ namespace Mongo.Migration.Documents
 
         public int Revision { get; init; }
 
+        static DocumentVersion()
+        {
+            try
+            {
+                BsonSerializer.RegisterSerializer(typeof(DocumentVersion), new DocumentVersionSerializer());
+            }
+            catch (Exception)
+            {
+            }
+        }
+
         public DocumentVersion(string version)
         {
             string[] versionParts = version.Split(VERSION_SPLIT_CHAR);
@@ -24,18 +39,18 @@ namespace Mongo.Migration.Documents
                 throw new VersionStringToLongException(version);
             }
 
-            Major = ParseVersionPart(versionParts[0]);
+            this.Major = ParseVersionPart(versionParts[0]);
 
-            Minor = ParseVersionPart(versionParts[1]);
+            this.Minor = ParseVersionPart(versionParts[1]);
 
-            Revision = ParseVersionPart(versionParts[2]);
+            this.Revision = ParseVersionPart(versionParts[2]);
         }
 
         public DocumentVersion(int major, int minor, int revision)
         {
-            Major = major;
-            Minor = minor;
-            Revision = revision;
+            this.Major = major;
+            this.Minor = minor;
+            this.Revision = revision;
         }
 
         public static DocumentVersion Default()
@@ -60,14 +75,12 @@ namespace Mongo.Migration.Documents
 
         public override string ToString()
         {
-            return $"{Major}.{Minor}.{Revision}";
+            return $"{this.Major}.{this.Minor}.{this.Revision}";
         }
-
-        #region compare
 
         public int CompareTo(DocumentVersion other)
         {
-            if (Equals(other))
+            if (this.Equals(other))
             {
                 return 0;
             }
@@ -109,7 +122,7 @@ namespace Mongo.Migration.Documents
 
         public bool Equals(DocumentVersion other)
         {
-            return other.Major == Major && other.Minor == Minor && other.Revision == Revision;
+            return other.Major == this.Major && other.Minor == this.Minor && other.Revision == this.Revision;
         }
 
         public override bool Equals(object obj)
@@ -124,23 +137,19 @@ namespace Mongo.Migration.Documents
                 return false;
             }
 
-            return Equals((DocumentVersion)obj);
+            return this.Equals((DocumentVersion)obj);
         }
 
         public override int GetHashCode()
         {
             unchecked
             {
-                int result = Major;
-                result = (result * 397) ^ Minor;
-                result = (result * 397) ^ Revision;
+                int result = this.Major;
+                result = (result * 397) ^ this.Minor;
+                result = (result * 397) ^ this.Revision;
                 return result;
             }
         }
-
-        #endregion
-
-        #region parse operations
 
         private static int ParseVersionPart(string value)
         {
@@ -149,9 +158,8 @@ namespace Mongo.Migration.Documents
             {
                 throw new InvalidVersionValueException(revisionString);
             }
+
             return target;
         }
-
-        #endregion
     }
 }

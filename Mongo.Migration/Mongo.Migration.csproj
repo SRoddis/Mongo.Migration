@@ -1,30 +1,38 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <AssemblyName>Mongo.Migration</AssemblyName>
-    <RootNamespace>Mongo.Migration</RootNamespace>
-    <Version>3.1.4</Version>
-    <PackageVersion>3.1.4</PackageVersion>
-    <TargetFrameworks>net5.0;netcoreapp3.1</TargetFrameworks>
-    <LangVersion>9.0</LangVersion>
+    <TargetFramework>net6.0</TargetFramework>
+    <Platforms>x64</Platforms>
+    <Company>Sherweb</Company>
+    <Authors>Sherweb</Authors>
+    <Product>Office Protect</Product>
+    <PackageId>OfficeProtect.Mongo.Migration</PackageId>
+    <Description>Forked from Mongo.Migration which is designed for MongoDB C# Driver to migrate your documents easily on-the-fly.</Description>
+    <RepositoryUrl>https://github.com/sherweb/Mongo.Migration.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageIcon>op-icon.png</PackageIcon>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    <MinVerTagPrefix>v</MinVerTagPrefix> 
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="IsExternalInit" Version="1.0.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="LightInject" Version="5.4.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="2.2.0" />
-    <PackageReference Include="MongoDB.Driver" Version="2.13.1" />
-    <PackageReference Include="NLog" Version="4.7.11" />
-    <PackageReference Include="Serilog" Version="2.8.0" />
-    <PackageReference Include="Serilog.Extensions.Logging" Version="2.0.4" />
-    <PackageReference Include="Serilog.Extensions.Logging.File" Version="2.0.0" />
+    <PackageReference Include="LightInject" Version="6.6.1" />
+    <PackageReference Include="Microsoft.AspNetCore.MiddlewareAnalysis" Version="6.0.12" />
+    <PackageReference Include="MinVer" Version="4.2.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="MongoDB.Driver" Version="2.18.0" />
+    <PackageReference Include="NLog" Version="5.1.0" />
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
+    <None Include="op-icon.png" Pack="true" PackagePath="" />
   </ItemGroup>
 </Project>
