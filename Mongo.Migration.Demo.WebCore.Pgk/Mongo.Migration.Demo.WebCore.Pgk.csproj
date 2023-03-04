@@ -9,7 +9,7 @@
         <PackageReference Include="Microsoft.AspNetCore.App" />
         <PackageReference Include="Mongo.Migration" Version="3.0.131" />
         <PackageReference Include="Mongo2Go" Version="2.2.11" />
-        <PackageReference Include="MongoDB.Driver" Version="2.8.0" />
+        <PackageReference Include="MongoDB.Driver" Version="2.19.0" />
     </ItemGroup>
 
     <ItemGroup>
