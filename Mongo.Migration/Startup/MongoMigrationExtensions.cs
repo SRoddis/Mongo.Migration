@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Mongo.Migration.Documents.Locators;
 using Mongo.Migration.Documents.Serializers;
@@ -7,6 +8,7 @@ using Mongo.Migration.Migrations.Document;
 using Mongo.Migration.Migrations.Locators;
 using Mongo.Migration.Services;
 using Mongo.Migration.Services.Interceptors;
+using MongoDB.Driver;
 
 namespace Mongo.Migration.Startup
 {
