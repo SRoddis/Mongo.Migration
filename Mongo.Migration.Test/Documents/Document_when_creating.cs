@@ -13,20 +13,16 @@ namespace Mongo.Migration.Test.Documents
             // Arrange Act
             IDocument document = new Document();
 
-            // Assert
             document.Should().BeOfType<Document>();
         }
 
         [Test]
         public void Then_document_has_a_version()
         {
-            // Arrange 
             IDocument document = new Document();
 
-            // Act
             var version = document.Version;
-            
-            // Assert
+
             version.Should().Be("0.0.0");
         }
     }

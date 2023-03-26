@@ -32,18 +32,6 @@ PM> Install-Package Mongo.Migration
 
 # Document migrations quick Start 
 
-#### .Net Framework
-1. Initialize `MongoMigration` behind the `MongoClient`. ([Mongo2Go](https://github.com/Mongo2Go/Mongo2Go))
-
-```csharp
-// Init MongoDB
-var runner = MongoDbRunner.Start(); // Mongo2Go
-var client = new MongoClient(runner.ConnectionString);
-
-// Init MongoMigration
-MongoMigrationClient.Initialize(client);
-```
-    
 #### .Net Core
 
 1.1 Add `MongoMigration` with the StartupFilter (`IMongoClient` has to be registered at the DI-container before)
@@ -227,25 +215,6 @@ public class Car : IDocument
 
 # Database migrations quick start
 
-#### .Net Framework
-1. Initialize `MongoMigration` behind the `MongoClient`. ([Mongo2Go](https://github.com/Mongo2Go/Mongo2Go))
-
-```csharp
-// Init MongoDB
-var runner = MongoDbRunner.Start(); // Mongo2Go
-var client = new MongoClient(runner.ConnectionString);
-
-// Init MongoMigration
- MongoMigrationClient.Initialize(
-                client,
-                new MongoMigrationSettings()
-                {
-                    ConnectionString = runner.ConnectionString,
-                    Database = "TestCars"
-                },
-                new LightInjectAdapter(new LightInject.ServiceContainer()))
-```
-    
 #### .Net Core
 
 1.1 Add `MongoMigration` with the StartupFilter (`IMongoClient` has to be registered at the DI-container before)
@@ -331,32 +300,6 @@ With the latest update (3.0.94) I added a requested feature to `Mongo.Migration`
 #### .NetCore
 It is pitty simple with .NetCore. `Mongo.Migration` uses the `IServiceProvider` to resolve all used dependencies. So you have access to all registered dependencies.
 
-
-#### .Net Framework
-When you initialize `Mongo.Migration` you can now add a `IContainerAdapter`. At the moment following Containers can be used out of the box:
-- LightInject
-- .NetCore ServiceProvider
-- ... more planned in the future.
-
-If you use an other Container, you have to implement the interface yourself. As an example, see `LightInjectAdapter`.
-
-When that is done, you can pass the Adapter as a parameter to initialize `Mongo.Migration`.
-
-```csharp
-    // Your Container
-    var conatiner = ServiceContainer()
-    ontainer.Register<IYourDependency, YourDependency>();
-
-    // Init MongoDB
-    var runner = MongoDbRunner.Start(); // Mongo2Go
-    var client = new MongoClient(runner.ConnectionString);
-
-    // Your Adapter implementation to abstract the container
-    var adapter = new LightInjectAdapter(container)
-
-    // Init MongoMigration
-    MongoMigrationClient.Initialize(client, adapter);
-```
 
 ```csharp
     public class M001_RenameDorsToDoors : DocumentMigration<Car>
@@ -456,10 +399,6 @@ MongoDB: 48ms, Mongo.Migration: 50ms, Diff: 2ms (Tolerance: 10ms), Documents: 10
 ```
 
 After bigger changes the code is analyzed with profiling tools to check for performance or memory problems.
-
-## Next Feature/Todo
-
-	1. Intercept updates, aggregation pipeline and projections.
 
 ## Copyright
 

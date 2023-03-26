@@ -6,8 +6,8 @@ namespace Mongo.Migration.Documents.Attributes
         {
             Database = database;
             Collection = collection;
-        }        
-        
+        }
+
         public string Database { get; }
         public string Collection { get; }
     }

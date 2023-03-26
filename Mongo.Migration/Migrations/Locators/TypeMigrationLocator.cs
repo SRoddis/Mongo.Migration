@@ -11,11 +11,11 @@ namespace Mongo.Migration.Migrations.Locators
         {
             var migrationTypes =
                 (from assembly in Assemblies
-                from type in assembly.GetTypes()
-                where typeof(IDocumentMigration).IsAssignableFrom(type) && !type.IsAbstract
-                select type).Distinct();
+                 from type in assembly.GetTypes()
+                 where typeof(IDocumentMigration).IsAssignableFrom(type) && !type.IsAbstract
+                 select type).Distinct();
 
-            Migrations = migrationTypes.Select(t => (IDocumentMigration) Activator.CreateInstance(t)).ToMigrationDictionary();
+            Migrations = migrationTypes.Select(t => (IDocumentMigration)Activator.CreateInstance(t)).ToMigrationDictionary();
         }
     }
 }

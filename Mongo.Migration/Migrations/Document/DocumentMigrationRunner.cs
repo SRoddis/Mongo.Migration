@@ -9,35 +9,39 @@ namespace Mongo.Migration.Migrations.Document
 {
     internal class DocumentMigrationRunner : IDocumentMigrationRunner
     {
-        private readonly IMigrationLocator<IDocumentMigration> _migrationLocator;
-
         private readonly IDocumentVersionService _documentVersionService;
+
+        private readonly IMigrationLocator<IDocumentMigration> _migrationLocator;
 
         public DocumentMigrationRunner(IMigrationLocator<IDocumentMigration> migrationLocator, IDocumentVersionService documentVersionService)
         {
             _migrationLocator = migrationLocator;
             _documentVersionService = documentVersionService;
         }
-        
+
         public void Run(Type type, BsonDocument document)
         {
             var documentVersion = _documentVersionService.GetVersionOrDefault(document);
             var currentOrLatest = _documentVersionService.GetCurrentOrLatestMigrationVersion(type);
 
             if (documentVersion == currentOrLatest)
+            {
                 return;
+            }
 
             MigrateUpOrDown(type, document, documentVersion, currentOrLatest);
         }
-        
+
         public void Run(Type type, BsonDocument document, DocumentVersion to)
         {
             var documentVersion = _documentVersionService.GetVersionOrDefault(document);
             var currentOrLatest = _documentVersionService.GetCurrentOrLatestMigrationVersion(type);
 
             if (documentVersion == to || documentVersion == currentOrLatest)
+            {
                 return;
-            
+            }
+
             MigrateUpOrDown(type, document, documentVersion, to);
         }
 
@@ -59,7 +63,7 @@ namespace Mongo.Migration.Migrations.Document
         private void MigrateUp(Type type, BsonDocument document, DocumentVersion version, DocumentVersion toVersion)
         {
             var migrations = _migrationLocator.GetMigrationsFromTo(type, version, toVersion).ToList();
-            
+
             foreach (var migration in migrations)
             {
                 migration.Up(document);
@@ -77,7 +81,9 @@ namespace Mongo.Migration.Migrations.Document
             for (var m = 0; m < migrations.Count; m++)
             {
                 if (version == migrations[m].Version)
+                {
                     break;
+                }
 
                 migrations[m].Down(document);
 

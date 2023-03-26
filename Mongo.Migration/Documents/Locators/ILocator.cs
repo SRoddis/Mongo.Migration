@@ -5,7 +5,6 @@ namespace Mongo.Migration.Documents.Locators
         where TTypeIdentifier : class
     {
         TReturnType? GetLocateOrNull(TTypeIdentifier identifier);
-
         void Locate();
     }
 }

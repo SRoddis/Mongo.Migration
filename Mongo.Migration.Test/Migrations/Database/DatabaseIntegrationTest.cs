@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.DependencyInjection;
 using Mongo.Migration.Documents;
 using Mongo.Migration.Migrations.Database;
 using Mongo.Migration.Startup;
-using Mongo.Migration.Startup.Static;
 using Mongo2Go;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -15,48 +15,51 @@ namespace Mongo.Migration.Test.Migrations.Database
     {
         private const string MigrationsCollectionName = "_migrations";
 
-        protected IMongoClient _client;
-
-        protected IMongoDatabase _db;
-
-        protected IComponentRegistry _components;
-
-        protected MongoDbRunner _mongoToGoRunner;
+        protected IMongoClient Client;
+        protected IServiceProvider ServiceProvider;
+        protected IMongoDatabase Db;
+        protected MongoDbRunner MongoToGoRunner;
 
         protected virtual string DatabaseName { get; set; } = "DatabaseMigration";
 
         protected virtual string CollectionName { get; set; } = "Test";
 
-        protected virtual void OnSetUp(DocumentVersion databaseMigrationVersion)
-        {
-            _mongoToGoRunner = MongoDbRunner.Start();
-            _client = new MongoClient(_mongoToGoRunner.ConnectionString);
-            _db = _client.GetDatabase(DatabaseName);
-            _db.CreateCollection(CollectionName);
-
-            _components = new ComponentRegistry(new MongoMigrationSettings()
-            {
-                ConnectionString = _mongoToGoRunner.ConnectionString,
-                Database = DatabaseName,
-                DatabaseMigrationVersion = databaseMigrationVersion
-            });
-            _components.RegisterComponents(_client);
-        }
-
         public void Dispose()
         {
-            _mongoToGoRunner?.Dispose();
+            MongoToGoRunner?.Dispose();
+        }
+
+        protected virtual void OnSetUp(DocumentVersion databaseMigrationVersion)
+        {
+            MongoToGoRunner = MongoDbRunner.Start();
+            Client = new MongoClient(MongoToGoRunner.ConnectionString);
+            Db = Client.GetDatabase($"{DatabaseName}-{Guid.NewGuid()}");
+            Db.CreateCollection(CollectionName);
+
+            var serviceCollection = new ServiceCollection()
+                .AddScoped<IMongoClient>(_ => Client)
+                .AddMigration(x =>
+                {
+                    x.ConnectionString = MongoToGoRunner.ConnectionString;
+                    x.Database = DatabaseName;
+                    x.DatabaseMigrationVersion = databaseMigrationVersion;
+                });
+            ServiceProvider = serviceCollection.BuildServiceProvider();
         }
 
         protected void InsertMigrations(IEnumerable<DatabaseMigration> migrations)
         {
-            var list = migrations.Select(m => new BsonDocument { { "MigrationId", m.GetType().ToString() }, { "Version", m.Version.ToString() } });
-            _db.GetCollection<BsonDocument>(MigrationsCollectionName).InsertManyAsync(list).Wait();
+            var list = migrations.Select(m => new BsonDocument
+            {
+                { "MigrationId", m.GetType().ToString() }, 
+                { "Version", m.Version.ToString() }
+            });
+            Db.GetCollection<BsonDocument>(MigrationsCollectionName).InsertManyAsync(list).Wait();
         }
 
         protected List<MigrationHistory> GetMigrationHistory()
         {
-            var migrationHistoryCollection = _db.GetCollection<MigrationHistory>(MigrationsCollectionName);
+            var migrationHistoryCollection = Db.GetCollection<MigrationHistory>(MigrationsCollectionName);
             return migrationHistoryCollection.Find(m => true).ToList();
         }
     }
