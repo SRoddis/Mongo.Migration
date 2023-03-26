@@ -4,6 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <ProjectGuid>9F83ECAC-9A03-4546-9500-43841EFFA65A</ProjectGuid>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="3.2.0" />
