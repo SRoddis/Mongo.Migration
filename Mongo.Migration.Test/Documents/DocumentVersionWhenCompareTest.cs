@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace Mongo.Migration.Test.Documents
 {
     [TestFixture]
-    public class DocumentVersion_When_compare
+    public class DocumentVersionWhenCompareTest
     {
         private readonly DocumentVersion equalLowerVersion = new DocumentVersion("0.0.1");
 

@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace Mongo.Migration.Test.Documents
 {
     [TestFixture]
-    public class Document_when_creating
+    public class DocumentWhenCreatingTest
     {
         [Test]
         public void Then_document_can_be_created()

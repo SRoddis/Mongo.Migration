@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace Mongo.Migration.Test.Documents
 {
     [TestFixture]
-    public class DocumentVersion_When_casting
+    public class DocumentVersionWhenCastingTest
     {
         [Test]
         public void If_implicit_string_to_version_Then_cast_should_work()
