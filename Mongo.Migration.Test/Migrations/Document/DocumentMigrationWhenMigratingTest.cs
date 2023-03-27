@@ -11,7 +11,6 @@ namespace Mongo.Migration.Test.Migrations.Document
         [Test]
         public void When_migrating_down_Then_document_changes()
         {
-            // Arrange
             var migration = new TestDocumentWithOneMigration_0_0_1();
             var document = new BsonDocument { { "Doors", 3 } };
 
@@ -23,7 +22,6 @@ namespace Mongo.Migration.Test.Migrations.Document
         [Test]
         public void When_migrating_up_Then_document_changes()
         {
-            // Arrange
             var migration = new TestDocumentWithOneMigration_0_0_1();
             var document = new BsonDocument { { "Dors", 3 } };
 

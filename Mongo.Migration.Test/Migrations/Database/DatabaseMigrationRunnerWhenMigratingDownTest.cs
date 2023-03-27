@@ -30,7 +30,6 @@ namespace Mongo.Migration.Test.Migrations.Database
         {
             OnSetUp(DocumentVersion.Default());
 
-            // Arrange
             InsertMigrations(
                 new DatabaseMigration[]
                 {
@@ -50,7 +49,6 @@ namespace Mongo.Migration.Test.Migrations.Database
         {
             OnSetUp(new DocumentVersion("0.0.1"));
 
-            // Arrange
             InsertMigrations(
                 new DatabaseMigration[]
                 {

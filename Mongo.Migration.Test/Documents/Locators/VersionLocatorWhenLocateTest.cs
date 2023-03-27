@@ -11,7 +11,6 @@ namespace Mongo.Migration.Test.Documents.Locators
         [Test]
         public void Then_find_current_version_of_document()
         {
-            // Arrange
             var locator = new RuntimeVersionLocator();
 
             var currentVersion = locator.GetLocateOrNull(typeof(TestDocumentWithOneMigration));
@@ -22,7 +21,6 @@ namespace Mongo.Migration.Test.Documents.Locators
         [Test]
         public void When_document_has_no_attribute_Then_return_null()
         {
-            // Arrange
             var locator = new RuntimeVersionLocator();
 
             var currentVersion = locator.GetLocateOrNull(typeof(TestDocumentWithoutAttribute));

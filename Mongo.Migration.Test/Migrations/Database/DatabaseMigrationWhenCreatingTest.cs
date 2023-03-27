@@ -11,7 +11,6 @@ namespace Mongo.Migration.Test.Migrations.Database
         [Test]
         public void Then_migration_has_type_DatabaseMigration()
         {
-            // Arrange Act
             var migration = new TestDatabaseMigration_0_0_1();
 
             migration.Type.Should().Be(typeof(DatabaseMigration));
@@ -20,7 +19,6 @@ namespace Mongo.Migration.Test.Migrations.Database
         [Test]
         public void Then_migration_have_version()
         {
-            // Arrange Act
             var migration = new TestDatabaseMigration_0_0_1();
 
             migration.Version.Should().Be("0.0.1");
@@ -29,7 +27,6 @@ namespace Mongo.Migration.Test.Migrations.Database
         [Test]
         public void Then_migration_should_be_created()
         {
-            // Arrange Act
             var migration = new TestDatabaseMigration_0_0_1();
 
             migration.Should().BeOfType<TestDatabaseMigration_0_0_1>();

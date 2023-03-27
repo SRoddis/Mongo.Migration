@@ -41,7 +41,6 @@ namespace Mongo.Migration.Test.Migrations.Database
         [Test]
         public void When_database_has_migrations_Then_latest_migrations_are_used()
         {
-            // Arrange
             InsertMigrations(new DatabaseMigration[] { new TestDatabaseMigration_0_0_1(), new TestDatabaseMigration_0_0_2() });
 
             _runner.Run(Db);
@@ -54,7 +53,6 @@ namespace Mongo.Migration.Test.Migrations.Database
         [Test]
         public void When_database_has_latest_version_Then_nothing_happens()
         {
-            // Arrange
             InsertMigrations(
                 new DatabaseMigration[] { new TestDatabaseMigration_0_0_1(), new TestDatabaseMigration_0_0_2(), new TestDatabaseMigration_0_0_3() });
 

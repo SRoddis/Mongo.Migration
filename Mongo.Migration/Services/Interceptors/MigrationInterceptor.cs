@@ -28,7 +28,6 @@ namespace Mongo.Migration.Services.Interceptors
 
         public override TDocument Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)
         {
-            // TODO: Performance? LatestVersion, dont do anything
             var document = BsonDocumentSerializer.Instance.Deserialize(context);
 
             _migrationRunner.Run(typeof(TDocument), document);

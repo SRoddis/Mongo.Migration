@@ -14,7 +14,6 @@ namespace Mongo.Migration.Test.Migrations.Locators
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            // Arrange
             _locator = new TypeMigrationLocator();
         }
 

@@ -10,7 +10,6 @@ namespace Mongo.Migration.Test.Documents
         [Test]
         public void Then_document_can_be_created()
         {
-            // Arrange Act
             IDocument document = new Document();
 
             document.Should().BeOfType<Document>();
