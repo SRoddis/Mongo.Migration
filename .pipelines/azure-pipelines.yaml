@@ -25,6 +25,7 @@ parameters:
     default: "Mongo.Migration"
 
 variables:
+  - group: DatadogCI
   - group: github-credentials
 
 pr: none
