@@ -16,7 +16,7 @@ namespace Mongo.Migration.Test.Migrations.Database
         private const string MigrationsCollectionName = "_migrations";
 
         protected IMongoClient Client;
-        protected IServiceProvider ServiceProvider;
+        protected ServiceProvider ServiceProvider;
         protected IMongoDatabase Db;
         protected MongoDbRunner MongoToGoRunner;
 
@@ -27,13 +27,15 @@ namespace Mongo.Migration.Test.Migrations.Database
         public void Dispose()
         {
             MongoToGoRunner?.Dispose();
+            ServiceProvider.Dispose();
         }
 
         protected virtual void OnSetUp(DocumentVersion databaseMigrationVersion)
         {
+            var databaseName = $"{DatabaseName}-{Guid.NewGuid()}";
             MongoToGoRunner = MongoDbRunner.Start();
             Client = new MongoClient(MongoToGoRunner.ConnectionString);
-            Db = Client.GetDatabase($"{DatabaseName}-{Guid.NewGuid()}");
+            Db = Client.GetDatabase(databaseName);
             Db.CreateCollection(CollectionName);
 
             var serviceCollection = new ServiceCollection()
@@ -41,9 +43,10 @@ namespace Mongo.Migration.Test.Migrations.Database
                 .AddMigration(x =>
                 {
                     x.ConnectionString = MongoToGoRunner.ConnectionString;
-                    x.Database = DatabaseName;
+                    x.Database = databaseName;
                     x.DatabaseMigrationVersion = databaseMigrationVersion;
                 });
+            
             ServiceProvider = serviceCollection.BuildServiceProvider();
         }
 

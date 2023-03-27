@@ -44,7 +44,7 @@ namespace Mongo.Migration.Test.Services.Interceptors
         [Test]
         public void If_type_is_assignable_to_document_Then_interceptor_is_created()
         {
-            var scoped = _serviceProvider.CreateScope();
+            using var scoped = _serviceProvider.CreateScope();
 
             var factory = scoped.ServiceProvider.GetRequiredService<IMigrationInterceptorFactory>();
 
@@ -56,7 +56,7 @@ namespace Mongo.Migration.Test.Services.Interceptors
         [Test]
         public void If_type_is_not_assignable_to_document_Then_exception_is_thrown()
         {
-            var scoped = _serviceProvider.CreateScope();
+            using var scoped = _serviceProvider.CreateScope();
 
             var factory = scoped.ServiceProvider.GetRequiredService<IMigrationInterceptorFactory>();
 
@@ -68,7 +68,7 @@ namespace Mongo.Migration.Test.Services.Interceptors
         [Test]
         public void If_type_is_null_Then_exception_is_thrown()
         {
-            var scoped = _serviceProvider.CreateScope();
+            using var scoped = _serviceProvider.CreateScope();
 
             var factory = scoped.ServiceProvider.GetRequiredService<IMigrationInterceptorFactory>();
 

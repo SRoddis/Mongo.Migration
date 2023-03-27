@@ -55,7 +55,7 @@ namespace Mongo.Migration.Migrations.Database
         {
             if (databaseVersion > to)
             {
-                MigrateDown(db, databaseVersion);
+                MigrateDown(db, to);
                 return;
             }
 

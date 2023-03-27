@@ -43,7 +43,7 @@ namespace Mongo.Migration.Test.Services.Interceptors
         [Test]
         public void When_entity_is_document_Then_provide_serializer()
         {
-            var scoped = _serviceProvider.CreateScope();
+            using var scoped = _serviceProvider.CreateScope();
 
             var provider = scoped.ServiceProvider.GetRequiredService<IMigrationInterceptorProvider>();
 
@@ -55,7 +55,7 @@ namespace Mongo.Migration.Test.Services.Interceptors
         [Test]
         public void When_entity_is_not_document_Then_provide_null()
         {
-            var scoped = _serviceProvider.CreateScope();
+            using var scoped = _serviceProvider.CreateScope();
 
             var provider = scoped.ServiceProvider.GetRequiredService<IMigrationInterceptorProvider>();
 

@@ -10,15 +10,6 @@ namespace Mongo.Migration.Test.Migrations.Database
     [TestFixture]
     internal class DatabaseMigrationRunnerWhenMigratingDownTest : DatabaseIntegrationTest
     {
-        private IDatabaseMigrationRunner _runner;
-
-        protected override void OnSetUp(DocumentVersion databaseMigrationVersion)
-        {
-            base.OnSetUp(databaseMigrationVersion);
-
-            _runner = ServiceProvider.GetRequiredService<IDatabaseMigrationRunner>();
-        }
-
         [TearDown]
         public void TearDown()
         {
@@ -29,7 +20,9 @@ namespace Mongo.Migration.Test.Migrations.Database
         public void When_database_has_migrations_Then_down_all_migrations()
         {
             OnSetUp(DocumentVersion.Default());
-
+            using var scoped = ServiceProvider.CreateScope();
+            var runner = scoped.ServiceProvider.GetRequiredService<IDatabaseMigrationRunner>();
+            
             InsertMigrations(
                 new DatabaseMigration[]
                 {
@@ -38,7 +31,7 @@ namespace Mongo.Migration.Test.Migrations.Database
                     new TestDatabaseMigration_0_0_3()
                 });
 
-            _runner.Run(Db);
+            runner.Run(Db);
 
             var migrations = GetMigrationHistory();
             migrations.Should().BeEmpty();
@@ -48,7 +41,9 @@ namespace Mongo.Migration.Test.Migrations.Database
         public void When_database_has_migrations_Then_down_to_selected_migration()
         {
             OnSetUp(new DocumentVersion("0.0.1"));
-
+            using var scoped = ServiceProvider.CreateScope();
+            var runner = scoped.ServiceProvider.GetRequiredService<IDatabaseMigrationRunner>();
+            
             InsertMigrations(
                 new DatabaseMigration[]
                 {
@@ -57,7 +52,7 @@ namespace Mongo.Migration.Test.Migrations.Database
                     new TestDatabaseMigration_0_0_3()
                 });
 
-            _runner.Run(Db);
+            runner.Run(Db);
 
             var migrations = GetMigrationHistory();
             migrations.Should().NotBeEmpty();

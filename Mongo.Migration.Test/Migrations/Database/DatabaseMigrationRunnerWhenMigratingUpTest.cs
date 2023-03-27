@@ -10,14 +10,10 @@ namespace Mongo.Migration.Test.Migrations.Database
     [TestFixture]
     internal class DatabaseMigrationRunnerWhenMigratingUpTest : DatabaseIntegrationTest
     {
-        private IDatabaseMigrationRunner _runner;
-
         [SetUp]
         public void SetUp()
         {
             base.OnSetUp(DocumentVersion.Empty());
-
-            _runner = ServiceProvider.GetRequiredService<IDatabaseMigrationRunner>();
         }
 
         [TearDown]
@@ -29,7 +25,10 @@ namespace Mongo.Migration.Test.Migrations.Database
         [Test]
         public void When_database_has_no_migrations_Then_all_migrations_are_used()
         {
-            _runner.Run(Db);
+            using var scoped = ServiceProvider.CreateScope();
+            var runner = scoped.ServiceProvider.GetRequiredService<IDatabaseMigrationRunner>();
+            
+            runner.Run(Db);
 
             var migrations = GetMigrationHistory();
             migrations.Should().NotBeEmpty();
@@ -42,8 +41,10 @@ namespace Mongo.Migration.Test.Migrations.Database
         public void When_database_has_migrations_Then_latest_migrations_are_used()
         {
             InsertMigrations(new DatabaseMigration[] { new TestDatabaseMigration_0_0_1(), new TestDatabaseMigration_0_0_2() });
-
-            _runner.Run(Db);
+            using var scoped = ServiceProvider.CreateScope();
+            var runner = scoped.ServiceProvider.GetRequiredService<IDatabaseMigrationRunner>();
+            
+            runner.Run(Db);
 
             var migrations = GetMigrationHistory();
             migrations.Should().NotBeEmpty();
@@ -55,8 +56,11 @@ namespace Mongo.Migration.Test.Migrations.Database
         {
             InsertMigrations(
                 new DatabaseMigration[] { new TestDatabaseMigration_0_0_1(), new TestDatabaseMigration_0_0_2(), new TestDatabaseMigration_0_0_3() });
-
-            _runner.Run(Db);
+            
+            using var scoped = ServiceProvider.CreateScope();
+            var runner = scoped.ServiceProvider.GetRequiredService<IDatabaseMigrationRunner>();
+            
+            runner.Run(Db);
 
             var migrations = GetMigrationHistory();
             migrations.Should().NotBeEmpty();
