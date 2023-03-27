@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
-using Mongo.Migration.Resources.Exceptions;
 using Mongo.Migration.Startup;
 
 namespace Mongo.Migration.Migrations.Locators;
@@ -19,14 +17,6 @@ public class MongoMigrationAssemblyService : IMongoMigrationAssemblyService
     
     public IEnumerable<Assembly> GetAssemblies()
     {
-        var location = AppDomain.CurrentDomain.BaseDirectory;
-        var path = Path.GetDirectoryName(location);
-
-        if (string.IsNullOrWhiteSpace(path))
-        {
-            throw new DirectoryNotFoundException(ErrorTexts.AppDirNotFound);
-        }
-
         var assemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
             
         return !string.IsNullOrEmpty(_settings.AssemblyPrefix) 

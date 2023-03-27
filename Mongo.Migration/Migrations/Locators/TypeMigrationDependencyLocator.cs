@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Mongo.Migration.Extensions;
+using Mongo.Migration.Resources.Exceptions;
 
 namespace Mongo.Migration.Migrations.Locators
 {
@@ -21,7 +23,15 @@ namespace Mongo.Migration.Migrations.Locators
             using var scopedService = _scopeFactory.CreateScope();
 
             var mongoAssembly = scopedService.ServiceProvider.GetRequiredService<IMongoMigrationAssemblyService>();
+            
+            var location = AppDomain.CurrentDomain.BaseDirectory;
+            var path = Path.GetDirectoryName(location);
 
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                throw new DirectoryNotFoundException(ErrorTexts.AppDirNotFound);
+            }
+            
             var migrationTypes = mongoAssembly.GetAssemblies()
                 .SelectMany(assembly => assembly.GetTypes())
                 .Where(type => type.IsAssignableTo(typeof(TMigrationType)) && !type.IsAbstract)
