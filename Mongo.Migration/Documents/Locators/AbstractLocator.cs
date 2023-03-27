@@ -13,7 +13,10 @@ namespace Mongo.Migration.Documents.Locators
             get
             {
                 if (_locatesDictionary == null)
+                {
                     Locate();
+                }
+
                 return _locatesDictionary;
             }
 

@@ -10,5 +10,6 @@ namespace Mongo.Migration.Startup
         DocumentVersion DatabaseMigrationVersion { get; set; }
         string VersionFieldName { get; set; }
         MongoClientSettings ClientSettings { get; set; }
+        string AssemblyPrefix { get; set; }
     }
 }

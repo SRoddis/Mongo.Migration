@@ -1,5 +1,6 @@
 ﻿using System;
 using Mongo.Migration.Documents;
+using Mongo.Migration.Resources.Exceptions;
 
 namespace Mongo.Migration.Exceptions
 {

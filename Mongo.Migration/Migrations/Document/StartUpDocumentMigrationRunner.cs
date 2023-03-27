@@ -13,14 +13,10 @@ namespace Mongo.Migration.Migrations.Document
     internal class StartUpDocumentMigrationRunner : IStartUpDocumentMigrationRunner
     {
         private readonly IMongoClient _client;
-
         private readonly ICollectionLocator _collectionLocator;
-
         private readonly string _databaseName;
-
-        private readonly IDocumentMigrationRunner _migrationRunner;
-
         private readonly IDocumentVersionService _documentVersionService;
+        private readonly IDocumentMigrationRunner _migrationRunner;
 
         public StartUpDocumentMigrationRunner(
             IMongoMigrationSettings settings,
@@ -33,12 +29,11 @@ namespace Mongo.Migration.Migrations.Document
                 migrationRunner)
         {
             if (settings.ConnectionString == null && settings.Database == null || settings.ClientSettings == null)
+            {
                 throw new MongoMigrationNoMongoClientException();
+            }
 
-            if (settings.ClientSettings != null)
-                _client = new MongoClient(settings.ClientSettings);
-            else
-                _client = new MongoClient(settings.ConnectionString);
+            _client = settings.ClientSettings != null ? new MongoClient(settings.ClientSettings) : new MongoClient(settings.ConnectionString);
 
             _databaseName = settings.Database;
         }
@@ -56,7 +51,10 @@ namespace Mongo.Migration.Migrations.Document
         {
             _client = client;
 
-            if (settings.ConnectionString == null && settings.Database == null) return;
+            if (settings.ConnectionString == null && settings.Database == null)
+            {
+                return;
+            }
 
             _client = new MongoClient(settings.ConnectionString);
             _databaseName = settings.Database;
@@ -76,10 +74,8 @@ namespace Mongo.Migration.Migrations.Document
         {
             var locations = _collectionLocator.GetLocatesOrEmpty();
 
-            foreach (var locate in locations)
+            foreach (var (type, information) in locations)
             {
-                var information = locate.Value;
-                var type = locate.Key;
                 var databaseName = GetDatabaseOrDefault(information);
                 var collectionVersion = _documentVersionService.GetCollectionVersion(type);
 
@@ -100,7 +96,7 @@ namespace Mongo.Migration.Migrations.Document
                             _migrationRunner.Run(type, document, collectionVersion);
 
                             var update = new ReplaceOneModel<BsonDocument>(
-                                new BsonDocument {{"_id", document["_id"]}},
+                                new BsonDocument { { "_id", document["_id"] } },
                                 document
                             );
 
@@ -109,20 +105,24 @@ namespace Mongo.Migration.Migrations.Document
                     }
                 }
 
-                if (bulk.Count > 0) collection.BulkWrite(bulk);
+                if (bulk.Count > 0)
+                {
+                    collection.BulkWrite(bulk);
+                }
             }
         }
 
         private string GetDatabaseOrDefault(CollectionLocationInformation information)
         {
             if (string.IsNullOrEmpty(_databaseName) && string.IsNullOrEmpty(information.Database))
+            {
                 throw new NoDatabaseNameFoundException();
+            }
 
             return string.IsNullOrEmpty(information.Database) ? _databaseName : information.Database;
         }
 
-        private FilterDefinition<BsonDocument> CreateQueryForRelevantDocuments(
-            Type type)
+        private FilterDefinition<BsonDocument> CreateQueryForRelevantDocuments(Type type)
         {
             var currentVersion = _documentVersionService.GetCurrentOrLatestMigrationVersion(type);
 

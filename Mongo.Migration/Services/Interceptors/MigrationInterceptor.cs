@@ -6,10 +6,11 @@ using MongoDB.Bson.Serialization.Serializers;
 
 namespace Mongo.Migration.Services.Interceptors
 {
-    internal class MigrationInterceptor<TDocument> : BsonClassMapSerializer<TDocument> where TDocument : class, IDocument
+    internal class MigrationInterceptor<TDocument> : BsonClassMapSerializer<TDocument>
+        where TDocument : class, IDocument
     {
-        private readonly IDocumentMigrationRunner _migrationRunner;
         private readonly IDocumentVersionService _documentVersionService;
+        private readonly IDocumentMigrationRunner _migrationRunner;
 
         public MigrationInterceptor(IDocumentMigrationRunner migrationRunner, IDocumentVersionService documentVersionService)
             : base(BsonClassMap.LookupClassMap(typeof(TDocument)))
@@ -27,13 +28,11 @@ namespace Mongo.Migration.Services.Interceptors
 
         public override TDocument Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)
         {
-            // TODO: Performance? LatestVersion, dont do anything
             var document = BsonDocumentSerializer.Instance.Deserialize(context);
-            
+
             _migrationRunner.Run(typeof(TDocument), document);
-            
-            var migratedContext =
-                BsonDeserializationContext.CreateRoot(new BsonDocumentReader(document));
+
+            var migratedContext = BsonDeserializationContext.CreateRoot(new BsonDocumentReader(document));
 
             return base.Deserialize(migratedContext, args);
         }

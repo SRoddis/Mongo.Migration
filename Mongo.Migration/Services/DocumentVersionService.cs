@@ -13,14 +13,10 @@ namespace Mongo.Migration.Services
 {
     internal class DocumentVersionService : IDocumentVersionService
     {
-        private static readonly string VERSION_FIELD_NAME = "Version";
-
+        private const string VERSION_FIELD_NAME = "Version";
         private readonly IMigrationLocator<IDocumentMigration> _migrationLocator;
-
         private readonly IRuntimeVersionLocator _runtimeVersionLocator;
-
         private readonly IStartUpVersionLocator _startUpVersionLocator;
-
         private readonly string _versionFieldName;
 
         public DocumentVersionService(
@@ -33,8 +29,8 @@ namespace Mongo.Migration.Services
             _runtimeVersionLocator = runtimeVersionLocator;
             _startUpVersionLocator = startUpVersionLocator;
             _versionFieldName = string.IsNullOrWhiteSpace(mongoMigrationSettings.VersionFieldName)
-                ? VERSION_FIELD_NAME
-                : mongoMigrationSettings.VersionFieldName;
+                                         ? VERSION_FIELD_NAME
+                                         : mongoMigrationSettings.VersionFieldName;
         }
 
         public string GetVersionFieldName()
@@ -56,11 +52,12 @@ namespace Mongo.Migration.Services
 
         public DocumentVersion GetVersionOrDefault(BsonDocument document)
         {
-            BsonValue value;
-            document.TryGetValue(GetVersionFieldName(), out value);
+            document.TryGetValue(GetVersionFieldName(), out var value);
 
             if (value != null && !value.IsBsonNull)
+            {
                 return value.AsString;
+            }
 
             return DocumentVersion.Default();
         }
@@ -70,34 +67,34 @@ namespace Mongo.Migration.Services
             document[GetVersionFieldName()] = version.ToString();
         }
 
-        public void DetermineVersion<TClass>(TClass instance) where TClass : class, IDocument
+        public void DetermineVersion<TClass>(TClass instance)
+            where TClass : class, IDocument
         {
             var type = typeof(TClass);
             var documentVersion = instance.Version.ToString();
             var latestVersion = _migrationLocator.GetLatestVersion(type);
             var currentVersion = _runtimeVersionLocator.GetLocateOrNull(type) ?? latestVersion;
 
-            if (documentVersion == currentVersion)
-                return;
-
-            if (documentVersion == latestVersion)
-                return;
-
-            if (DocumentVersion.Default() == documentVersion)
+            if (documentVersion == currentVersion || documentVersion == latestVersion)
             {
-                SetVersion(instance, currentVersion, latestVersion);
                 return;
             }
 
-            throw new VersionViolationException(currentVersion.ToString(), documentVersion, latestVersion);
+            if (DocumentVersion.Default() != documentVersion)
+            {
+                throw new VersionViolationException(currentVersion.ToString(), documentVersion, latestVersion);
+            }
+            
+            SetVersion(instance, currentVersion, latestVersion);
+
         }
 
-        public DocumentVersion DetermineLastVersion(DocumentVersion version, List<IDocumentMigration> migrations,
+        public DocumentVersion DetermineLastVersion(
+            DocumentVersion version,
+            List<IDocumentMigration> migrations,
             int currentMigration)
         {
-            if (migrations.Last() != migrations[currentMigration])
-                return migrations[currentMigration + 1].Version;
-            return version;
+            return migrations.Last() != migrations[currentMigration] ? migrations[currentMigration + 1].Version : version;
         }
 
         private DocumentVersion? GetCurrentVersion(Type type)
@@ -108,7 +105,8 @@ namespace Mongo.Migration.Services
         private static void SetVersion<TClass>(
             TClass instance,
             DocumentVersion? currentVersion,
-            DocumentVersion latestVersion) where TClass : class, IDocument
+            DocumentVersion latestVersion)
+            where TClass : class, IDocument
         {
             if (currentVersion < latestVersion)
             {

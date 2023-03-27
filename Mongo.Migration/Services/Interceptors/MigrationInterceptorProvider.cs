@@ -17,10 +17,7 @@ namespace Mongo.Migration.Services.Interceptors
 
         public IBsonSerializer GetSerializer(Type type)
         {
-            if (ShouldBeMigrated(type))
-                return _migrationInterceptorFactory.Create(type);
-
-            return null;
+            return ShouldBeMigrated(type) ? _migrationInterceptorFactory.Create(type) : null;
         }
 
         private static bool ShouldBeMigrated(Type type)

@@ -8,11 +8,11 @@ namespace Mongo.Migration
     internal class MongoMigration : IMongoMigration
     {
         private readonly ICollectionLocator _collectionLocator;
-        private readonly IStartUpVersionLocator _startUpVersionLocator;
-        private readonly IMigrationLocator<IDocumentMigration> _documentMigrationLocator;
         private readonly IDatabaseTypeMigrationDependencyLocator _databaseMigrationLocator;
+        private readonly IMigrationLocator<IDocumentMigration> _documentMigrationLocator;
         private readonly IMigrationService _migrationService;
         private readonly IRuntimeVersionLocator _runtimeVersionLocator;
+        private readonly IStartUpVersionLocator _startUpVersionLocator;
 
         public MongoMigration(
             IMigrationLocator<IDocumentMigration> documentMigrationLocator,
@@ -37,7 +37,6 @@ namespace Mongo.Migration
             _runtimeVersionLocator.Locate();
             _collectionLocator.Locate();
             _startUpVersionLocator.Locate();
-
             _migrationService.Migrate();
         }
     }

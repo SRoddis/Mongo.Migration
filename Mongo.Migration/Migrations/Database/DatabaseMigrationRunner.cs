@@ -11,13 +11,13 @@ namespace Mongo.Migration.Migrations.Database
 {
     internal class DatabaseMigrationRunner : IDatabaseMigrationRunner
     {
-        private readonly Type DatabaseMigrationType = typeof(DatabaseMigration);
         private readonly IDatabaseVersionService _databaseVersionService;
         private readonly ILogger _logger;
-        private IDatabaseTypeMigrationDependencyLocator _migrationLocator { get; }
+        private readonly Type _databaseMigrationType = typeof(DatabaseMigration);
+        private readonly IDatabaseTypeMigrationDependencyLocator _migrationLocator;
 
         public DatabaseMigrationRunner(
-            IDatabaseTypeMigrationDependencyLocator migrationLocator, 
+            IDatabaseTypeMigrationDependencyLocator migrationLocator,
             IDatabaseVersionService databaseVersionService)
             : this(migrationLocator, databaseVersionService, NullLoggerFactory.Instance)
         {
@@ -35,7 +35,7 @@ namespace Mongo.Migration.Migrations.Database
 
         public void Run(IMongoDatabase db)
         {
-            _logger.LogInformation($"Database migration started.");
+            _logger.LogInformation("Database migration started.");
             var databaseVersion = _databaseVersionService.GetLatestDatabaseVersion(db);
             var currentOrLatest = _databaseVersionService.GetCurrentOrLatestMigrationVersion();
 
@@ -45,7 +45,7 @@ namespace Mongo.Migration.Migrations.Database
             }
 
             MigrateUpOrDown(db, databaseVersion, currentOrLatest);
-            _logger.LogInformation($"Database migration finished.");
+            _logger.LogInformation("Database migration finished.");
         }
 
         private void MigrateUpOrDown(
@@ -55,7 +55,7 @@ namespace Mongo.Migration.Migrations.Database
         {
             if (databaseVersion > to)
             {
-                MigrateDown(db, databaseVersion, to);
+                MigrateDown(db, to);
                 return;
             }
 
@@ -64,7 +64,7 @@ namespace Mongo.Migration.Migrations.Database
 
         private void MigrateUp(IMongoDatabase db, DocumentVersion currentVersion, DocumentVersion toVersion)
         {
-            var migrations = _migrationLocator.GetMigrationsFromTo(DatabaseMigrationType, currentVersion, toVersion).ToList();
+            var migrations = _migrationLocator.GetMigrationsFromTo(_databaseMigrationType, currentVersion, toVersion);
 
             foreach (var migration in migrations)
             {
@@ -77,21 +77,20 @@ namespace Mongo.Migration.Migrations.Database
             }
         }
 
-        private void MigrateDown(IMongoDatabase db, DocumentVersion currentVersion, DocumentVersion toVersion)
+        private void MigrateDown(IMongoDatabase db, DocumentVersion toVersion)
         {
             var migrations = _migrationLocator
-                .GetMigrationsGtEq(DatabaseMigrationType, toVersion)
+                .GetMigrationsGtEq(_databaseMigrationType, toVersion)
                 .OrderByDescending(m => m.Version)
                 .ToList();
 
-            for (var m = 0; m < migrations.Count; m++)
+            foreach (var migration in migrations)
             {
-                var migration = migrations[m];
                 if (migration.Version == toVersion)
                 {
                     break;
                 }
-
+                
                 _logger.LogInformation("Database Migration Down: {0}:{1} ", migration.GetType().ToString(), migration.Version);
 
                 migration.Down(db);

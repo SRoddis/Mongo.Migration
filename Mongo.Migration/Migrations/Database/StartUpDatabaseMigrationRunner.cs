@@ -1,9 +1,9 @@
+using System.Linq;
 using Mongo.Migration.Documents.Attributes;
 using Mongo.Migration.Documents.Locators;
 using Mongo.Migration.Exceptions;
 using Mongo.Migration.Startup;
 using MongoDB.Driver;
-using System.Linq;
 
 namespace Mongo.Migration.Migrations.Database
 {
@@ -11,11 +11,11 @@ namespace Mongo.Migration.Migrations.Database
     {
         private readonly IMongoClient _client;
 
-        private readonly IDatabaseMigrationRunner _migrationRunner;
-
         private readonly ICollectionLocator _collectionLocator;
 
         private readonly string _databaseName;
+
+        private readonly IDatabaseMigrationRunner _migrationRunner;
 
         public StartUpDatabaseMigrationRunner(
             IMongoMigrationSettings settings,
@@ -26,12 +26,11 @@ namespace Mongo.Migration.Migrations.Database
                 migrationRunner)
         {
             if (settings.ConnectionString == null && settings.Database == null || settings.ClientSettings == null)
+            {
                 throw new MongoMigrationNoMongoClientException();
+            }
 
-            if (settings.ClientSettings != null)
-                _client = new MongoClient(settings.ClientSettings);
-            else
-                _client = new MongoClient(settings.ConnectionString);
+            _client = settings.ClientSettings != null ? new MongoClient(settings.ClientSettings) : new MongoClient(settings.ConnectionString);
 
             _databaseName = settings.Database;
         }
@@ -42,11 +41,14 @@ namespace Mongo.Migration.Migrations.Database
             ICollectionLocator collectionLocator,
             IDatabaseMigrationRunner migrationRunner)
             : this(
-                  collectionLocator,
-                  migrationRunner)
+                collectionLocator,
+                migrationRunner)
         {
             _client = client;
-            if (settings.ConnectionString == null && settings.Database == null) return;
+            if (settings.ConnectionString == null && settings.Database == null)
+            {
+                return;
+            }
 
             _client = new MongoClient(settings.ConnectionString);
             _databaseName = settings.Database;
@@ -72,7 +74,9 @@ namespace Mongo.Migration.Migrations.Database
         private string GetDatabaseOrDefault(CollectionLocationInformation information)
         {
             if (string.IsNullOrEmpty(_databaseName) && string.IsNullOrEmpty(information.Database))
+            {
                 throw new NoDatabaseNameFoundException();
+            }
 
             return string.IsNullOrEmpty(information.Database) ? _databaseName : information.Database;
         }

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30011.22
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33122.133
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Git", "Git", "{CB26356F-6A6A-4B13-BD95-672A8AF24518}"
 	ProjectSection(SolutionItems) = preProject
@@ -10,72 +10,37 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Git", "Git", "{CB26356F-6A6
 		Readme.md = Readme.md
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Information", "Information", "{11D545C6-1ED2-428C-94FA-B9DA0758F7DA}"
-	ProjectSection(SolutionItems) = preProject
-		Todo.txt = Todo.txt
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demo", "Demo", "{DB219944-127E-489A-9C06-1121DB9C17AD}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{47979B8A-45B3-41C4-803A-98FE92A9A405}"
-	ProjectSection(SolutionItems) = preProject
-		NuGet\Mongo.Migration.nuspec = NuGet\Mongo.Migration.nuspec
-		NuGet\NuGet.exe = NuGet\NuGet.exe
-		NuGet\nuget.jpg = NuGet\nuget.jpg
-		NuGet\pack.ps1 = NuGet\pack.ps1
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mongo.Migration", "Mongo.Migration\Mongo.Migration.csproj", "{8DFFD615-1E1A-4BED-8A96-CAF4C3637E81}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mongo.Migration.Test.Core", "Mongo.Migration.Test.Core\Mongo.Migration.Test.Core.csproj", "{1EEC8464-61D1-4FA3-97D4-21A35A45F3FE}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mongo.Migration.Demo.Core.Pkg", "Mongo.Migration.Demo.Core.Pkg\Mongo.Migration.Demo.Core.Pkg.csproj", "{DD04BE10-B6A0-49A8-937C-47A06968C270}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mongo.Migration.Demo.Model.Pkg", "Mongo.Migration.Demo.Model.Pkg\Mongo.Migration.Demo.Model.Pkg.csproj", "{79EF2D4A-8F99-47B2-96F1-B40040B8AE64}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mongo.Migration.Demo.MongoMigrations.Pkg", "Mongo.Migration.Demo.MongoMigrations.Pkg\Mongo.Migration.Demo.MongoMigrations.Pkg.csproj", "{668385C6-5FE3-4336-B9EA-52EC03F47100}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mongo.Migration.Demo.WebCore.Pgk", "Mongo.Migration.Demo.WebCore.Pgk\Mongo.Migration.Demo.WebCore.Pgk.csproj", "{FA802E68-DCCE-40B8-90D4-E3C534A99301}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mongo.Migration.Test", "Mongo.Migration.Test\Mongo.Migration.Test.csproj", "{5A168879-B891-40A2-B3AB-0CF2022FDE89}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
 		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8DFFD615-1E1A-4BED-8A96-CAF4C3637E81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8DFFD615-1E1A-4BED-8A96-CAF4C3637E81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DFFD615-1E1A-4BED-8A96-CAF4C3637E81}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{8DFFD615-1E1A-4BED-8A96-CAF4C3637E81}.Debug|Any CPU.Build.0 = Debug|x64
+		{8DFFD615-1E1A-4BED-8A96-CAF4C3637E81}.Debug|x64.ActiveCfg = Debug|x64
+		{8DFFD615-1E1A-4BED-8A96-CAF4C3637E81}.Debug|x64.Build.0 = Debug|x64
 		{8DFFD615-1E1A-4BED-8A96-CAF4C3637E81}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8DFFD615-1E1A-4BED-8A96-CAF4C3637E81}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1EEC8464-61D1-4FA3-97D4-21A35A45F3FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1EEC8464-61D1-4FA3-97D4-21A35A45F3FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1EEC8464-61D1-4FA3-97D4-21A35A45F3FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1EEC8464-61D1-4FA3-97D4-21A35A45F3FE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DD04BE10-B6A0-49A8-937C-47A06968C270}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DD04BE10-B6A0-49A8-937C-47A06968C270}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DD04BE10-B6A0-49A8-937C-47A06968C270}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DD04BE10-B6A0-49A8-937C-47A06968C270}.Release|Any CPU.Build.0 = Release|Any CPU
-		{79EF2D4A-8F99-47B2-96F1-B40040B8AE64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{79EF2D4A-8F99-47B2-96F1-B40040B8AE64}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{79EF2D4A-8F99-47B2-96F1-B40040B8AE64}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{79EF2D4A-8F99-47B2-96F1-B40040B8AE64}.Release|Any CPU.Build.0 = Release|Any CPU
-		{668385C6-5FE3-4336-B9EA-52EC03F47100}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{668385C6-5FE3-4336-B9EA-52EC03F47100}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{668385C6-5FE3-4336-B9EA-52EC03F47100}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{668385C6-5FE3-4336-B9EA-52EC03F47100}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FA802E68-DCCE-40B8-90D4-E3C534A99301}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FA802E68-DCCE-40B8-90D4-E3C534A99301}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FA802E68-DCCE-40B8-90D4-E3C534A99301}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FA802E68-DCCE-40B8-90D4-E3C534A99301}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8DFFD615-1E1A-4BED-8A96-CAF4C3637E81}.Release|x64.ActiveCfg = Release|x64
+		{8DFFD615-1E1A-4BED-8A96-CAF4C3637E81}.Release|x64.Build.0 = Release|x64
+		{5A168879-B891-40A2-B3AB-0CF2022FDE89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A168879-B891-40A2-B3AB-0CF2022FDE89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A168879-B891-40A2-B3AB-0CF2022FDE89}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5A168879-B891-40A2-B3AB-0CF2022FDE89}.Debug|x64.Build.0 = Debug|Any CPU
+		{5A168879-B891-40A2-B3AB-0CF2022FDE89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A168879-B891-40A2-B3AB-0CF2022FDE89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A168879-B891-40A2-B3AB-0CF2022FDE89}.Release|x64.ActiveCfg = Release|Any CPU
+		{5A168879-B891-40A2-B3AB-0CF2022FDE89}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{DD04BE10-B6A0-49A8-937C-47A06968C270} = {DB219944-127E-489A-9C06-1121DB9C17AD}
-		{79EF2D4A-8F99-47B2-96F1-B40040B8AE64} = {DB219944-127E-489A-9C06-1121DB9C17AD}
-		{668385C6-5FE3-4336-B9EA-52EC03F47100} = {DB219944-127E-489A-9C06-1121DB9C17AD}
-		{FA802E68-DCCE-40B8-90D4-E3C534A99301} = {DB219944-127E-489A-9C06-1121DB9C17AD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {141CC212-9A27-4082-94E7-A80340DFDF4C}

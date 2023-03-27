@@ -23,9 +23,9 @@ namespace Mongo.Migration.Services
 
         public DocumentVersion GetCurrentOrLatestMigrationVersion()
         {
-          return _mongoMigrationSettings.DatabaseMigrationVersion > DocumentVersion.Empty()
-                ? _mongoMigrationSettings.DatabaseMigrationVersion
-                : _migrationLocator.GetLatestVersion(typeof(DatabaseMigration));
+            return _mongoMigrationSettings.DatabaseMigrationVersion > DocumentVersion.Empty()
+                       ? _mongoMigrationSettings.DatabaseMigrationVersion
+                       : _migrationLocator.GetLatestVersion(typeof(DatabaseMigration));
         }
 
         public DocumentVersion GetLatestDatabaseVersion(IMongoDatabase db)
@@ -41,11 +41,12 @@ namespace Mongo.Migration.Services
 
         public void Save(IMongoDatabase db, IDatabaseMigration migration)
         {
-            GetMigrationsCollection(db).InsertOne(new MigrationHistory
-            {
-                MigrationId = migration.GetType().ToString(),
-                Version = migration.Version
-            });
+            GetMigrationsCollection(db).InsertOne(
+                new MigrationHistory
+                {
+                    MigrationId = migration.GetType().ToString(),
+                    Version = migration.Version
+                });
         }
 
         public void Remove(IMongoDatabase db, IDatabaseMigration migration)
