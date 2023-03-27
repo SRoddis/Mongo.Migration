@@ -18,25 +18,28 @@ namespace Mongo.Migration.Migrations.Locators
 
         public override void Locate()
         {
-            var migrationTypes =
-                (from assembly in Assemblies
-                 from type in assembly.GetTypes()
-                 where typeof(TMigrationType).IsAssignableFrom(type) && !type.IsAbstract
-                 select type).Distinct(new TypeComparer());
+            using var scopedService = _scopeFactory.CreateScope();
 
-            Migrations = migrationTypes.Select(GetMigrationInstance).ToMigrationDictionary();
+            var mongoAssembly = scopedService.ServiceProvider.GetRequiredService<IMongoMigrationAssemblyService>();
+
+            var migrationTypes = mongoAssembly.GetAssemblies()
+                .SelectMany(assembly => assembly.GetTypes())
+                .Where(type => type.IsAssignableTo(typeof(TMigrationType)) && !type.IsAbstract)
+                .Distinct(new TypeComparer());
+
+            Migrations = migrationTypes.Select(x => GetMigrationInstance(scopedService.ServiceProvider, x))
+                .ToMigrationDictionary();
         }
 
-        private TMigrationType GetMigrationInstance(Type type)
+        private TMigrationType GetMigrationInstance(IServiceProvider serviceProvider, Type type)
         {
             var constructor = type.GetConstructors()[0];
 
-            using var scopedService = _scopeFactory.CreateScope();
-            
+
             var args = constructor
                 .GetParameters()
                 .Select(o => o.ParameterType)
-                .Select(o => scopedService.ServiceProvider.GetService(o))
+                .Select(serviceProvider.GetService)
                 .ToArray();
 
             return Activator.CreateInstance(type, args) as TMigrationType;

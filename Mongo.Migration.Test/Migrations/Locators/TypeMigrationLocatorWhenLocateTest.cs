@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using FluentAssertions;
 using Mongo.Migration.Migrations.Locators;
+using Mongo.Migration.Startup;
 using Mongo.Migration.Test.TestDoubles;
 using NUnit.Framework;
 
@@ -14,7 +15,7 @@ namespace Mongo.Migration.Test.Migrations.Locators
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            _locator = new TypeMigrationLocator();
+            _locator = new TypeMigrationLocator(new MongoMigrationAssemblyService(new MongoMigrationSettings()));
         }
 
         [Test]

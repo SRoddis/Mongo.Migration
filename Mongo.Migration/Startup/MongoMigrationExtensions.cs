@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Mongo.Migration.Documents.Locators;
 using Mongo.Migration.Documents.Serializers;
@@ -8,7 +7,6 @@ using Mongo.Migration.Migrations.Document;
 using Mongo.Migration.Migrations.Locators;
 using Mongo.Migration.Services;
 using Mongo.Migration.Services.Interceptors;
-using MongoDB.Driver;
 
 namespace Mongo.Migration.Startup
 {
@@ -18,15 +16,17 @@ namespace Mongo.Migration.Startup
         {
             var migrationSettings = new MongoMigrationSettings();
             settings?.Invoke(migrationSettings);
-            RegisterDefaults(services, migrationSettings);
-            services.AddScoped<IMigrationService, MigrationService>();
+            services.RegisterDefaults(migrationSettings);
+            services.AddSingleton<IMigrationService, MigrationService>();
+            services.AddHostedService<MongoMigrationHostedService>();
             
             return services;
         }
 
-        private static void RegisterDefaults(IServiceCollection services, IMongoMigrationSettings settings)
+        private static void RegisterDefaults(this IServiceCollection services, IMongoMigrationSettings settings)
         {
             services.AddSingleton(settings);
+            services.AddSingleton<IMongoMigrationAssemblyService, MongoMigrationAssemblyService>();
             services.AddSingleton(typeof(IMigrationLocator<>), typeof(TypeMigrationDependencyLocator<>));
             services.AddSingleton<IDatabaseTypeMigrationDependencyLocator, DatabaseTypeMigrationDependencyLocator>();
             services.AddSingleton<ICollectionLocator, CollectionLocator>();

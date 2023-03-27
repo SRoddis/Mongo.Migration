@@ -2,11 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using Mongo.Migration.Documents.Attributes;
+using Mongo.Migration.Migrations.Locators;
 
 namespace Mongo.Migration.Documents.Locators
 {
     internal class StartUpVersionLocator : AbstractLocator<DocumentVersion, Type>, IStartUpVersionLocator
     {
+        private readonly IMongoMigrationAssemblyService _mongoMigrationAssemblyService;
+
+        public StartUpVersionLocator(IMongoMigrationAssemblyService mongoMigrationAssemblyService)
+        {
+            _mongoMigrationAssemblyService = mongoMigrationAssemblyService;
+        }
+        
         public override DocumentVersion? GetLocateOrNull(Type identifier)
         {
             if (!LocatesDictionary.ContainsKey(identifier))
@@ -21,7 +29,7 @@ namespace Mongo.Migration.Documents.Locators
         public override void Locate()
         {
             var types =
-                from a in AppDomain.CurrentDomain.GetAssemblies()
+                from a in _mongoMigrationAssemblyService.GetAssemblies()
                 from t in a.GetTypes()
                 let attributes = t.GetCustomAttributes(typeof(StartUpVersion), true)
                 where attributes != null && attributes.Length > 0

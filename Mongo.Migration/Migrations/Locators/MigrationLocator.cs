@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using Mongo.Migration.Documents;
 using Mongo.Migration.Exceptions;
 using Mongo.Migration.Extensions;
 using NLog;
-using Mongo.Migration.Resources.Exceptions;
 
 namespace Mongo.Migration.Migrations.Locators
 {
@@ -15,9 +12,7 @@ namespace Mongo.Migration.Migrations.Locators
         where TMigrationType : class, IMigration
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private IEnumerable<Assembly> _assemblies;
         private IDictionary<Type, IReadOnlyCollection<TMigrationType>> _migrations;
-        protected IEnumerable<Assembly> Assemblies => _assemblies ??= GetAssemblies();
 
         protected virtual IDictionary<Type, IReadOnlyCollection<TMigrationType>> Migrations
         {
@@ -75,23 +70,5 @@ namespace Mongo.Migration.Migrations.Locators
         }
 
         public abstract void Locate();
-
-        private static IEnumerable<Assembly> GetAssemblies()
-        {
-            var location = AppDomain.CurrentDomain.BaseDirectory;
-            var path = Path.GetDirectoryName(location);
-
-            if (string.IsNullOrWhiteSpace(path))
-            {
-                throw new DirectoryNotFoundException(ErrorTexts.AppDirNotFound);
-            }
-
-            var assemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
-            var migrationAssemblies = Directory.GetFiles(path, "*.MongoMigrations*.dll").Select(Assembly.LoadFile);
-
-            assemblies.AddRange(migrationAssemblies);
-
-            return assemblies;
-        }
     }
 }

@@ -14,5 +14,6 @@
     <PackageReference Include="MinVer" Version="4.3.0" />
     <PackageReference Include="MongoDB.Driver" Version="2.19.0" />
     <PackageReference Include="NLog" Version="5.1.2" />
+    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
 </Project>

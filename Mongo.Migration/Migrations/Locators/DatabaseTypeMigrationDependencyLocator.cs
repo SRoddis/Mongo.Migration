@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using Mongo.Migration.Migrations.Database;
+using Mongo.Migration.Startup;
 
 namespace Mongo.Migration.Migrations.Locators
 {
@@ -23,8 +24,7 @@ namespace Mongo.Migration.Migrations.Locators
             set => _migrations = value;
         }
 
-        public DatabaseTypeMigrationDependencyLocator(IServiceScopeFactory scopeFactory)
-            : base(scopeFactory)
+        public DatabaseTypeMigrationDependencyLocator(IServiceScopeFactory scopeFactory) : base(scopeFactory)
         {
         }
     }
