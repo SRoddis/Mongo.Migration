@@ -13,13 +13,14 @@ namespace Mongo.Migration.Demo.Core.Pkg
         private static void Main(string[] args)
         {
             // Init MongoDB
-            var runner = MongoDbRunner.StartForDebugging();
-            var client = new MongoClient(runner.ConnectionString);
+            //var runner = MongoDbRunner.StartForDebugging();
+            var connectionString = "mongodb://localhost:27017/?maxPoolSize=9999";
+            var client = new MongoClient(connectionString);
 
             // Init MongoMigration
             MongoMigrationClient.Initialize(client);
 
-            client.GetDatabase("TestCars").DropCollection("Car");
+            client.GetDatabase("Local-test").DropCollection("Car");
 
             // Insert old and new version of cars into MongoDB
             var cars = new List<BsonDocument>
@@ -31,7 +32,7 @@ namespace Mongo.Migration.Demo.Core.Pkg
             };
 
             var bsonCollection =
-                client.GetDatabase("TestCars").GetCollection<BsonDocument>("Car");
+                client.GetDatabase("Local-test").GetCollection<BsonDocument>("Car");
 
             bsonCollection.InsertManyAsync(cars).Wait();
 
@@ -39,7 +40,7 @@ namespace Mongo.Migration.Demo.Core.Pkg
             cars.ForEach(c => Console.WriteLine(c.ToBsonDocument() + "\n"));
 
             // Migrate old version to current version by reading collection
-            var typedCollection = client.GetDatabase("TestCars").GetCollection<Car>("Car");
+            var typedCollection = client.GetDatabase("Local-test").GetCollection<Car>("Car");
             var result = typedCollection.FindAsync(_ => true).Result.ToListAsync().Result;
 
             Console.WriteLine("To:");
@@ -64,7 +65,7 @@ namespace Mongo.Migration.Demo.Core.Pkg
             Console.WriteLine("Press any Key to exit...");
             Console.Read();
 
-            client.GetDatabase("TestCars").DropCollection("Car");
+            client.GetDatabase("Local-test").DropCollection("Car");
         }
     }
 }

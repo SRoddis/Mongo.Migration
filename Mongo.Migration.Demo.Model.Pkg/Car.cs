@@ -6,7 +6,7 @@ namespace Mongo.Migration.Demo.Model.Pkg
 {
     [RuntimeVersion("0.1.1")]
     [StartUpVersion("0.0.1")]
-    [CollectionLocation("Car", "TestCars")]
+    [CollectionLocation("Car", "Local-test")]
     public class Car : IDocument
     {
         public ObjectId Id { get; set; }

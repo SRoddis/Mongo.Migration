@@ -34,16 +34,20 @@ namespace Mongo.Migration.Demo.WebCore.Pgk
         {
             services.AddMvc();
 
-            var runner = MongoDbRunner.Start();
-            _client = new MongoClient(runner.ConnectionString);
+            var connectionString = _configuration.GetSection("MongoDb:ConnectionString").Value;
+            var databaseName = _configuration.GetSection("MongoDb:Database").Value;
+            
+            //var runner = MongoDbRunner.Start();
+            _client = new MongoClient(connectionString);
+            services.AddSingleton<IMongoClient>(_client);
             
             CreateTestDocuments();
 
             services.Configure<MongoMigrationSettings>(
                 options =>
                 {
-                    options.ConnectionString =_configuration.GetSection("MongoDb:ConnectionString").Value; //With Mongo2Go use: runner.ConnectionString;
-                    options.Database = _configuration.GetSection("MongoDb:Database").Value;
+                    options.ConnectionString = connectionString; //With Mongo2Go use: runner.ConnectionString;
+                    options.Database = databaseName;
                 });
             services.AddMigration();
         }
@@ -56,37 +60,49 @@ namespace Mongo.Migration.Demo.WebCore.Pgk
             app.Run(
                 async context =>
                 {
-                    // Migrate old version to current version by reading collection
-                    var typedCollection = _client.GetDatabase("TestCars").GetCollection<Car>("Car");
+                    try
+                    {
+                        var connectionString = _configuration.GetSection("MongoDb:ConnectionString").Value;
+            
+                        //var runner = MongoDbRunner.Start();
+                        var client = new MongoClient(connectionString);
+                        
+                        // Migrate old version to current version by reading collection
+                        var typedCollection = client.GetDatabase("Local-test").GetCollection<Car>("Car");
+                        
+                        // Create new car and add it with current version number into MongoDB
+                        var id = ObjectId.GenerateNewId();
+                        var type = "Test" + id;
+                        var car = new Car {Doors = 2, Type = type};
 
-                    // Create new car and add it with current version number into MongoDB
-                    var id = ObjectId.GenerateNewId();
-                    var type = "Test" + id;
-                    var car = new Car {Doors = 2, Type = type};
+                        typedCollection.InsertOne(car);
+                        var test = typedCollection.FindAsync(Builders<Car>.Filter.Eq(c => c.Type, type)).Result.Single();
 
-                    typedCollection.InsertOne(car);
-                    var test = typedCollection.FindAsync(Builders<Car>.Filter.Eq(c => c.Type, type)).Result.Single();
+                        var aggregate = typedCollection.Aggregate()
+                            .Match(new BsonDocument {{"Dors", 3}});
+                        var results = aggregate.ToListAsync().Result;
 
-                    var aggregate = typedCollection.Aggregate()
-                        .Match(new BsonDocument {{"Dors", 3}});
-                    var results = aggregate.ToListAsync().Result;
+                        var result = typedCollection.FindAsync(_ => true).Result.ToListAsync().Result;
 
-                    var result = typedCollection.FindAsync(_ => true).Result.ToListAsync().Result;
-
-                    var response = "";
-                    result.ForEach(
-                        d =>
-                        {
-                             response += d.ToBsonDocument().ToString() + "\n";            
-                        });
+                        var response = "";
+                        result.ForEach(
+                            d =>
+                            {
+                                response += d.ToBsonDocument().ToString() + "\n";            
+                            });
                     
-                    await context.Response.WriteAsync(response);
+                        await context.Response.WriteAsync(response);
+                    }
+                    catch (Exception ex)
+                    {
+                        
+                    }
                 });
         }
         
         private void CreateTestDocuments()
         {
-            _client.GetDatabase("TestCars").DropCollection("Car");
+            _client.GetDatabase("Local-test").DropCollection("Car");
 
             // Insert old and new version of cars into MongoDB
             var cars = new List<BsonDocument>
@@ -98,7 +114,7 @@ namespace Mongo.Migration.Demo.WebCore.Pgk
             };
 
             var bsonCollection =
-                _client.GetDatabase("TestCars").GetCollection<BsonDocument>("Car");
+                _client.GetDatabase("Local-test").GetCollection<BsonDocument>("Car");
 
             bsonCollection.InsertManyAsync(cars).Wait();
         }
