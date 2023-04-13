@@ -13,7 +13,7 @@ parameters:
   - name: arrayTests
     type: object
     default:
-      - Mongo.Migration.Test.Core
+      - none
   - name: dockerfilePath
     type: string
     default: "none"
