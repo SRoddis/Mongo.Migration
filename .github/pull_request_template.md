@@ -29,26 +29,12 @@ Remove this section if empty.
 
 ### Checks
 
-````text
-Remove checks which do not apply, since the list serves as task progress display in the PR's overview.
-````
-
-- [ ] I have updated appveyor.yml with the correct new version of this project
 - [ ] I have labeled the PR correctly
+- [ ] I have set the PR title with the proper versioning[^versioning] prefix (will help for the merge commit message)
 - [ ] I have added tests that prove my fix is effective or that my feature works
-- [ ] I have tagged a commit in this PR with correct version
 - [ ] I have maximized the division of this story and could not make multiple smaller PRs
-- [ ] I have used stable versions for every package in this PR
-- [ ] The changelogs are writen in the story
-
-### Co-Authors
-
-````text
-Mention co-authors, if any.
-
-Remove this block when done.
-Remove this section if empty.
-````
+- [ ] I have used stable versions for every package in this PR (if not dependending on an unclosed PR)
+- [ ] The changelog is written in the story
 
 ![image](https://app.office-protect.com/assets/office-protect-logo-white.png)
 
