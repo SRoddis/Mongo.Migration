@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 
 using Mongo.Migration.Documents.Locators;
@@ -20,10 +19,6 @@ namespace Mongo.Migration.Startup.DotNetCore
 
             services.AddScoped<IMigrationService, MigrationService>();
         }
-
-        public static void AddMigrationStartupFilter(this IServiceCollection services) => services.AddTransient<IStartupFilter, MongoMigrationStartupFilter>();
-
-        public static void AddMongoMigrationHostedService(this IServiceCollection services) => services.AddHostedService<MongoMigrationHostedService>();
 
         private static void RegisterDefaults(IServiceCollection services, IMongoMigrationSettings settings)
         {
