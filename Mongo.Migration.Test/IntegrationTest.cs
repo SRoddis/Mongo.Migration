@@ -1,8 +1,10 @@
 ﻿using System;
+
 using Mongo.Migration.Startup;
 using Mongo.Migration.Startup.Static;
+
 using Mongo2Go;
-using MongoDB.Bson;
+
 using MongoDB.Driver;
 
 namespace Mongo.Migration.Test
@@ -15,20 +17,22 @@ namespace Mongo.Migration.Test
 
         protected MongoDbRunner _mongoToGoRunner;
 
-        protected void OnSetUp()
-        {
-            _mongoToGoRunner = MongoDbRunner.Start();
-            _client = new MongoClient(_mongoToGoRunner.ConnectionString);
-
-            _client.GetDatabase("PerformanceTest").CreateCollection("Test");
-
-            _components = new ComponentRegistry( new MongoMigrationSettings() {ConnectionString = _mongoToGoRunner.ConnectionString, Database = "PerformanceTest"});
-            _components.RegisterComponents(_client);
-        }
-
         public void Dispose()
         {
-            _mongoToGoRunner?.Dispose();
+            this._mongoToGoRunner?.Dispose();
+        }
+
+        protected void OnSetUp()
+        {
+            this._mongoToGoRunner = MongoDbRunner.Start();
+            this._client = new MongoClient(this._mongoToGoRunner.ConnectionString);
+
+            this._client.GetDatabase("PerformanceTest").CreateCollection("Test");
+
+            this._components = new ComponentRegistry(
+                new MongoMigrationSettings
+                    { ConnectionString = this._mongoToGoRunner.ConnectionString, Database = "PerformanceTest" });
+            this._components.RegisterComponents(this._client);
         }
     }
 }

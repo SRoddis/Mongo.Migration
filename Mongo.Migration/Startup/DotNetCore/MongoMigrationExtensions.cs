@@ -1,5 +1,5 @@
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+
 using Mongo.Migration.Documents.Locators;
 using Mongo.Migration.Documents.Serializers;
 using Mongo.Migration.Migrations.Adapters;
@@ -8,14 +8,12 @@ using Mongo.Migration.Migrations.Document;
 using Mongo.Migration.Migrations.Locators;
 using Mongo.Migration.Services;
 using Mongo.Migration.Services.Interceptors;
-using ServiceProvider = Mongo.Migration.Migrations.Adapters.ServiceProvider;
 
 namespace Mongo.Migration.Startup.DotNetCore
 {
     public static class MongoMigrationExtensions
     {
-        public static void AddMigration(
-            this IServiceCollection services, IMongoMigrationSettings settings = null)
+        public static void AddMigration(this IServiceCollection services, IMongoMigrationSettings settings = null)
         {
             RegisterDefaults(services, settings ?? new MongoMigrationSettings());
 
@@ -26,7 +24,7 @@ namespace Mongo.Migration.Startup.DotNetCore
         {
             services.AddSingleton(settings);
 
-            services.AddSingleton<IContainerProvider, ServiceProvider>();
+            services.AddSingleton<IContainerProvider, Migrations.Adapters.ServiceProvider>();
             services.AddSingleton(typeof(IMigrationLocator<>), typeof(TypeMigrationDependencyLocator<>));
             services.AddSingleton<IDatabaseTypeMigrationDependencyLocator, DatabaseTypeMigrationDependencyLocator>();
             services.AddSingleton<ICollectionLocator, CollectionLocator>();
@@ -47,7 +45,6 @@ namespace Mongo.Migration.Startup.DotNetCore
             services.AddTransient<IMigrationInterceptorProvider, MigrationInterceptorProvider>();
 
             services.AddTransient<IMongoMigration, MongoMigration>();
-            services.AddTransient<IStartupFilter, MongoMigrationStartupFilter>();
         }
     }
 }

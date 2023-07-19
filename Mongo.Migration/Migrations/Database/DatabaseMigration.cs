@@ -1,5 +1,7 @@
 ﻿using System;
+
 using Mongo.Migration.Documents;
+
 using MongoDB.Driver;
 
 namespace Mongo.Migration.Migrations.Database
@@ -8,7 +10,7 @@ namespace Mongo.Migration.Migrations.Database
     {
         protected DatabaseMigration(string version)
         {
-            Version = version;
+            this.Version = version;
         }
 
         public DocumentVersion Version { get; }

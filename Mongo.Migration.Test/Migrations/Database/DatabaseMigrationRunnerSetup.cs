@@ -1,7 +1,10 @@
 ﻿using Mongo.Migration.Documents.Serializers;
+
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
+
 using NLog;
+
 using NUnit.Framework;
 
 namespace Mongo.Migration.Test.Migrations.Database
@@ -10,11 +13,10 @@ namespace Mongo.Migration.Test.Migrations.Database
     public class DatabaseMigrationRunnerSetup
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        
+
         [OneTimeSetUp]
         public void GlobalSetup()
         {
-            
             try
             {
                 var documentSerializaer = new DocumentVersionSerializer();
@@ -22,7 +24,7 @@ namespace Mongo.Migration.Test.Migrations.Database
             }
             catch (BsonSerializationException ex)
             {
-                _logger.Warn(ex);
+                this._logger.Warn(ex);
             }
         }
 

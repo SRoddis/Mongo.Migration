@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Mongo.Migration.Exceptions;
 using Mongo.Migration.Migrations;
 
@@ -21,7 +22,9 @@ namespace Mongo.Migration.Extensions
             {
                 var version = element.Version.ToString();
                 if (uniqueHashes.Add(version))
+                {
                     continue;
+                }
 
                 var typeName = element.GetType().Name;
                 throw new DuplicateVersionException(typeName, element.Version);
@@ -29,7 +32,7 @@ namespace Mongo.Migration.Extensions
 
             return list;
         }
-        
+
         internal static IDictionary<Type, IReadOnlyCollection<TMigrationType>> ToMigrationDictionary<TMigrationType>(
             this IEnumerable<TMigrationType> migrations)
             where TMigrationType : class, IMigration
@@ -41,7 +44,9 @@ namespace Mongo.Migration.Extensions
             foreach (var type in types)
             {
                 if (dictonary.ContainsKey(type))
+                {
                     continue;
+                }
 
                 var uniqueMigrations =
                     list.Where(m => m.Type == type).CheckForDuplicates().OrderBy(m => m.Version).ToList();
