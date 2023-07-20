@@ -34,7 +34,7 @@ namespace Mongo.Migration.Migrations.Locators
 
                 if (this._migrations.NullOrEmpty())
                 {
-                    this._logger.Info(new NoMigrationsFoundException());
+                    this._logger.Debug(new NoMigrationsFoundException());
                 }
 
                 return this._migrations;
