@@ -30,7 +30,7 @@ bld/
 #wwwroot/
 
 # MSTest test Results
-[Tt]est[Rr]esult*/
+[Tt]est[Rr]esult*/**/*.xml
 [Bb]uild[Ll]og.*
 
 # NUNIT
