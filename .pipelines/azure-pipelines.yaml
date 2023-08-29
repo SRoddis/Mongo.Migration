@@ -66,6 +66,7 @@ stages:
           dockerfilePath: "${{ parameters.dockerfilePath }}"
           dotNetSdkVersion: "${{ parameters.dotNetSdkVersion }}"
           projectPath: "$(System.DefaultWorkingDirectory)/${{ parameters.gitRepoName }}"
+          gitRepoName: "${{ parameters.gitRepoName }}"
       - template: azdoTemplates/workflows/cd-docker.yaml@tools
         parameters:
           env: "dev"
