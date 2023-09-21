@@ -8,6 +8,14 @@ Remove this block when done.
 
 Related Work Item: AB#xxxxx
 
+### Impact analysis[^usecases]
+
+```text
+List the impacted use cases, e.g.:
+
+- SETUP-5: added parameter to contract
+```
+
 ## Dependencies
 
 ````text
@@ -29,7 +37,9 @@ Remove this section if empty.
 
 ### Checks
 
-- [ ] I have labeled the PR correctly
+- [ ] I have labeled the PR type: `bug`, `refactoring`, `feature`, `breaking change`
+- [ ] I have labeled the PR risk: `lo-risk`, `med-risk`, `hi-risk`
+- [ ] I have labeled the PR visibility: `client-facing`
 - [ ] I have set the PR title with the proper versioning[^versioning] prefix (will help for the merge commit message)
 - [ ] I have added tests that prove my fix is effective or that my feature works
 - [ ] I have maximized the division of this story and could not make multiple smaller PRs
@@ -38,6 +48,7 @@ Remove this section if empty.
 
 ![image](https://app.office-protect.com/assets/office-protect-logo-white.png)
 
-[^practices]: https://wiki.sherweb.com/display/TUR/Meilleures+pratiques+pour+la+revue+de+pull+requests
-[^deps]: https://github.com/sherweb/OfficeProtect.Utils/blob/master/dependencies/README.md
-[^versioning]: https://github.com/sherweb/OfficeProtect.Application/blob/master/docs/software/application-versioning.md
+[^practices]: <https://wiki.sherweb.com/display/TUR/Meilleures+pratiques+pour+la+revue+de+pull+requests>
+[^deps]: <https://github.com/sherweb/OfficeProtect.Utils/blob/master/dependencies/README.md>
+[^versioning]: <https://github.com/sherweb/OfficeProtect.Application/blob/master/docs/software/application-versioning.md>
+[^usecases]: <https://wiki-sherweb.atlassian.net/wiki/spaces/TUR/pages/159023503/Product+-+All+Use+Cases>
