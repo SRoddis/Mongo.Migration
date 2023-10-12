@@ -1,0 +1,6 @@
+exclude:
+    global:
+      - Mongo.Migration.Test/**
+      - Mongo.Migration.Test.Core/**
+      - Mongo.Migration.Tests/**
+      - pacakages/**
