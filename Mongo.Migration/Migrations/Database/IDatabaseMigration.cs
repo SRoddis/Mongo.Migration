@@ -1,11 +1,10 @@
 ﻿using MongoDB.Driver;
 
-namespace Mongo.Migration.Migrations.Database
-{
-    public interface IDatabaseMigration : IMigration
-    {
-        void Up(IMongoDatabase db);
+namespace Mongo.Migration.Migrations.Database;
 
-        void Down(IMongoDatabase db);
-    }
+public interface IDatabaseMigration : IMigration
+{
+    void Up(IMongoDatabase db);
+
+    void Down(IMongoDatabase db);
 }

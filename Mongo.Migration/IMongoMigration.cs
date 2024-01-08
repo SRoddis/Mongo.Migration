@@ -1,7 +1,6 @@
-﻿namespace Mongo.Migration
+﻿namespace Mongo.Migration;
+
+public interface IMongoMigration
 {
-    public interface IMongoMigration
-    {
-        void Run();
-    }
+    void Run();
 }

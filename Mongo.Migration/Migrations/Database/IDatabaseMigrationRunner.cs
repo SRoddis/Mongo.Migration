@@ -1,9 +1,8 @@
 ﻿using MongoDB.Driver;
 
-namespace Mongo.Migration.Migrations.Database
+namespace Mongo.Migration.Migrations.Database;
+
+internal interface IDatabaseMigrationRunner
 {
-    internal interface IDatabaseMigrationRunner
-    {
-        void Run(IMongoDatabase db);
-    }
+    void Run(IMongoDatabase db);
 }

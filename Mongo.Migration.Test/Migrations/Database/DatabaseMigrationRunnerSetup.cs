@@ -7,31 +7,30 @@ using NLog;
 
 using NUnit.Framework;
 
-namespace Mongo.Migration.Test.Migrations.Database
+namespace Mongo.Migration.Test.Migrations.Database;
+
+[SetUpFixture]
+public class DatabaseMigrationRunnerSetup
 {
-    [SetUpFixture]
-    public class DatabaseMigrationRunnerSetup
+    private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+
+    [OneTimeSetUp]
+    public void GlobalSetup()
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-
-        [OneTimeSetUp]
-        public void GlobalSetup()
+        try
         {
-            try
-            {
-                var documentSerializaer = new DocumentVersionSerializer();
-                BsonSerializer.RegisterSerializer(documentSerializaer.ValueType, documentSerializaer);
-            }
-            catch (BsonSerializationException ex)
-            {
-                this._logger.Warn(ex);
-            }
+            var documentSerializaer = new DocumentVersionSerializer();
+            BsonSerializer.RegisterSerializer(documentSerializaer.ValueType, documentSerializaer);
         }
-
-        [OneTimeTearDown]
-        public void GlobalTeardown()
+        catch (BsonSerializationException ex)
         {
-            // Do logout here
+            this._logger.Warn(ex);
         }
+    }
+
+    [OneTimeTearDown]
+    public void GlobalTeardown()
+    {
+        // Do logout here
     }
 }

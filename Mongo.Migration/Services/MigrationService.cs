@@ -9,69 +9,68 @@ using Mongo.Migration.Services.Interceptors;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 
-namespace Mongo.Migration.Services
+namespace Mongo.Migration.Services;
+
+internal class MigrationService : IMigrationService
 {
-    internal class MigrationService : IMigrationService
+    private readonly ILogger<MigrationService> _logger;
+
+    private readonly IMigrationInterceptorProvider _provider;
+
+    private readonly DocumentVersionSerializer _serializer;
+
+    private readonly IStartUpDatabaseMigrationRunner _startUpDatabaseMigrationRunner;
+
+    private readonly IStartUpDocumentMigrationRunner _startUpDocumentMigrationRunner;
+
+    public MigrationService(
+        DocumentVersionSerializer serializer,
+        IMigrationInterceptorProvider provider,
+        IStartUpDocumentMigrationRunner startUpDocumentMigrationRunner,
+        IStartUpDatabaseMigrationRunner startUpDatabaseMigrationRunner)
+        : this(serializer, provider, NullLoggerFactory.Instance)
     {
-        private readonly ILogger<MigrationService> _logger;
+        this._startUpDocumentMigrationRunner = startUpDocumentMigrationRunner;
+        this._startUpDatabaseMigrationRunner = startUpDatabaseMigrationRunner;
+    }
 
-        private readonly IMigrationInterceptorProvider _provider;
+    private MigrationService(
+        DocumentVersionSerializer serializer,
+        IMigrationInterceptorProvider provider,
+        ILoggerFactory loggerFactory)
+    {
+        this._serializer = serializer;
+        this._provider = provider;
+        this._logger = loggerFactory.CreateLogger<MigrationService>();
+    }
 
-        private readonly DocumentVersionSerializer _serializer;
+    public void Migrate()
+    {
+        BsonSerializer.RegisterSerializationProvider(this._provider);
+        this.RegisterSerializer();
 
-        private readonly IStartUpDatabaseMigrationRunner _startUpDatabaseMigrationRunner;
+        this.OnStartup();
+    }
 
-        private readonly IStartUpDocumentMigrationRunner _startUpDocumentMigrationRunner;
+    private void OnStartup()
+    {
+        this._startUpDatabaseMigrationRunner.RunAll();
+        this._startUpDocumentMigrationRunner.RunAll();
+    }
 
-        public MigrationService(
-            DocumentVersionSerializer serializer,
-            IMigrationInterceptorProvider provider,
-            IStartUpDocumentMigrationRunner startUpDocumentMigrationRunner,
-            IStartUpDatabaseMigrationRunner startUpDatabaseMigrationRunner)
-            : this(serializer, provider, NullLoggerFactory.Instance)
+    private void RegisterSerializer()
+    {
+        try
         {
-            this._startUpDocumentMigrationRunner = startUpDocumentMigrationRunner;
-            this._startUpDatabaseMigrationRunner = startUpDatabaseMigrationRunner;
+            BsonSerializer.RegisterSerializer(this._serializer.ValueType, this._serializer);
         }
-
-        private MigrationService(
-            DocumentVersionSerializer serializer,
-            IMigrationInterceptorProvider provider,
-            ILoggerFactory loggerFactory)
+        catch (BsonSerializationException ex)
         {
-            this._serializer = serializer;
-            this._provider = provider;
-            this._logger = loggerFactory.CreateLogger<MigrationService>();
-        }
+            // Catch if Serializer was registered already ... not great, I know.
+            // We have to do this, because there is always a default DocumentVersionSerialzer.
+            // BsonSerializer.LookupSerializer(), does not work.
 
-        public void Migrate()
-        {
-            BsonSerializer.RegisterSerializationProvider(this._provider);
-            this.RegisterSerializer();
-
-            this.OnStartup();
-        }
-
-        private void OnStartup()
-        {
-            this._startUpDatabaseMigrationRunner.RunAll();
-            this._startUpDocumentMigrationRunner.RunAll();
-        }
-
-        private void RegisterSerializer()
-        {
-            try
-            {
-                BsonSerializer.RegisterSerializer(this._serializer.ValueType, this._serializer);
-            }
-            catch (BsonSerializationException ex)
-            {
-                // Catch if Serializer was registered already ... not great, I know.
-                // We have to do this, because there is always a default DocumentVersionSerialzer.
-                // BsonSerializer.LookupSerializer(), does not work.
-
-                this._logger.LogError(ex, ex.GetType().ToString());
-            }
+            this._logger.LogError(ex, ex.GetType().ToString());
         }
     }
 }

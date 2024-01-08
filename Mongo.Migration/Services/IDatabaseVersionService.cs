@@ -3,16 +3,15 @@ using Mongo.Migration.Migrations.Database;
 
 using MongoDB.Driver;
 
-namespace Mongo.Migration.Services
+namespace Mongo.Migration.Services;
+
+public interface IDatabaseVersionService
 {
-    public interface IDatabaseVersionService
-    {
-        DocumentVersion GetCurrentOrLatestMigrationVersion();
+    DocumentVersion GetCurrentOrLatestMigrationVersion();
 
-        DocumentVersion GetLatestDatabaseVersion(IMongoDatabase db);
+    DocumentVersion GetLatestDatabaseVersion(IMongoDatabase db);
 
-        void Save(IMongoDatabase db, IDatabaseMigration migration);
+    void Save(IMongoDatabase db, IDatabaseMigration migration);
 
-        void Remove(IMongoDatabase db, IDatabaseMigration migration);
-    }
+    void Remove(IMongoDatabase db, IDatabaseMigration migration);
 }

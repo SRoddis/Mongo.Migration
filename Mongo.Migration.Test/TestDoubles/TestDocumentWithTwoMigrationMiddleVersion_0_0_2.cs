@@ -2,27 +2,26 @@
 
 using MongoDB.Bson;
 
-namespace Mongo.Migration.Test.TestDoubles
+namespace Mongo.Migration.Test.TestDoubles;
+
+internal class TestDocumentWithTwoMigrationMiddleVersion_0_0_2 : DocumentMigration<TestDocumentWithTwoMigrationMiddleVersion>
 {
-    internal class TestDocumentWithTwoMigrationMiddleVersion_0_0_2 : DocumentMigration<TestDocumentWithTwoMigrationMiddleVersion>
+    public TestDocumentWithTwoMigrationMiddleVersion_0_0_2()
+        : base("0.0.2")
     {
-        public TestDocumentWithTwoMigrationMiddleVersion_0_0_2()
-            : base("0.0.2")
-        {
-        }
+    }
 
-        public override void Up(BsonDocument document)
-        {
-            var doors = document["Doors"].ToInt32();
-            document.Add("Door", doors);
-            document.Remove("Doors");
-        }
+    public override void Up(BsonDocument document)
+    {
+        var doors = document["Doors"].ToInt32();
+        document.Add("Door", doors);
+        document.Remove("Doors");
+    }
 
-        public override void Down(BsonDocument document)
-        {
-            var doors = document["Door"].ToInt32();
-            document.Add("Doors", doors);
-            document.Remove("Door");
-        }
+    public override void Down(BsonDocument document)
+    {
+        var doors = document["Door"].ToInt32();
+        document.Add("Doors", doors);
+        document.Remove("Door");
     }
 }

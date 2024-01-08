@@ -1,7 +1,6 @@
-namespace Mongo.Migration.Migrations.Document
+namespace Mongo.Migration.Migrations.Document;
+
+internal interface IStartUpDocumentMigrationRunner
 {
-    internal interface IStartUpDocumentMigrationRunner
-    {
-        void RunAll();
-    }
+    void RunAll();
 }

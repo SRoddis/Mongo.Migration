@@ -1,8 +1,7 @@
 ﻿using Mongo.Migration.Migrations.Database;
 
-namespace Mongo.Migration.Migrations.Locators
+namespace Mongo.Migration.Migrations.Locators;
+
+internal interface IDatabaseTypeMigrationDependencyLocator : IMigrationLocator<IDatabaseMigration>
 {
-    internal interface IDatabaseTypeMigrationDependencyLocator : IMigrationLocator<IDatabaseMigration>
-    {
-    }
 }

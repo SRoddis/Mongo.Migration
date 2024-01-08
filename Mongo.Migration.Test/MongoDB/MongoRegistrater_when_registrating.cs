@@ -7,34 +7,33 @@ using MongoDB.Bson.Serialization;
 
 using NUnit.Framework;
 
-namespace Mongo.Migration.Test.MongoDB
+namespace Mongo.Migration.Test.MongoDB;
+
+[TestFixture]
+internal class MongoRegistrator_when_registrating : IntegrationTest
 {
-    [TestFixture]
-    internal class MongoRegistrator_when_registrating : IntegrationTest
+    [SetUp]
+    public void SetUp()
     {
-        [SetUp]
-        public void SetUp()
-        {
-            this.OnSetUp();
-        }
+        this.OnSetUp();
+    }
 
-        [TearDown]
-        public void TearDown()
-        {
-            this.Dispose();
-        }
+    [TearDown]
+    public void TearDown()
+    {
+        this.Dispose();
+    }
 
-        [Test]
-        public void Then_serializer_is_registered()
-        {
-            // Arrange 
-            var migrationService = this._components.Get<IMigrationService>();
+    [Test]
+    public void Then_serializer_is_registered()
+    {
+        // Arrange 
+        var migrationService = this._components.Get<IMigrationService>();
 
-            // Act
-            migrationService.Migrate();
+        // Act
+        migrationService.Migrate();
 
-            // Arrange
-            BsonSerializer.LookupSerializer<DocumentVersion>().ValueType.Should().Be(typeof(DocumentVersion));
-        }
+        // Arrange
+        BsonSerializer.LookupSerializer<DocumentVersion>().ValueType.Should().Be(typeof(DocumentVersion));
     }
 }

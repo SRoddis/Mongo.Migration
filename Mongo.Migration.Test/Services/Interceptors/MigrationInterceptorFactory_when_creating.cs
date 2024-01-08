@@ -7,60 +7,59 @@ using Mongo.Migration.Test.TestDoubles;
 
 using NUnit.Framework;
 
-namespace Mongo.Migration.Test.Services.Interceptors
+namespace Mongo.Migration.Test.Services.Interceptors;
+
+[TestFixture]
+internal class MigrationInterceptorFactory_when_creating : IntegrationTest
 {
-    [TestFixture]
-    internal class MigrationInterceptorFactory_when_creating : IntegrationTest
+    [SetUp]
+    public void SetUp()
     {
-        [SetUp]
-        public void SetUp()
-        {
-            this.OnSetUp();
-        }
+        this.OnSetUp();
+    }
 
-        [TearDown]
-        public void TearDown()
-        {
-            this.Dispose();
-        }
+    [TearDown]
+    public void TearDown()
+    {
+        this.Dispose();
+    }
 
-        [Test]
-        public void If_type_is_assignable_to_document_Then_interceptor_is_created()
-        {
-            // Arrange
-            var factory = this._components.Get<IMigrationInterceptorFactory>();
+    [Test]
+    public void If_type_is_assignable_to_document_Then_interceptor_is_created()
+    {
+        // Arrange
+        var factory = this._components.Get<IMigrationInterceptorFactory>();
 
-            // Act
-            var interceptor = factory.Create(typeof(TestDocumentWithOneMigration));
+        // Act
+        var interceptor = factory.Create(typeof(TestDocumentWithOneMigration));
 
-            // Assert
-            interceptor.ValueType.Should().Be<TestDocumentWithOneMigration>();
-        }
+        // Assert
+        interceptor.ValueType.Should().Be<TestDocumentWithOneMigration>();
+    }
 
-        [Test]
-        public void If_type_is_not_assignable_to_document_Then_exception_is_thrown()
-        {
-            // Arrange
-            var factory = this._components.Get<IMigrationInterceptorFactory>();
+    [Test]
+    public void If_type_is_not_assignable_to_document_Then_exception_is_thrown()
+    {
+        // Arrange
+        var factory = this._components.Get<IMigrationInterceptorFactory>();
 
-            // Act
-            Action act = () => factory.Create(typeof(TestClass));
+        // Act
+        Action act = () => factory.Create(typeof(TestClass));
 
-            // Assert
-            act.Should().ThrowExactly<ArgumentException>();
-        }
+        // Assert
+        act.Should().ThrowExactly<ArgumentException>();
+    }
 
-        [Test]
-        public void If_type_is_null_Then_exception_is_thrown()
-        {
-            // Arrange
-            var factory = this._components.Get<IMigrationInterceptorFactory>();
+    [Test]
+    public void If_type_is_null_Then_exception_is_thrown()
+    {
+        // Arrange
+        var factory = this._components.Get<IMigrationInterceptorFactory>();
 
-            // Act
-            Action act = () => factory.Create(null);
+        // Act
+        Action act = () => factory.Create(null);
 
-            // Assert
-            act.Should().ThrowExactly<ArgumentNullException>();
-        }
+        // Assert
+        act.Should().ThrowExactly<ArgumentNullException>();
     }
 }

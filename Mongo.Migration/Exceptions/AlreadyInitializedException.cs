@@ -1,12 +1,11 @@
 ﻿using System;
 
-namespace Mongo.Migration.Exceptions
+namespace Mongo.Migration.Exceptions;
+
+public class AlreadyInitializedException : Exception
 {
-    public class AlreadyInitializedException : Exception
+    public AlreadyInitializedException()
+        : base(string.Format(ErrorTexts.AlreadyInitialized))
     {
-        public AlreadyInitializedException()
-            : base(string.Format(ErrorTexts.AlreadyInitialized))
-        {
-        }
     }
 }

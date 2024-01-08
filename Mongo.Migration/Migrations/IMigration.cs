@@ -2,12 +2,11 @@
 
 using Mongo.Migration.Documents;
 
-namespace Mongo.Migration.Migrations
-{
-    public interface IMigration
-    {
-        DocumentVersion Version { get; }
+namespace Mongo.Migration.Migrations;
 
-        Type Type { get; }
-    }
+public interface IMigration
+{
+    DocumentVersion Version { get; }
+
+    Type Type { get; }
 }

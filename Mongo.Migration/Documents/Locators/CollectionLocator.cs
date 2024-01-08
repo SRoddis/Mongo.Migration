@@ -4,44 +4,43 @@ using System.Linq;
 
 using Mongo.Migration.Documents.Attributes;
 
-namespace Mongo.Migration.Documents.Locators
+namespace Mongo.Migration.Documents.Locators;
+
+public class CollectionLocator : AbstractLocator<CollectionLocationInformation, Type>, ICollectionLocator
 {
-    public class CollectionLocator : AbstractLocator<CollectionLocationInformation, Type>, ICollectionLocator
+    public override CollectionLocationInformation? GetLocateOrNull(Type identifier)
     {
-        public override CollectionLocationInformation? GetLocateOrNull(Type identifier)
+        if (!this.LocatesDictionary.ContainsKey(identifier))
         {
-            if (!this.LocatesDictionary.ContainsKey(identifier))
-            {
-                return null;
-            }
-
-            this.LocatesDictionary.TryGetValue(identifier, out var value);
-            return value;
+            return null;
         }
 
-        public override void Locate()
+        this.LocatesDictionary.TryGetValue(identifier, out var value);
+        return value;
+    }
+
+    public override void Locate()
+    {
+        var types =
+            from a in AppDomain.CurrentDomain.GetAssemblies()
+            from t in a.GetTypes()
+            let attributes = t.GetCustomAttributes(typeof(CollectionLocation), true)
+            where attributes != null && attributes.Length > 0
+            select new { Type = t, Attributes = attributes.Cast<CollectionLocation>() };
+
+        var versions = new Dictionary<Type, CollectionLocationInformation>();
+
+        foreach (var type in types)
         {
-            var types =
-                from a in AppDomain.CurrentDomain.GetAssemblies()
-                from t in a.GetTypes()
-                let attributes = t.GetCustomAttributes(typeof(CollectionLocation), true)
-                where attributes != null && attributes.Length > 0
-                select new { Type = t, Attributes = attributes.Cast<CollectionLocation>() };
-
-            var versions = new Dictionary<Type, CollectionLocationInformation>();
-
-            foreach (var type in types)
-            {
-                var version = type.Attributes.First().CollectionInformation;
-                versions.Add(type.Type, version);
-            }
-
-            this.LocatesDictionary = versions;
+            var version = type.Attributes.First().CollectionInformation;
+            versions.Add(type.Type, version);
         }
 
-        public IDictionary<Type, CollectionLocationInformation> GetLocatesOrEmpty()
-        {
-            return this.LocatesDictionary;
-        }
+        this.LocatesDictionary = versions;
+    }
+
+    public IDictionary<Type, CollectionLocationInformation> GetLocatesOrEmpty()
+    {
+        return this.LocatesDictionary;
     }
 }

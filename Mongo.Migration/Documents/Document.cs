@@ -1,7 +1,6 @@
-namespace Mongo.Migration.Documents
+namespace Mongo.Migration.Documents;
+
+public class Document : IDocument
 {
-    public class Document : IDocument
-    {
-        public DocumentVersion Version { get; set; }
-    }
+    public DocumentVersion Version { get; set; }
 }

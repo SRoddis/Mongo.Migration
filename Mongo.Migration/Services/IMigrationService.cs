@@ -1,7 +1,6 @@
-﻿namespace Mongo.Migration.Services
+﻿namespace Mongo.Migration.Services;
+
+internal interface IMigrationService
 {
-    internal interface IMigrationService
-    {
-        void Migrate();
-    }
+    void Migrate();
 }

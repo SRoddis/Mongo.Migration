@@ -1,12 +1,11 @@
 ﻿using System;
 
-namespace Mongo.Migration.Exceptions
+namespace Mongo.Migration.Exceptions;
+
+internal class DuplicateVersionException : Exception
 {
-    internal class DuplicateVersionException : Exception
+    public DuplicateVersionException(string typeName, string version)
+        : base(string.Format(ErrorTexts.DuplicateVersion, typeName, version))
     {
-        public DuplicateVersionException(string typeName, string version)
-            : base(string.Format(ErrorTexts.DuplicateVersion, typeName, version))
-        {
-        }
     }
 }

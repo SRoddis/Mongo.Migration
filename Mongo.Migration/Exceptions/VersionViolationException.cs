@@ -2,16 +2,15 @@
 
 using Mongo.Migration.Documents;
 
-namespace Mongo.Migration.Exceptions
+namespace Mongo.Migration.Exceptions;
+
+public class VersionViolationException : Exception
 {
-    public class VersionViolationException : Exception
+    public VersionViolationException(
+        DocumentVersion currentVersion,
+        DocumentVersion documentVersion,
+        DocumentVersion latestVersion)
+        : base(string.Format(ErrorTexts.DuplicateVersion, currentVersion, documentVersion, latestVersion))
     {
-        public VersionViolationException(
-            DocumentVersion currentVersion,
-            DocumentVersion documentVersion,
-            DocumentVersion latestVersion)
-            : base(string.Format(ErrorTexts.DuplicateVersion, currentVersion, documentVersion, latestVersion))
-        {
-        }
     }
 }

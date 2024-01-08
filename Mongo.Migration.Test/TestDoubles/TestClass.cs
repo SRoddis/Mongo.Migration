@@ -1,11 +1,10 @@
 ﻿using MongoDB.Bson;
 
-namespace Mongo.Migration.Test.TestDoubles
-{
-    public class TestClass
-    {
-        public ObjectId Id { get; set; }
+namespace Mongo.Migration.Test.TestDoubles;
 
-        public int Dors { get; set; }
-    }
+public class TestClass
+{
+    public ObjectId Id { get; set; }
+
+    public int Dors { get; set; }
 }

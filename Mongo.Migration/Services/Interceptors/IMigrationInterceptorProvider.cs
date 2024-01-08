@@ -1,8 +1,7 @@
 ﻿using MongoDB.Bson.Serialization;
 
-namespace Mongo.Migration.Services.Interceptors
+namespace Mongo.Migration.Services.Interceptors;
+
+public interface IMigrationInterceptorProvider : IBsonSerializationProvider
 {
-    public interface IMigrationInterceptorProvider : IBsonSerializationProvider
-    {
-    }
 }

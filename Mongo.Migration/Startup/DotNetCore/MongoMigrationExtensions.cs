@@ -9,42 +9,41 @@ using Mongo.Migration.Migrations.Locators;
 using Mongo.Migration.Services;
 using Mongo.Migration.Services.Interceptors;
 
-namespace Mongo.Migration.Startup.DotNetCore
+namespace Mongo.Migration.Startup.DotNetCore;
+
+public static class MongoMigrationExtensions
 {
-    public static class MongoMigrationExtensions
+    public static void AddMigration(this IServiceCollection services, IMongoMigrationSettings settings = null)
     {
-        public static void AddMigration(this IServiceCollection services, IMongoMigrationSettings settings = null)
-        {
-            RegisterDefaults(services, settings ?? new MongoMigrationSettings());
+        RegisterDefaults(services, settings ?? new MongoMigrationSettings());
 
-            services.AddScoped<IMigrationService, MigrationService>();
-        }
+        services.AddScoped<IMigrationService, MigrationService>();
+    }
 
-        private static void RegisterDefaults(IServiceCollection services, IMongoMigrationSettings settings)
-        {
-            services.AddSingleton(settings);
+    private static void RegisterDefaults(IServiceCollection services, IMongoMigrationSettings settings)
+    {
+        services.AddSingleton(settings);
 
-            services.AddSingleton<IContainerProvider, Migrations.Adapters.ServiceProvider>();
-            services.AddSingleton(typeof(IMigrationLocator<>), typeof(TypeMigrationDependencyLocator<>));
-            services.AddSingleton<IDatabaseTypeMigrationDependencyLocator, DatabaseTypeMigrationDependencyLocator>();
-            services.AddSingleton<ICollectionLocator, CollectionLocator>();
-            services.AddSingleton<IRuntimeVersionLocator, RuntimeVersionLocator>();
-            services.AddSingleton<IStartUpVersionLocator, StartUpVersionLocator>();
+        services.AddSingleton<IContainerProvider, Migrations.Adapters.ServiceProvider>();
+        services.AddSingleton(typeof(IMigrationLocator<>), typeof(TypeMigrationDependencyLocator<>));
+        services.AddSingleton<IDatabaseTypeMigrationDependencyLocator, DatabaseTypeMigrationDependencyLocator>();
+        services.AddSingleton<ICollectionLocator, CollectionLocator>();
+        services.AddSingleton<IRuntimeVersionLocator, RuntimeVersionLocator>();
+        services.AddSingleton<IStartUpVersionLocator, StartUpVersionLocator>();
 
-            services.AddTransient<IDatabaseVersionService, DatabaseVersionService>();
-            services.AddTransient<IDocumentVersionService, DocumentVersionService>();
-            services.AddTransient<IMigrationInterceptorFactory, MigrationInterceptorFactory>();
-            services.AddTransient<DocumentVersionSerializer, DocumentVersionSerializer>();
+        services.AddTransient<IDatabaseVersionService, DatabaseVersionService>();
+        services.AddTransient<IDocumentVersionService, DocumentVersionService>();
+        services.AddTransient<IMigrationInterceptorFactory, MigrationInterceptorFactory>();
+        services.AddTransient<DocumentVersionSerializer, DocumentVersionSerializer>();
 
-            services.AddTransient<IStartUpDocumentMigrationRunner, StartUpDocumentMigrationRunner>();
-            services.AddTransient<IDocumentMigrationRunner, DocumentMigrationRunner>();
+        services.AddTransient<IStartUpDocumentMigrationRunner, StartUpDocumentMigrationRunner>();
+        services.AddTransient<IDocumentMigrationRunner, DocumentMigrationRunner>();
 
-            services.AddTransient<IStartUpDatabaseMigrationRunner, StartUpDatabaseMigrationRunner>();
-            services.AddTransient<IDatabaseMigrationRunner, DatabaseMigrationRunner>();
+        services.AddTransient<IStartUpDatabaseMigrationRunner, StartUpDatabaseMigrationRunner>();
+        services.AddTransient<IDatabaseMigrationRunner, DatabaseMigrationRunner>();
 
-            services.AddTransient<IMigrationInterceptorProvider, MigrationInterceptorProvider>();
+        services.AddTransient<IMigrationInterceptorProvider, MigrationInterceptorProvider>();
 
-            services.AddTransient<IMongoMigration, MongoMigration>();
-        }
+        services.AddTransient<IMongoMigration, MongoMigration>();
     }
 }

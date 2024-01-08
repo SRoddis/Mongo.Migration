@@ -1,9 +1,8 @@
 using System;
 
-namespace Mongo.Migration.Migrations.Adapters
+namespace Mongo.Migration.Migrations.Adapters;
+
+public interface IContainerProvider
 {
-    public interface IContainerProvider
-    {
-        object GetInstance(Type type);
-    }
+    object GetInstance(Type type);
 }
