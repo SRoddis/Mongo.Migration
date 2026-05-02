@@ -1,13 +1,10 @@
-﻿using System;
+﻿using Mongo.Migration.Documents;
 
-using Mongo.Migration.Documents;
+namespace Mongo.Migration.Migrations;
 
-namespace Mongo.Migration.Migrations
+public interface IMigration
 {
-    public interface IMigration
-    {
-        DocumentVersion Version { get; }
+    DocumentVersion Version { get; }
 
-        Type Type { get; }
-    }
+    Type Type { get; }
 }

@@ -1,97 +1,78 @@
-﻿using System;
-using System.Linq;
-
-using Mongo.Migration.Documents;
+﻿using Mongo.Migration.Documents;
 using Mongo.Migration.Migrations.Locators;
 using Mongo.Migration.Services;
 
 using MongoDB.Bson;
 
-namespace Mongo.Migration.Migrations.Document
+namespace Mongo.Migration.Migrations.Document;
+
+internal class DocumentMigrationRunner : IDocumentMigrationRunner
 {
-    internal class DocumentMigrationRunner : IDocumentMigrationRunner
+    private readonly IDocumentVersionService _documentVersionService;
+
+    private readonly IMigrationLocator<IDocumentMigration> _migrationLocator;
+
+    public DocumentMigrationRunner(IMigrationLocator<IDocumentMigration> migrationLocator, IDocumentVersionService documentVersionService)
     {
-        private readonly IDocumentVersionService _documentVersionService;
+        _migrationLocator = migrationLocator;
+        _documentVersionService = documentVersionService;
+    }
 
-        private readonly IMigrationLocator<IDocumentMigration> _migrationLocator;
+    public void Run(Type type, BsonDocument document)
+    {
+        var currentOrLatest = _documentVersionService.GetCurrentOrLatestMigrationVersion(type);
+        Run(type, document, currentOrLatest);
+    }
 
-        public DocumentMigrationRunner(IMigrationLocator<IDocumentMigration> migrationLocator, IDocumentVersionService documentVersionService)
+    public void Run(Type type, BsonDocument document, in DocumentVersion to)
+    {
+        var documentVersion = _documentVersionService.GetVersionOrDefault(document);
+
+        if (documentVersion == to)
         {
-            this._migrationLocator = migrationLocator;
-            this._documentVersionService = documentVersionService;
+            return;
         }
 
-        public void Run(Type type, BsonDocument document)
+        MigrateUpOrDown(type, document, documentVersion, to);
+    }
+
+    private void MigrateUpOrDown(
+        Type type,
+        BsonDocument document,
+        in DocumentVersion documentVersion,
+        in DocumentVersion to)
+    {
+        if (documentVersion > to)
         {
-            var documentVersion = this._documentVersionService.GetVersionOrDefault(document);
-            var currentOrLatest = this._documentVersionService.GetCurrentOrLatestMigrationVersion(type);
-
-            if (documentVersion == currentOrLatest)
-            {
-                return;
-            }
-
-            this.MigrateUpOrDown(type, document, documentVersion, currentOrLatest);
+            MigrateDown(type, document, documentVersion, to);
         }
-
-        public void Run(Type type, BsonDocument document, DocumentVersion to)
+        else
         {
-            var documentVersion = this._documentVersionService.GetVersionOrDefault(document);
-            var currentOrLatest = this._documentVersionService.GetCurrentOrLatestMigrationVersion(type);
-
-            if (documentVersion == to || documentVersion == currentOrLatest)
-            {
-                return;
-            }
-
-            this.MigrateUpOrDown(type, document, documentVersion, to);
+            MigrateUp(type, document, documentVersion, to);
         }
+        
+        _documentVersionService.SetVersion(document, to);
+    }
 
-        private void MigrateUpOrDown(
-            Type type,
-            BsonDocument document,
-            DocumentVersion documentVersion,
-            DocumentVersion to)
+    private void MigrateUp(Type type, BsonDocument document, in DocumentVersion version, in DocumentVersion toVersion)
+    {
+        var migrations = _migrationLocator
+            .GetMigrationsFromTo(type, version, toVersion);
+
+        foreach (var migration in migrations)
         {
-            if (documentVersion > to)
-            {
-                this.MigrateDown(type, document, to);
-                return;
-            }
-
-            this.MigrateUp(type, document, documentVersion, to);
+            migration.Up(document);
         }
+    }
 
-        private void MigrateUp(Type type, BsonDocument document, DocumentVersion version, DocumentVersion toVersion)
+    private void MigrateDown(Type type, BsonDocument document, in DocumentVersion version, in DocumentVersion toVersion)
+    {
+        var migrations = _migrationLocator
+                .GetMigrationsFromToDown(type, version, toVersion);
+
+        foreach (var migration in migrations)
         {
-            var migrations = this._migrationLocator.GetMigrationsFromTo(type, version, toVersion).ToList();
-
-            foreach (var migration in migrations)
-            {
-                migration.Up(document);
-                this._documentVersionService.SetVersion(document, migration.Version);
-            }
-        }
-
-        private void MigrateDown(Type type, BsonDocument document, DocumentVersion version)
-        {
-            var migrations = this._migrationLocator
-                .GetMigrationsGtEq(type, version)
-                .OrderByDescending(m => m.Version)
-                .ToList();
-
-            for (var m = 0; m < migrations.Count; m++)
-            {
-                if (version == migrations[m].Version)
-                {
-                    break;
-                }
-
-                migrations[m].Down(document);
-
-                var docVersion = this._documentVersionService.DetermineLastVersion(version, migrations, m);
-                this._documentVersionService.SetVersion(document, docVersion);
-            }
+            migration.Down(document);
         }
     }
 }

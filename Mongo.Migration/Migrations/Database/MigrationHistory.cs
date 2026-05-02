@@ -2,14 +2,13 @@
 
 using MongoDB.Bson;
 
-namespace Mongo.Migration.Migrations.Database
+namespace Mongo.Migration.Migrations.Database;
+
+public record MigrationHistory
 {
-    public class MigrationHistory
-    {
-        public ObjectId Id { get; set; }
+    public ObjectId Id { get; init; }
 
-        public string MigrationId { get; set; }
+    public required string MigrationId { get; init; }
 
-        public DocumentVersion Version { get; set; }
-    }
+    public DocumentVersion Version { get; init; }
 }

@@ -1,47 +1,27 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
 using Mongo.Migration.Documents.Attributes;
 
-namespace Mongo.Migration.Documents.Locators
+namespace Mongo.Migration.Documents.Locators;
+
+public class CollectionLocator : AbstractLocator<CollectionLocationInformation, CollectionLocationAttribute>, ICollectionLocator
 {
-    public class CollectionLocator : AbstractLocator<CollectionLocationInformation, Type>, ICollectionLocator
+    protected override CollectionLocationInformation GetAttributeValue(CollectionLocationAttribute attribute)
     {
-        public override CollectionLocationInformation? GetLocateOrNull(Type identifier)
-        {
-            if (!this.LocatesDictionary.ContainsKey(identifier))
-            {
-                return null;
-            }
+        return attribute.CollectionInformation;
+    }
 
-            this.LocatesDictionary.TryGetValue(identifier, out var value);
-            return value;
+    public override CollectionLocationInformation? GetLocateOrNull(Type identifier)
+    {
+        if (!LocatesDictionary.ContainsKey(identifier))
+        {
+            return null;
         }
 
-        public override void Locate()
-        {
-            var types =
-                from a in AppDomain.CurrentDomain.GetAssemblies()
-                from t in a.GetTypes()
-                let attributes = t.GetCustomAttributes(typeof(CollectionLocation), true)
-                where attributes != null && attributes.Length > 0
-                select new { Type = t, Attributes = attributes.Cast<CollectionLocation>() };
+        LocatesDictionary.TryGetValue(identifier, out var value);
+        return value;
+    }
 
-            var versions = new Dictionary<Type, CollectionLocationInformation>();
-
-            foreach (var type in types)
-            {
-                var version = type.Attributes.First().CollectionInformation;
-                versions.Add(type.Type, version);
-            }
-
-            this.LocatesDictionary = versions;
-        }
-
-        public IDictionary<Type, CollectionLocationInformation> GetLocatesOrEmpty()
-        {
-            return this.LocatesDictionary;
-        }
+    public IDictionary<Type, CollectionLocationInformation> GetLocatesOrEmpty()
+    {
+        return LocatesDictionary;
     }
 }

@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/Git/">
+    <File Path=".gitignore" />
+    <File Path="LICENSE.txt" />
+    <File Path="Readme.md" />
+  </Folder>
+  <Folder Name="/workflows/">
+    <File Path=".github/workflows/build.yaml" />
+    <File Path=".github/workflows/publish.yaml" />
+  </Folder>
+  <Project Path="Mongo.Migration.Tests/Mongo.Migration.Tests.csproj" />
+  <Project Path="Mongo.Migration/Mongo.Migration.csproj" />
+</Solution>

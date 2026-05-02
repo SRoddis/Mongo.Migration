@@ -1,12 +1,8 @@
-using System;
-using System.Collections.Generic;
-
 using Mongo.Migration.Documents.Attributes;
 
-namespace Mongo.Migration.Documents.Locators
+namespace Mongo.Migration.Documents.Locators;
+
+public interface ICollectionLocator : ILocator<CollectionLocationInformation, Type>
 {
-    public interface ICollectionLocator : ILocator<CollectionLocationInformation, Type>
-    {
-        IDictionary<Type, CollectionLocationInformation> GetLocatesOrEmpty();
-    }
+    IDictionary<Type, CollectionLocationInformation> GetLocatesOrEmpty();
 }

@@ -1,66 +1,62 @@
-using System.Linq;
-
 using Mongo.Migration.Documents;
 using Mongo.Migration.Migrations.Database;
 using Mongo.Migration.Migrations.Locators;
-using Mongo.Migration.Startup;
-
 using MongoDB.Driver;
 
-namespace Mongo.Migration.Services
+namespace Mongo.Migration.Services;
+
+internal class DatabaseVersionService : IDatabaseVersionService
 {
-    internal class DatabaseVersionService : IDatabaseVersionService
+    private const string MigrationsCollectionName = "_migrations";
+
+    private readonly IDatabaseTypeMigrationDependencyLocator _migrationLocator;
+
+    public DatabaseVersionService(IDatabaseTypeMigrationDependencyLocator migrationLocator)
     {
-        private const string MigrationsCollectionName = "_migrations";
+        _migrationLocator = migrationLocator;
+    }
 
-        private readonly IDatabaseTypeMigrationDependencyLocator _migrationLocator;
+    public DocumentVersion GetLatestMigrationVersion()
+    {
+        return _migrationLocator.GetLatestVersion(typeof(DatabaseMigration));
+    }
 
-        private readonly IMongoMigrationSettings _mongoMigrationSettings;
+    public async Task<DocumentVersion> GetLatestDatabaseVersionAsync(IMongoDatabase db, CancellationToken cancellationToken)
+    {
+        var cursor = await GetMigrationsCollection(db)
+            .FindAsync(m => true, cancellationToken: cancellationToken);
+        var migrations = await cursor.ToListAsync(cancellationToken);
 
-        public DatabaseVersionService(
-            IDatabaseTypeMigrationDependencyLocator migrationLocator,
-            IMongoMigrationSettings mongoMigrationSettings)
+        if (migrations is { Count: 0 })
         {
-            this._migrationLocator = migrationLocator;
-            this._mongoMigrationSettings = mongoMigrationSettings;
+            return DocumentVersion.Default;
         }
 
-        public DocumentVersion GetCurrentOrLatestMigrationVersion()
-        {
-            return this._mongoMigrationSettings.DatabaseMigrationVersion > DocumentVersion.Empty()
-                       ? this._mongoMigrationSettings.DatabaseMigrationVersion
-                       : this._migrationLocator.GetLatestVersion(typeof(DatabaseMigration));
-        }
+        return migrations.Max(m => m.Version);
+    }
 
-        public DocumentVersion GetLatestDatabaseVersion(IMongoDatabase db)
-        {
-            var migrations = this.GetMigrationsCollection(db).Find(m => true).ToList();
-            if (migrations == null || !migrations.Any())
-            {
-                return DocumentVersion.Default();
-            }
-
-            return migrations.Max(m => m.Version);
-        }
-
-        public void Save(IMongoDatabase db, IDatabaseMigration migration)
-        {
-            this.GetMigrationsCollection(db).InsertOne(
-                new MigrationHistory
+    public async Task SaveAsync(IMongoDatabase db, IDatabaseMigration migration, CancellationToken cancellationToken)
+    {
+        await GetMigrationsCollection(db)
+            .InsertOneAsync(
+                new()
                 {
                     MigrationId = migration.GetType().ToString(),
                     Version = migration.Version
-                });
-        }
+                },
+                cancellationToken: cancellationToken);
+    }
 
-        public void Remove(IMongoDatabase db, IDatabaseMigration migration)
-        {
-            this.GetMigrationsCollection(db).DeleteOne(Builders<MigrationHistory>.Filter.Eq(mh => mh.MigrationId, migration.GetType().ToString()));
-        }
+    public async Task RemoveAsync(IMongoDatabase db, IDatabaseMigration migration, CancellationToken cancellationToken)
+    {
+        await GetMigrationsCollection(db)
+            .DeleteOneAsync(
+                Builders<MigrationHistory>.Filter.Eq(mh => mh.MigrationId, migration.GetType().ToString()),
+                cancellationToken: cancellationToken);
+    }
 
-        private IMongoCollection<MigrationHistory> GetMigrationsCollection(IMongoDatabase db)
-        {
-            return db.GetCollection<MigrationHistory>(MigrationsCollectionName);
-        }
+    private static IMongoCollection<MigrationHistory> GetMigrationsCollection(IMongoDatabase db)
+    {
+        return db.GetCollection<MigrationHistory>(MigrationsCollectionName);
     }
 }

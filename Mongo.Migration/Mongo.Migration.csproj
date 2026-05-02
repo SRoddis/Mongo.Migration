@@ -1,39 +1,37 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <Platforms>x64</Platforms>
-    <Company>Sherweb</Company>
-    <Authors>Sherweb</Authors>
-    <Product>Office Protect</Product>
-    <PackageId>OfficeProtect.Mongo.Migration</PackageId>
-    <Description>Forked from Mongo.Migration which is designed for MongoDB C# Driver to migrate your documents easily on-the-fly.</Description>
-    <RepositoryUrl>https://github.com/sherweb/Mongo.Migration.git</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
-    <PackageIcon>op-icon.png</PackageIcon>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
-    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
-    <MinVerTagPrefix>v</MinVerTagPrefix> 
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="IsExternalInit" Version="1.0.3">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="LightInject" Version="6.6.4" />
-    <PackageReference Include="Microsoft.AspNetCore.MiddlewareAnalysis" Version="6.0.16" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
-    <PackageReference Include="MinVer" Version="4.3.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="MongoDB.Driver" Version="2.19.2" />
-    <PackageReference Include="NLog" Version="5.2.0" />
-    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
-    <None Include="op-icon.png" Pack="true" PackagePath="" />
-  </ItemGroup>
+
+	<PropertyGroup>
+		<TargetFrameworks>net10.0;net8.0</TargetFrameworks>
+		<LangVersion>14.0</LangVersion>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<DebugType>embedded</DebugType>
+		<Deterministic>true</Deterministic>
+		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<!-- If all members are not documented, you can disable the compiler warnings -->
+		<NoWarn>$(NoWarn);CS1591</NoWarn>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<PackageId>Mongo.Migration</PackageId>
+		<RepositoryType>git</RepositoryType>
+		<RepositoryUrl>https://github.com/sroddis/Mongo.Migration/</RepositoryUrl>
+		<Authors>sroddis,rpallares</Authors>
+		<Description>Mongo.Migration is designed for the MongoDB.Driver to migrate documents easily and on-the-fly</Description>
+		<PackageTags>mongo, library, migration</PackageTags>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="MongoDB.Driver" Version="[3.5.2,4.0)" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
+		<None Include="../README.md" Pack="true" PackagePath=""/>
+	</ItemGroup>
+
+	<ItemGroup>
+		<InternalsVisibleTo Include="Mongo.Migration.Tests" />
+	</ItemGroup>
+
 </Project>

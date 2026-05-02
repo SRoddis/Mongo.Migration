@@ -1,24 +1,21 @@
-﻿using System;
-
-using Mongo.Migration.Documents;
+﻿using Mongo.Migration.Documents;
 
 using MongoDB.Driver;
 
-namespace Mongo.Migration.Migrations.Database
+namespace Mongo.Migration.Migrations.Database;
+
+public abstract class DatabaseMigration : IDatabaseMigration
 {
-    public abstract class DatabaseMigration : IDatabaseMigration
+    protected DatabaseMigration(string version)
     {
-        protected DatabaseMigration(string version)
-        {
-            this.Version = version;
-        }
-
-        public DocumentVersion Version { get; }
-
-        public Type Type => typeof(DatabaseMigration);
-
-        public abstract void Up(IMongoDatabase db);
-
-        public abstract void Down(IMongoDatabase db);
+        Version = DocumentVersion.Parse(version.AsSpan());
     }
+
+    public DocumentVersion Version { get; }
+
+    public Type Type => typeof(DatabaseMigration);
+
+    public abstract Task UpAsync(IMongoDatabase db, CancellationToken cancellationToken);
+
+    public abstract Task DownAsync(IMongoDatabase db, CancellationToken cancellationToken);
 }

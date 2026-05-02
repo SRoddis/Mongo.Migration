@@ -1,8 +1,5 @@
-﻿using System;
+﻿namespace Mongo.Migration.Documents.Locators;
 
-namespace Mongo.Migration.Documents.Locators
+internal interface IRuntimeVersionLocator : ILocator<DocumentVersion, Type>
 {
-    internal interface IRuntimeVersionLocator : ILocator<DocumentVersion, Type>
-    {
-    }
 }

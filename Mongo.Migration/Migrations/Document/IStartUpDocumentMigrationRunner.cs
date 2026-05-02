@@ -1,7 +1,8 @@
-namespace Mongo.Migration.Migrations.Document
+using MongoDB.Driver;
+
+namespace Mongo.Migration.Migrations.Document;
+
+internal interface IStartUpDocumentMigrationRunner
 {
-    internal interface IStartUpDocumentMigrationRunner
-    {
-        void RunAll();
-    }
+    Task RunAllAsync(IMongoDatabase database, CancellationToken cancellationToken);
 }

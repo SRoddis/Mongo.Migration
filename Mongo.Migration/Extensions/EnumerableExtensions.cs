@@ -1,59 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
+﻿using System.Collections.Frozen;
+using System.Collections.ObjectModel;
+using Mongo.Migration.Documents;
 using Mongo.Migration.Exceptions;
 using Mongo.Migration.Migrations;
 
-namespace Mongo.Migration.Extensions
+namespace Mongo.Migration.Extensions;
+
+internal static class EnumerableExtensions
 {
-    internal static class EnumerableExtensions
+    private static IEnumerable<TMigrationType> CheckForDuplicates<TMigrationType>(this IEnumerable<TMigrationType> list)
+        where TMigrationType : IMigration
     {
-        internal static bool NullOrEmpty<T>(this IEnumerable<T> list)
+        var uniqueHashes = new HashSet<DocumentVersion>();
+        foreach (var element in list)
         {
-            return list == null || !list.Any();
-        }
-
-        internal static IEnumerable<TMigrationType> CheckForDuplicates<TMigrationType>(this IEnumerable<TMigrationType> list)
-            where TMigrationType : class, IMigration
-        {
-            var uniqueHashes = new HashSet<string>();
-            foreach (var element in list)
+            if (uniqueHashes.Add(element.Version))
             {
-                var version = element.Version.ToString();
-                if (uniqueHashes.Add(version))
-                {
-                    continue;
-                }
-
-                var typeName = element.GetType().Name;
-                throw new DuplicateVersionException(typeName, element.Version);
+                yield return element;
             }
-
-            return list;
-        }
-
-        internal static IDictionary<Type, IReadOnlyCollection<TMigrationType>> ToMigrationDictionary<TMigrationType>(
-            this IEnumerable<TMigrationType> migrations)
-            where TMigrationType : class, IMigration
-        {
-            var dictonary = new Dictionary<Type, IReadOnlyCollection<TMigrationType>>();
-            var list = migrations.ToList();
-            var types = (from m in list select m.Type).Distinct();
-
-            foreach (var type in types)
+            else
             {
-                if (dictonary.ContainsKey(type))
-                {
-                    continue;
-                }
-
-                var uniqueMigrations =
-                    list.Where(m => m.Type == type).CheckForDuplicates().OrderBy(m => m.Version).ToList();
-                dictonary.Add(type, uniqueMigrations);
+                throw new DuplicateVersionException(element.GetType().Name, element.Version.ToString());
             }
-
-            return dictonary;
         }
+    }
+
+    internal static IDictionary<Type, ReadOnlyCollection<TMigrationType>> ToMigrationDictionary<TMigrationType>(
+        this IEnumerable<TMigrationType> migrations)
+        where TMigrationType : IMigration
+    {
+        return migrations
+            .GroupBy(m => m.Type)
+            .ToFrozenDictionary(
+                g => g.Key,
+                g => g
+                    .CheckForDuplicates()
+                    .OrderBy(m => m.Version).ToList().AsReadOnly());
     }
 }

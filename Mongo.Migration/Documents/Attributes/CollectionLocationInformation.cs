@@ -1,15 +1,11 @@
-namespace Mongo.Migration.Documents.Attributes
+namespace Mongo.Migration.Documents.Attributes;
+
+public readonly struct CollectionLocationInformation
 {
-    public struct CollectionLocationInformation
+    public CollectionLocationInformation(string collection)
     {
-        public CollectionLocationInformation(string database, string collection)
-        {
-            this.Database = database;
-            this.Collection = collection;
-        }
-
-        public string Database { get; }
-
-        public string Collection { get; }
+        Collection = collection;
     }
+
+    public string Collection { get; }
 }

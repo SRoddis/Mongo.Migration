@@ -1,42 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
+﻿using System.Collections.Frozen;
 using Mongo.Migration.Documents.Attributes;
 
-namespace Mongo.Migration.Documents.Locators
+namespace Mongo.Migration.Documents.Locators;
+
+internal class RuntimeVersionLocator : AbstractLocator<DocumentVersion, RuntimeVersionAttribute>, IRuntimeVersionLocator
 {
-    internal class RuntimeVersionLocator : AbstractLocator<DocumentVersion, Type>, IRuntimeVersionLocator
+    private readonly FrozenDictionary<Type, DocumentVersion> _codeDefinedDictionary;
+
+    internal RuntimeVersionLocator(IEnumerable<KeyValuePair<Type, DocumentVersion>> alreadyDefinedRuntimeVersions)
     {
-        public override DocumentVersion? GetLocateOrNull(Type identifier)
-        {
-            if (!this.LocatesDictionary.ContainsKey(identifier))
-            {
-                return null;
-            }
+        _codeDefinedDictionary = alreadyDefinedRuntimeVersions.ToFrozenDictionary();
+    }
 
-            this.LocatesDictionary.TryGetValue(identifier, out var value);
-            return value;
+    protected override DocumentVersion GetAttributeValue(RuntimeVersionAttribute attribute)
+    {
+        return attribute.Version;
+    }
+
+    public override DocumentVersion? GetLocateOrNull(Type identifier)
+    {
+        if (_codeDefinedDictionary.TryGetValue(identifier, out DocumentVersion version))
+        {
+            return version;
         }
 
-        public override void Locate()
-        {
-            var types =
-                from a in AppDomain.CurrentDomain.GetAssemblies()
-                from t in a.GetTypes()
-                let attributes = t.GetCustomAttributes(typeof(RuntimeVersion), true)
-                where attributes != null && attributes.Length > 0
-                select new { Type = t, Attributes = attributes.Cast<RuntimeVersion>() };
-
-            var versions = new Dictionary<Type, DocumentVersion>();
-
-            foreach (var type in types)
-            {
-                var version = type.Attributes.First().Version;
-                versions.Add(type.Type, version);
-            }
-
-            this.LocatesDictionary = versions;
-        }
+        return base.GetLocateOrNull(identifier);
     }
 }

@@ -1,0 +1,33 @@
+name: Publish
+
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+"
+      - "v[0-9]+.[0-9]+.[0-9]+-[a-z]+[0-9]+"
+
+env:
+  DOTNET_NOLOGO: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    steps:
+    - uses: actions/checkout@v6
+    - uses: actions/setup-dotnet@v5
+    - name: Set VERSION variable from tag
+      run: echo "VERSION=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_ENV
+    - name: Build
+      run: dotnet build -c Release /p:Version=${VERSION}
+    - name: Test
+      run: dotnet test -c Release /p:Version=${VERSION} --no-build --framework net10.0
+    - name: Pack
+      run: dotnet pack -c Release /p:Version=${VERSION} --no-build --output .
+    - name: Push
+      env:
+        NUGET_SOURCE: ${{ vars.NUGET_SOURCE }}
+        NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+      run: dotnet nuget push Mongo.Migration.${VERSION}.nupkg --source $NUGET_SOURCE --api-key "$NUGET_API_KEY"

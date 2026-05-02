@@ -1,15 +1,12 @@
-﻿using System;
-
-using Mongo.Migration.Documents;
+﻿using Mongo.Migration.Documents;
 
 using MongoDB.Bson;
 
-namespace Mongo.Migration.Migrations.Document
-{
-    internal interface IDocumentMigrationRunner
-    {
-        void Run(Type type, BsonDocument document, DocumentVersion to);
+namespace Mongo.Migration.Migrations.Document;
 
-        void Run(Type type, BsonDocument document);
-    }
+public interface IDocumentMigrationRunner
+{
+    void Run(Type type, BsonDocument document, in DocumentVersion to);
+
+    void Run(Type type, BsonDocument document);
 }

@@ -1,77 +1,99 @@
+using System.Diagnostics;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
-
+using Mongo.Migration.Bson;
+using Mongo.Migration.Documents;
 using Mongo.Migration.Documents.Serializers;
 using Mongo.Migration.Migrations.Database;
 using Mongo.Migration.Migrations.Document;
-using Mongo.Migration.Services.Interceptors;
-
-using MongoDB.Bson;
+using Mongo.Migration.Migrations.Locators;
+using Mongo.Migration.Startup;
 using MongoDB.Bson.Serialization;
+using MongoDB.Driver;
 
-namespace Mongo.Migration.Services
+namespace Mongo.Migration.Services;
+
+internal class MigrationService : IMigrationService
 {
-    internal class MigrationService : IMigrationService
+    private readonly ILogger<MigrationService> _logger;
+    private readonly IMongoClient _client;
+    private readonly MongoMigrationStartupSettings _startupSettings;
+    private readonly IServiceProvider _provider;
+
+    public MigrationService(
+        ILogger<MigrationService> logger,
+        IMongoClient client,
+        MongoMigrationStartupSettings startupSettings,
+        IServiceProvider provider)
     {
-        private readonly ILogger<MigrationService> _logger;
+        _logger = logger;
+        _client = client;
+        _startupSettings = startupSettings;
+        _provider = provider;
+    }
 
-        private readonly IMigrationInterceptorProvider _provider;
+    /// <inheritdoc/>
+    public void RegisterBsonStatics()
+    {
+        BsonSerializer.RegisterSerializer(new DocumentVersionSerializer());
 
-        private readonly DocumentVersionSerializer _serializer;
-
-        private readonly IStartUpDatabaseMigrationRunner _startUpDatabaseMigrationRunner;
-
-        private readonly IStartUpDocumentMigrationRunner _startUpDocumentMigrationRunner;
-
-        public MigrationService(
-            DocumentVersionSerializer serializer,
-            IMigrationInterceptorProvider provider,
-            IStartUpDocumentMigrationRunner startUpDocumentMigrationRunner,
-            IStartUpDatabaseMigrationRunner startUpDatabaseMigrationRunner)
-            : this(serializer, provider, NullLoggerFactory.Instance)
+        if (_startupSettings.RuntimeMigrationEnabled)
         {
-            this._startUpDocumentMigrationRunner = startUpDocumentMigrationRunner;
-            this._startUpDatabaseMigrationRunner = startUpDatabaseMigrationRunner;
+            MigrationBsonSerializerProvider migrationSerializerProvider = _provider.GetRequiredService<MigrationBsonSerializerProvider>();
+            BsonSerializer.RegisterSerializationProvider(migrationSerializerProvider);
+
+            var documentMigrationLocator = _provider.GetRequiredService<IMigrationLocator<IDocumentMigration>>();
+            documentMigrationLocator.Initialize();
+        }
+    }
+
+    /// <inheritdoc/>
+    public async Task ExecuteMigrationsAsync(string databaseName, string? targetDatabaseVersion, CancellationToken cancellationToken)
+    {
+        if (_startupSettings.DatabaseMigrationEnabled)
+        {
+            await ExecuteDatabaseMigrationAsync(databaseName, targetDatabaseVersion, cancellationToken);
         }
 
-        private MigrationService(
-            DocumentVersionSerializer serializer,
-            IMigrationInterceptorProvider provider,
-            ILoggerFactory loggerFactory)
+        if (_startupSettings.StartupDocumentMigrationEnabled)
         {
-            this._serializer = serializer;
-            this._provider = provider;
-            this._logger = loggerFactory.CreateLogger<MigrationService>();
+            await ExecuteDocumentMigrationAsync(databaseName, cancellationToken);
+        }
+    }
+
+    /// <inheritdoc/>
+    public async Task ExecuteDatabaseMigrationAsync(string databaseName, string? targetVersion, CancellationToken cancellationToken)
+    {
+        Stopwatch sw = Stopwatch.StartNew();
+
+        DocumentVersion? typedTargetVersion = null;
+
+        if (targetVersion is not null)
+        {
+            typedTargetVersion = DocumentVersion.Parse(targetVersion.AsSpan());
         }
 
-        public void Migrate()
-        {
-            BsonSerializer.RegisterSerializationProvider(this._provider);
-            this.RegisterSerializer();
+        _logger.LogInformation("Executing database migration...");
+        await using var scope = _provider.CreateAsyncScope();
 
-            this.OnStartup();
-        }
+        IMongoDatabase database = _client.GetDatabase(databaseName);
+        IDatabaseMigrationRunner runner = scope.ServiceProvider.GetRequiredService<IDatabaseMigrationRunner>();
+        await runner.RunAsync(database, typedTargetVersion, cancellationToken);
 
-        private void OnStartup()
-        {
-            this._startUpDatabaseMigrationRunner.RunAll();
-            this._startUpDocumentMigrationRunner.RunAll();
-        }
+        _logger.LogInformation("Database migration done in {ElapsedMs} ms", sw.ElapsedMilliseconds);
+    }
 
-        private void RegisterSerializer()
-        {
-            try
-            {
-                BsonSerializer.RegisterSerializer(this._serializer.ValueType, this._serializer);
-            }
-            catch (BsonSerializationException ex)
-            {
-                // Catch if Serializer was registered already ... not great, I know.
-                // We have to do this, because there is always a default DocumentVersionSerialzer.
-                // BsonSerializer.LookupSerializer(), does not work.
+    /// <inheritdoc/>
+    public async Task ExecuteDocumentMigrationAsync(string databaseName, CancellationToken cancellationToken)
+    {
+        Stopwatch sw = Stopwatch.StartNew();
+        _logger.LogInformation("Executing document migration...");
+        await using var scope = _provider.CreateAsyncScope();
 
-                this._logger.LogError(ex, ex.GetType().ToString());
-            }
-        }
+        IMongoDatabase database = _client.GetDatabase(databaseName);
+        IStartUpDocumentMigrationRunner runner = scope.ServiceProvider.GetRequiredService<IStartUpDocumentMigrationRunner>();
+        await runner.RunAllAsync(database, cancellationToken);
+
+        _logger.LogInformation("Database migration done in {ElapsedMs} ms", sw.ElapsedMilliseconds);
     }
 }
